@@ -6,12 +6,10 @@ app = Flask(__name__)
 def index():
     return render_template("index.html")
 
-@app.route('/about')
-def about():
-    return render_template("about.html")
+@app.route('/base')
+def base():
+    return render_template("base.html")
 
-@app.route('/quiz')
-def quiz():
-    return render_template("quiz.html")
-
-# Add other routes like login, signup, results, etc.
+@app.route('/test')
+def test():
+    return render_template("test.html")
