@@ -1,12 +1,24 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CITS3403 Group Project</title>
-  <link rel="stylesheet" href="styles/style.css" />
-</head>
-<body>
-  <h1>hello world</h1>
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block title %}Index/Home Page{% endblock %}
+
+{% block content %} "To add the nav bar and reference style.css just use {% extends "base.html" %}" {% endblock %}
+{% block content %} "To run flask: 
+cd /path/to/your/project
+
+# Create a virtual environment (venv)
+python3 -m venv venv
+
+# Activate the virtual environment
+# On Windows
+venv\Scripts\activate
+# On macOS/Linux
+source venv/bin/activate
+
+pip install Flask
+
+python app.py
+
+Now, if you open your browser and go to http://127.0.0.1:5000, you should see your app rendered.
+"
+{% endblock %}
