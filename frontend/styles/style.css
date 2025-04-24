@@ -94,6 +94,18 @@ form label {
 .slider-wrapper input[type="range"] {
   flex-grow: 1;
   height: 1.5rem;
+  accent-color: #06b6d4;
+}
+
+.slider-value {
+  margin-left: 0.5rem;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.slider-wrapper input[type="range"] {
+  flex-grow: 1;
+  height: 1.5rem;
   accent-color: #06b6d4; /* optional: match your theme */
 }
 
