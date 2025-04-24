@@ -72,10 +72,21 @@ form label {
 }
 
 /* ===== Sliders ===== */
-input[type="range"] {
-  width: 100%;
-  margin: 1rem 0;
-  accent-color: #06b6d4; /* cyan slider accent */
+.slider-group {
+  margin-bottom: 1.5rem;
+}
+
+.slider-labels {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.slider-labels span {
+  font-size: 0.9rem;
+  color: #1f2937;
+  width: 20px;
+  text-align: center;
 }
 
 /* ===== Quiz Cards or Sections ===== */

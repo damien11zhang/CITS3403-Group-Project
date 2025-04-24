@@ -45,10 +45,16 @@
     </form>
 
     <!-- Sliders -->
-    <h2>Slider Input</h2>
-    <label for="satisfaction">How satisfied are you?</label>
-    <input type="range" id="satisfaction" min="0" max="10" />
-
+    <div class="slider-group">
+      <label for="interest">Interest Level</label>
+      <div class="slider-labels">
+        <span>0</span>
+        <input type="range" id="interest" min="0" max="10" value="5" step="1" oninput="interestValue.innerText = this.value" />
+        <span>10</span>
+        <span id="interestValue" style="margin-left: 1rem;">5</span>
+      </div>
+    </div>    
+    
     <!-- Card Style -->
     <h2>Card Style Example</h2>
     <div class="card">
