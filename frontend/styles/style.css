@@ -32,13 +32,6 @@ body.page-background {
   transform: translateY(-4px);
 }
 
-.alt-section {
-  background-color: #5c53d9;
-}
-.alt-section:hover {
-  transform: translateY(-4px);
-}
-
 /* ===== Header Navigation ===== */
 .header {
   background-color: #4f46e5;
