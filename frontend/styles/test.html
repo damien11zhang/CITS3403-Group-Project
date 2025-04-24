@@ -47,11 +47,10 @@
     <!-- Sliders -->
     <div class="slider-group">
       <label for="interest">Interest Level</label>
-      <div class="slider-labels">
-        <span>0</span>
-        <input type="range" id="interest" min="0" max="10" value="5" step="1" oninput="interestValue.innerText = this.value" />
-        <span>10</span>
-        <span id="interestValue" style="margin-left: 1rem;">5</span>
+      <div class="slider-wrapper">
+        <span class="slider-label">0</span>
+        <input type="range" id="interest" name="interest" min="0" max="10" value="5" step="1" />
+        <span class="slider-label">10</span>
       </div>
     </div>    
     
