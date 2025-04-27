@@ -168,7 +168,8 @@ input[type="range"]::-moz-range-thumb {
 }
 
 /* ===== Headings ===== */
-h1, h2, h3 {
+
+h1 {
   font-weight: 700;
   margin-bottom: 1rem;
   color: #222;
