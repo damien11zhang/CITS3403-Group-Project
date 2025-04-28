@@ -198,3 +198,30 @@ a:hover {
     flex-direction: column;
   }
 }
+
+/* ===== About Page Specific Styles ===== */
+.about-page .highlight-text {
+  font-weight: 600;
+  font-size: 1.2rem;
+  color: #4f46e5; /* Same purple as buttons for consistency */
+  margin-top: 1rem;
+}
+
+.about-image {
+  max-width: 500px;
+  width: 100%;
+  height: auto;
+  margin: 2rem 0;
+}
+
+.image-section {
+  margin-top: 2rem;
+}
+
+.layered-section {
+  background: white;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.05);
+  margin-bottom: 2rem;
+}
