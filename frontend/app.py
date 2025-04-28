@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 
 app = Flask(__name__)
 
@@ -37,8 +37,9 @@ def signup():
         username = request.form.get('username')
         password = request.form.get('password')
         email = request.form.get('email')
+        confirm_password = request.form.get('confirm_password')
         pass
-    
+
     return render_template("signup.html")
 
 @app.route('/profile')
