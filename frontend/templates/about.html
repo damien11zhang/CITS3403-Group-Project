@@ -1,14 +1,12 @@
 {% extends "base.html" %}
 
-{% block title %}
-About Us
-{% endblock %}
+{% block title %}About Us{% endblock %}
 
 {% block content %}
 <div class="container about-page">
   <div class="section layered-section">
     <div class="section image-section centered">
-        <img src="{{ url_for('static', filename='images/image2') }}" alt="Uncertain of Future" class="about-image" />
+        <img src="{{ url_for('static', filename='images/image2.jpg') }}" alt="Uncertain of Future" class="about-image" />
       </div>
     <h1>Helping You Find Your Path</h1>
     <p>
@@ -26,7 +24,7 @@ About Us
   </div>
 
   <div class="section image-section centered">
-    <img src="{{ url_for('static', filename='images/image1') }}" alt="Career Paths Illustration" class="about-image" />
+    <img src="{{ url_for('static', filename='images/image1.jpg') }}" alt="Career Paths Illustration" class="about-image" />
   </div>
 
   <div class="section layered-section">
