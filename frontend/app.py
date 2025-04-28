@@ -25,24 +25,20 @@ def support():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
-
-        # need logic to check the data against database, not finished
-    
+        username = request.form.get('username')
+        password = request.form.get('password')
         pass
+
     return render_template("login.html")
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
-        email = request.form['email']
-
-        # need logic to save the data to a database, not finished
-    
+        username = request.form.get('username')
+        password = request.form.get('password')
+        email = request.form.get('email')
         pass
+    
     return render_template("signup.html")
 
 @app.route('/profile')
