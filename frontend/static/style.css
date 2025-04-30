@@ -198,3 +198,36 @@ a:hover {
     flex-direction: column;
   }
 }
+
+/* ===== About Page Specific Styles ===== */
+.about-page .highlight-text {
+  font-weight: 600;
+  font-size: 1.2rem;
+  color: #4f46e5; /* Same purple as buttons for consistency */
+  margin-top: 1rem;
+}
+
+.about-image {
+  display: block;
+  margin: 2rem auto;
+  max-width: 80%;
+  height: auto;
+}
+
+.image-section {
+  margin-top: 2rem;
+}
+
+.centered {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.layered-section {
+  background: white;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.05);
+  margin-bottom: 2rem;
+}
