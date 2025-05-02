@@ -12,28 +12,21 @@ class Subgroup(db.Model):
     name = db.Column(db.String(100), nullable=False)
     job_cluster_id = db.Column(db.Integer, db.ForeignKey('job_clusters.id'), nullable=False)
     jobs = db.relationship('Job', backref='subgroup', lazy=True)
-    questions = db.relationship('Question', backref='subgroup', lazy=True)
+    subgroup_question = db.Column(db.String(300), nullable=False)  # Shared subgroup question
 
 class Job(db.Model):
     __tablename__ = 'jobs'
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100), nullable=False)
     subgroup_id = db.Column(db.Integer, db.ForeignKey('subgroups.id'), nullable=False)
-    questions = db.relationship('Question', backref='job', lazy=True)
-
-class Question(db.Model):
-    __tablename__ = 'questions'
-    id = db.Column(db.Integer, primary_key=True)
-    text = db.Column(db.String(300), nullable=False)
-    question_type = db.Column(db.String(20), nullable=False)  # 'first', 'second', or 'subgroup'
-    job_id = db.Column(db.Integer, db.ForeignKey('jobs.id'), nullable=True)
-    subgroup_id = db.Column(db.Integer, db.ForeignKey('subgroups.id'), nullable=True)
+    first_question = db.Column(db.String(300), nullable=False)  # First job-specific question
+    second_question = db.Column(db.String(300), nullable=False)  # Second job-specific question
 
 class UserResponse(db.Model):
     __tablename__ = 'user_responses'
     id = db.Column(db.Integer, primary_key=True)
     session_id = db.Column(db.String(100), nullable=False)
-    question_type = db.Column(db.String(50), nullable=False)
-    target_id = db.Column(db.Integer, nullable=False)  # ID of job or subgroup
+    question_type = db.Column(db.String(50), nullable=False)  # 'subgroup', 'first', 'second'
+    target_id = db.Column(db.Integer, nullable=False)  # ID of the job or subgroup
     score = db.Column(db.Integer, nullable=False)
     timestamp = db.Column(db.DateTime, server_default=db.func.now())
