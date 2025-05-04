@@ -1,6 +1,10 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for, session, flash
+from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
+app.secret_key = 'your_secret_key'
+
+users = {}
 
 @app.route('/')
 def index():
@@ -25,26 +29,54 @@ def support():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        username = request.form.get('username')
+        email = request.form.get('email')
         password = request.form.get('password')
-        pass
-
+        
+        if email in users and check_password_hash(users[email]['password'], password):
+            session['user_id'] = email
+            session['username'] = users[email]['username']
+            flash('Login successful!')
+            return redirect(url_for('profile'))
+        else:
+            flash('Invalid email or password')
+    
     return render_template("login.html")
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     if request.method == 'POST':
         username = request.form.get('username')
-        password = request.form.get('password')
         email = request.form.get('email')
+        password = request.form.get('password')
         confirm_password = request.form.get('confirm_password')
-        pass
-
+        if not username or not email or not password:
+            flash('All fields are required')
+            return render_template('signup.html')
+        
+        if password != confirm_password:
+            flash('Passwords do not match')
+            return render_template('signup.html')
+        
+        if email in users:
+            flash('Email already registered')
+            return render_template('signup.html')
+        
+        users[email] = {
+            'username': username,
+            'password': generate_password_hash(password)
+        }
+        flash('Account created successfully! Please log in.')
+        return redirect(url_for('login'))
+    
     return render_template("signup.html")
 
 @app.route('/profile')
 def profile():
-    return render_template("profile.html")
+    if 'user_id' not in session:
+        flash('Please log in to access your profile')
+        return redirect(url_for('login'))
+    
+    return render_template("profile.html", username=session.get('username'))
 
 @app.route('/quiz')
 def quiz():
@@ -53,6 +85,13 @@ def quiz():
 @app.route('/results')
 def results():
     return render_template("results.html")
+
+@app.route('/logout')
+def logout():
+    # Clear session
+    session.clear()
+    flash('You have been logged out')
+    return redirect(url_for('login'))
 
 if __name__ == '__main__':
     app.run(debug=True)
