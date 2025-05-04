@@ -183,6 +183,44 @@ def quiz_stage3():
 
     return render_template('quiz3.html', jobs=jobs)
 
+@app.route('/quiz4', methods=['GET', 'POST'])
+def quiz_stage4():
+    if request.method == 'POST':
+        job_scores = session.get('job_scores', {})  # Contains job_id: subgroup + Q1 score
+        final_scores = {}
+
+        for key, value in request.form.items():
+            if key.startswith('job_q2_'):
+                job_id = int(key.split('_')[2])
+                q2_score = int(value)
+
+                # Save Q2 response
+                response = UserResponse(
+                    session_id=session.sid,
+                    question_type='second',
+                    target_id=job_id,
+                    score=q2_score
+                )
+                db.session.add(response)
+
+                # Add to total score
+                total = job_scores.get(str(job_id), 0) + q2_score
+                final_scores[job_id] = total
+
+        db.session.commit()
+
+        # Sort and store top 5 jobs
+        top_jobs = sorted(final_scores.items(), key=lambda x: x[1], reverse=True)[:5]
+        session['top_jobs'] = [job_id for job_id, score in top_jobs]
+
+        return redirect(url_for('results'))
+
+    # GET: Load jobs that passed stage 3
+    passing_jobs = session.get('passing_jobs', [])
+    jobs = Job.query.filter(Job.id.in_(passing_jobs)).all()
+
+    return render_template('quiz4.html', jobs=jobs)
+
 
 @app.route('/results')
 def results():

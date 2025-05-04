@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block title %}Quiz Stage 4{% endblock %}
+
+{% block content %}
+<h1>Stage 4: Second Job-Specific Questions</h1>
+<form method="POST" action="{{ url_for('quiz4') }}">
+    {% for job in jobs %}
+        <div class="job-block">
+            <h3>{{ job.title }}</h3>
+            <p>{{ job.q2 }}</p>
+            <div class="slider-group">
+                <label for="job_q2_{{ job.id }}">Your Interest Level</label>
+                <div class="slider-wrapper">
+                    <span class="slider-label">0</span>
+                    <input 
+                        type="range" 
+                        id="job_q2_{{ job.id }}" 
+                        name="job_q2_{{ job.id }}" 
+                        min="0" 
+                        max="10" 
+                        value="5" 
+                        step="1" 
+                        oninput="document.getElementById('val_{{ job.id }}').innerText = this.value"
+                    />
+                    <span class="slider-label">10</span>
+                    <span class="slider-value" id="val_{{ job.id }}">5</span>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+    <button type="submit">See My Top Careers</button>
+</form>
+{% endblock %}
