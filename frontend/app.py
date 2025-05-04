@@ -88,7 +88,6 @@ def results():
 
 @app.route('/logout')
 def logout():
-    # Clear session
     session.clear()
     flash('You have been logged out')
     return redirect(url_for('login'))
