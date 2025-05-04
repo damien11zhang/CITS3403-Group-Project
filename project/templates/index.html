@@ -2,25 +2,17 @@
 
 {% block title %}Index/Home Page{% endblock %}
 
-"To add the nav bar and reference style.css just use (curly brace)% extends "base.html" %(curly brace)"
-"To run flask: 
- To add the nav bar and reference style.css just use
+{% block content %}
+<h1>welcome to the Homepage</h1>
 
-To run flask: 
-1. cd /path/to/your/project [frontend folder for us]
-
-2.# Create a virtual environment (venv)
+<!-- 
+To run Flask:
+1. cd into frontend folder
 2. python3 -m venv venv
-
-3. # Activate the virtual environment
-# On Windows
-3. venv\Scripts\activate
-# On macOS/Linux
-3. source venv/bin/activate
-
+3. venv\Scripts\activate (Windows) OR source venv/bin/activate (Mac/Linux)
 4. pip install Flask
-
 5. python app.py
+Visit http://127.0.0.1:5000 in your browser.
+-->
 
-Now, if you open your browser and go to http://127.0.0.1:5000, you should see your app rendered.
 {% endblock %}
