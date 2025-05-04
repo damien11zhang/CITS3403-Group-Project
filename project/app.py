@@ -90,25 +90,19 @@ def profile():
 @app.route('/quiz', methods=['GET', 'POST'])
 def quiz():
     if request.method == 'POST':
-        rankings = {
-            'engineering': int(request.form['engineering']),
-            'tech': int(request.form['tech']),
-            'social': int(request.form['social']),
-            'creative': int(request.form['creative']),
-            'business': int(request.form['business']),
-            'science': int(request.form['science']),
-            'admin': int(request.form['admin']),
-            'health': int(request.form['health']),
-            'trades': int(request.form['trades']),
-            'law': int(request.form['law']),
-        }
+        selected = request.form.getlist('selected_clusters')
+        if len(selected) != 3:
+            return "Please select exactly 3 clusters."
 
-        if len(set(rankings.values())) < 10:
-            return "Please assign a unique rank to each statement!"
+        user_id = 1  # for now (replace with session user later)
+        for cid in selected:
+            db.session.add(UserSelectedCluster(user_id=user_id, cluster_id=cid))
+        db.session.commit()
 
-        return redirect(url_for('quiz2'))
+        return redirect(url_for('quiz2'))  # Next section
 
-    return render_template("quiz.html")
+    clusters = JobCluster.query.all()
+    return render_template("quiz.html", clusters=clusters)
 
 @app.route('/quiz2', methods=['GET', 'POST'])
 def quiz2():

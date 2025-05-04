@@ -167,6 +167,41 @@ input[type="range"]::-moz-range-thumb {
   margin-bottom: 1.5rem;
 }
 
+.card-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  max-width: 600px;
+  margin: auto;
+}
+
+.card-selectable {
+  padding: 1.5rem;
+  border-radius: 12px;
+  background: white;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: center;
+  font-size: 1.1rem;
+  font-weight: 500;
+  width: 100%;
+  max-width: 700px; 
+}
+
+
+.card-selectable:hover {
+  transform: scale(1.02);
+  background-color: #f9f9ff;
+}
+
+.card-selectable.selected {
+  border: 2px solid #4f46e5;
+  background-color: #eef2ff;
+  color: #1e1b4b;
+}
+
+
 /* ===== Headings ===== */
 
 h1 {
