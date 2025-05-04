@@ -110,6 +110,18 @@ def quiz():
 
     return render_template("quiz.html")
 
+@app.route('/quiz2', methods=['GET', 'POST'])
+def quiz_stage2():
+    selected_ids = session.get('selected_clusters', [])
+
+    if not selected_ids:
+        return redirect(url_for('quiz.html'))
+
+    subgroups = Subgroup.query.filter(Subgroup.job_cluster_id.in_(selected_ids)).all()
+
+    return render_template('quiz2.html', subgroups=subgroups)
+
+
 
 @app.route('/results')
 def results():
