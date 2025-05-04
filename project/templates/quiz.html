@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Career Quiz – Section 1</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>Career Quiz – Rank Your Interests</h1>
+    <p>Rank each of the following statements from 1 (most like me) to 10 (least like me). Each number can only be used once.</p>
+
+    <form method="POST" action="{{ url_for('quiz') }}">
+        <div class="question-block">
+            <label>I enjoy figuring out how systems or machines work and how to improve them.</label>
+            <select name="engineering">
+                {% for i in range(1, 11) %}
+                    <option value="{{ i }}">{{ i }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="question-block">
+            <label>I often find myself analyzing situations or patterns to make sense of things.</label>
+            <select name="tech">
+                {% for i in range(1, 11) %}
+                    <option value="{{ i }}">{{ i }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="question-block">
+            <label>I like helping people feel heard, supported, or understood.</label>
+            <select name="social">
+                {% for i in range(1, 11) %}
+                    <option value="{{ i }}">{{ i }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="question-block">
+            <label>I enjoy coming up with creative ideas or visuals to express something.</label>
+            <select name="creative">
+                {% for i in range(1, 11) %}
+                    <option value="{{ i }}">{{ i }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="question-block">
+            <label>I find satisfaction in planning ahead or creating strategies to achieve a goal.</label>
+            <select name="business">
+                {% for i in range(1, 11) %}
+                    <option value="{{ i }}">{{ i }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="question-block">
+            <label>I’m drawn to exploring complex questions about the world, life, or science.</label>
+            <select name="science">
+                {% for i in range(1, 11) %}
+                    <option value="{{ i }}">{{ i }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="question-block">
+            <label>I enjoy organizing tasks, keeping things structured, and making sure everything runs smoothly.</label>
+            <select name="admin">
+                {% for i in range(1, 11) %}
+                    <option value="{{ i }}">{{ i }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="question-block">
+            <label>I feel fulfilled when caring for others’ physical or mental well-being.</label>
+            <select name="health">
+                {% for i in range(1, 11) %}
+                    <option value="{{ i }}">{{ i }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="question-block">
+            <label>I like doing practical, hands-on work and seeing the results of my efforts.</label>
+            <select name="trades">
+                {% for i in range(1, 11) %}
+                    <option value="{{ i }}">{{ i }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="question-block">
+            <label>I’m passionate about fairness, rules, and standing up for what’s right.</label>
+            <select name="law">
+                {% for i in range(1, 11) %}
+                    <option value="{{ i }}">{{ i }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <button type="submit">Next</button>
+    </form>
+</body>
+</html>
