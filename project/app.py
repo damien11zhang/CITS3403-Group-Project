@@ -57,9 +57,29 @@ def signup():
 def profile():
     return render_template("profile.html")
 
-@app.route('/quiz')
+@app.route('/quiz', methods=['GET', 'POST'])
 def quiz():
+    if request.method == 'POST':
+        rankings = {
+            'engineering': int(request.form['engineering']),
+            'tech': int(request.form['tech']),
+            'social': int(request.form['social']),
+            'creative': int(request.form['creative']),
+            'business': int(request.form['business']),
+            'science': int(request.form['science']),
+            'admin': int(request.form['admin']),
+            'health': int(request.form['health']),
+            'trades': int(request.form['trades']),
+            'law': int(request.form['law']),
+        }
+
+        if len(set(rankings.values())) < 10:
+            return "Please assign a unique rank to each statement!"
+
+        return redirect(url_for('quiz2'))
+
     return render_template("quiz.html")
+
 
 @app.route('/results')
 def results():
