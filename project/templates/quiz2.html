@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}Quiz Stage 2{% endblock %}
+
+{% block content %}
+<h1>Stage 2: Subgroup Questions</h1>
+<form method="POST" action="{{ url_for('quiz2') }}">
+    {% for subgroup in subgroups %}
+        <div class="subgroup-block">
+            <h3>{{ subgroup.name }} ({{ subgroup.job_cluster.name }})</h3>
+            <p>{{ subgroup.question_text }}</p>
+            <div class="slider-group">
+                <label for="score_{{ subgroup.id }}">Your Interest Level</label>
+                <div class="slider-wrapper">
+                    <span class="slider-label">0</span>
+                    <input 
+                        type="range" 
+                        id="score_{{ subgroup.id }}" 
+                        name="score_{{ subgroup.id }}" 
+                        min="0" 
+                        max="10" 
+                        value="5" 
+                        step="1" 
+                        oninput="document.getElementById('value_{{ subgroup.id }}').innerText = this.value"
+                    />
+                    <span class="slider-label">10</span>
+                    <span class="slider-value" id="value_{{ subgroup.id }}">5</span>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+
+    <button type="submit">Continue to Stage 3</button>
+</form>
+{% endblock %}

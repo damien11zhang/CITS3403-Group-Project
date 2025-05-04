@@ -111,16 +111,31 @@ def quiz():
     return render_template("quiz.html")
 
 @app.route('/quiz2', methods=['GET', 'POST'])
-def quiz_stage2():
+def quiz2():
     selected_ids = session.get('selected_clusters', [])
 
     if not selected_ids:
-        return redirect(url_for('quiz.html'))
+        return redirect(url_for('quiz'))
+
+    if request.method == 'POST':
+        for key, value in request.form.items():
+            if key.startswith('score_'):
+                subgroup_id = int(key.split('_')[1])
+                score = int(value)
+
+                response = UserResponse(
+                    session_id=session.sid,
+                    question_type='subgroup',
+                    target_id=subgroup_id,
+                    score=score
+                )
+                db.session.add(response)
+        db.session.commit()
+
+        return redirect(url_for('quiz3'))
 
     subgroups = Subgroup.query.filter(Subgroup.job_cluster_id.in_(selected_ids)).all()
-
     return render_template('quiz2.html', subgroups=subgroups)
-
 
 
 @app.route('/results')
