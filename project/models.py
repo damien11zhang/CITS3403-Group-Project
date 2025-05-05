@@ -20,8 +20,8 @@ class Job(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100), nullable=False)
     subgroup_id = db.Column(db.Integer, db.ForeignKey('subgroups.id'), nullable=False)
-    first_question = db.Column(db.String(300), nullable=False)
-    second_question = db.Column(db.String(300), nullable=False)
+    question_1 = db.Column(db.String(300), nullable=False)
+    question_2 = db.Column(db.String(300), nullable=False)
 
 class UserSelectedCluster(db.Model):
     __tablename__ = 'user_selected_clusters'
