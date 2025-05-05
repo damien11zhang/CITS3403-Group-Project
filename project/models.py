@@ -31,3 +31,9 @@ class UserResponse(db.Model):
     target_id = db.Column(db.Integer, nullable=False)  # ID of the job or subgroup
     score = db.Column(db.Integer, nullable=False)
     timestamp = db.Column(db.DateTime, server_default=db.func.now())
+
+class UserSelectedCluster(db.Model):
+    __tablename__ = 'user_selected_clusters'
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, nullable=False)
+    cluster_id = db.Column(db.Integer, db.ForeignKey('job_clusters.id'), nullable=False)
