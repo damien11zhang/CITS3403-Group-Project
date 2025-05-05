@@ -44,7 +44,7 @@
 
     <section class="account-settings">
         <h2>Account Settings</h2>
-        <form action="{{ url_for('edit_profile') }}" method="POST">
+        <form action="{{ url_for('profile') }}" method="POST">
             <label for="username">Username:</label>
             <input type="text" id="username" name="username" value="{{ user.username }}" required>
 
@@ -52,18 +52,6 @@
             <input type="email" id="email" name="email" value="{{ user.email }}" required>
 
             <button type="submit">Update Profile</button>
-        </form>
-
-        <h3>Change Password</h3>
-        <form action="{{ url_for('change_password') }}" method="POST">
-            <label for="current_password">Current Password:</label>
-            <input type="password" id="current_password" name="current_password" required>
-
-            <label for="new_password">New Password:</label>
-            <input type="password" id="new_password" name="new_password" required>
-
-            <button type="submit">Change Password</button>
-        </form>
     </section>
 
     <footer>
