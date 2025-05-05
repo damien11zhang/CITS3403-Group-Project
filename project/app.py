@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash
-from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.security import generate_password_hash
 from flask_migrate import Migrate
 from uuid import uuid4
 from flask_login import LoginManager, UserMixin, login_user, logout_user, current_user, login_required
@@ -49,12 +49,15 @@ def support():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        username = request.form['username']
+        username = request.form.get('username')
+        password = request.form.get('password')
+
         user = User.query.filter_by(username=username).first()
-        if user:
+        if user and user.password == password:
             login_user(user)
             return redirect(url_for('profile'))
-        return 'Invalid login'
+        return 'Invalid username or password.'
+
     return render_template('login.html')
 
 @login_manager.user_loader
@@ -93,9 +96,7 @@ def signup():
 @app.route('/profile')
 @login_required
 def profile():
-    return render_template('profile.html', user=current_user)
-    
-    return render_template("profile.html", username=session.get('username'))
+    return f'Welcome {current_user.username}!'
 
 @app.route('/quiz', methods=['GET', 'POST'])
 def quiz():
