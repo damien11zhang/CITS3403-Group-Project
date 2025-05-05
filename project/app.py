@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, session, f
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_migrate import Migrate
 from uuid import uuid4
+from flask_login import LoginManager, UserMixin, login_user, logout_user, current_user, login_required
 
 from extensions import db  # <--- new way
 from models import *
@@ -13,12 +14,21 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///career_quiz.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = 'your_random_secret_key'
 
+login_manager = LoginManager(app)
+login_manager.login_view = 'login'
+
 db.init_app(app)  # <--- wajib!
 migrate = Migrate(app, db)
 
+class User(UserMixin, db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(100), nullable=False, unique=True)
+    email = db.Column(db.String(100), nullable=False, unique=True)
+    password = db.Column(db.String(100), nullable=False)
+
 @app.route('/')
 def index():
-    return render_template("index.html")
+    return redirect(url_for('login'))
 
 @app.route('/base')
 def base():
@@ -39,18 +49,17 @@ def support():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        email = request.form.get('email')
-        password = request.form.get('password')
-        
-        if email in users and check_password_hash(users[email]['password'], password):
-            session['user_id'] = email
-            session['username'] = users[email]['username']
-            flash('Login successful!')
+        username = request.form['username']
+        user = User.query.filter_by(username=username).first()
+        if user:
+            login_user(user)
             return redirect(url_for('profile'))
-        else:
-            flash('Invalid email or password')
-    
-    return render_template("login.html")
+        return 'Invalid login'
+    return render_template('login.html')
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
@@ -82,10 +91,9 @@ def signup():
     return render_template("signup.html")
 
 @app.route('/profile')
+@login_required
 def profile():
-    if 'user_id' not in session:
-        flash('Please log in to access your profile')
-        return redirect(url_for('login'))
+    return render_template('profile.html', user=current_user)
     
     return render_template("profile.html", username=session.get('username'))
 
@@ -143,10 +151,12 @@ def results():
     return render_template("results.html")
 
 @app.route('/logout')
+@login_required
 def logout():
-    session.clear()
-    flash('You have been logged out')
+    logout_user()
     return redirect(url_for('login'))
 
 if __name__ == '__main__':
+    with app.app_context():
+        db.create_all()
     app.run(debug=True)
