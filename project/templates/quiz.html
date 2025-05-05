@@ -2,19 +2,20 @@
 {% block title %}Career Quiz – Section 1{% endblock %}
 
 {% block content %}
-<h1>Select 3 Statements That Describe You Best</h1>
-<form method="POST" action="{{ url_for('quiz') }}">
-  <div class="card-grid">
-    {% for cluster in clusters %}
-    <div class="card-selectable" onclick="toggleCard(this)">
-      <input type="checkbox" name="selected_clusters" value="{{ cluster.id }}" hidden>
-      {{ cluster.description }}
+<div class="quiz-page-wrapper">
+  <h1 class="quiz-heading">Select 3 Statements That Describe You Best</h1>
+  <form method="POST" action="{{ url_for('quiz') }}">
+    <div class="quiz-card-grid">
+      {% for cluster in clusters %}
+      <div class="quiz-card" onclick="toggleCard(this)">
+        <input type="checkbox" name="selected_clusters" value="{{ cluster.id }}" hidden>
+        {{ cluster.description }}
+      </div>
+      {% endfor %}
     </div>
-    {% endfor %}
-  </div>
-  <br>
-  <button class="button" type="submit">Next</button>
-</form>
+    <button class="button" type="submit">Next</button>
+  </form>
+</div>
 
 <script>
 function toggleCard(card) {
@@ -22,7 +23,7 @@ function toggleCard(card) {
   checkbox.checked = !checkbox.checked;
   card.classList.toggle('selected');
 
-  const selected = document.querySelectorAll('.card-selectable.selected');
+  const selected = document.querySelectorAll('.quiz-card.selected');
   if (selected.length > 3) {
     alert("You can only select up to 3 statements.");
     checkbox.checked = false;
