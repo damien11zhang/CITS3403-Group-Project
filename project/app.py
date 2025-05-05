@@ -94,17 +94,16 @@ def quiz():
     if request.method == 'POST':
         selected = request.form.getlist('selected_clusters')
         if len(selected) != 3:
-            flash("Please select exactly 3 clusters.")
-            return redirect(url_for('quiz'))
+            return "Please select exactly 3 clusters."
 
-        user_id = session.get('user_id') or "guest"
+        user_id = 1  # TEMPORARY, replace with session-based user later
 
         for cid in selected:
-            db.session.add(UserSelectedCluster(user_id=user_id, cluster_id=int(cid)))
+            db.session.add(UserSelectedCluster(user_id=user_id, cluster_id=cid))
+        
         db.session.commit()
 
-        session['selected_clusters'] = [int(cid) for cid in selected]
-        session['session_id'] = str(uuid4())
+        session['selected_clusters'] = selected  # <-- this is key!
 
         return redirect(url_for('quiz2'))
 
