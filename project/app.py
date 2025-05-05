@@ -137,7 +137,7 @@ def quiz2():
     subgroups = Subgroup.query.filter(Subgroup.job_cluster_id.in_(selected_ids)).all()
     return render_template('quiz2.html', subgroups=subgroups)
 
-  @app.route('/quiz3', methods=['GET', 'POST'])
+@app.route('/quiz3', methods=['GET', 'POST'])
 def quiz_stage3():
     if request.method == 'POST':
         passing_jobs = []
