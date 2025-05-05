@@ -8,7 +8,7 @@ def seed_business_strategy_data():
 
         strategy_roles = Subgroup(
             name="Strategy and Analysis Roles",
-            question="How interested are you in solving complex problems using data, logic, or long-term planning?",
+            subgroup_question="How interested are you in solving complex problems using data, logic, or long-term planning?",
             job_cluster=biz_strategy
         )
         db.session.add(strategy_roles)
@@ -30,7 +30,7 @@ def seed_business_strategy_data():
 
         leadership_roles = Subgroup(
             name="Leadership & Management Roles",
-            question="How appealing is it to you to guide teams and projects to meet goals efficiently and effectively?",
+            subgroup_question="How appealing is it to you to guide teams and projects to meet goals efficiently and effectively?",
             job_cluster=biz_strategy
         )
         db.session.add(leadership_roles)
@@ -52,7 +52,7 @@ def seed_business_strategy_data():
 
         marketing_roles = Subgroup(
             name="Marketing & Brand Roles",
-            question="How interested are you in creating and managing how products or companies connect with their audience?",
+            subgroup_question="How interested are you in creating and managing how products or companies connect with their audience?",
             job_cluster=biz_strategy
         )
         db.session.add(marketing_roles)
@@ -70,7 +70,7 @@ def seed_business_strategy_data():
 
         entrepreneurship_roles = Subgroup(
             name="Entrepreneurship & Finance Roles",
-            question="How appealing is the idea of managing money, taking risks, or starting your own venture?",
+            subgroup_question="How appealing is the idea of managing money, taking risks, or starting your own venture?",
             job_cluster=biz_strategy
         )
         db.session.add(entrepreneurship_roles)

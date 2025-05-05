@@ -8,7 +8,7 @@ def seed_creative_data():
 
         design_roles = Subgroup(
             name="Digital Design & Interaction",
-            question="How interested are you in designing digital visuals or environments that are clear, useful, or interactive?",
+            subgroup_question="How interested are you in designing digital visuals or environments that are clear, useful, or interactive?",
             job_cluster=creative_data
         )
         db.session.add(design_roles)
@@ -29,7 +29,7 @@ def seed_creative_data():
         ]
         motion_roles = Subgroup(
             name="Motion & Media",
-            question="How appealing is it to you to create dynamic content like videos, animations, or media for entertainment or education?",
+            subgroup_question="How appealing is it to you to create dynamic content like videos, animations, or media for entertainment or education?",
             job_cluster=creative_data
         )
         db.session.add(motion_roles)
@@ -51,7 +51,7 @@ def seed_creative_data():
 
         visual_roles = Subgroup(
             name="Visual Arts & Storytelling",
-            question="How interested are you in using art or photography to tell stories or convey a message?",
+            subgroup_question="How interested are you in using art or photography to tell stories or convey a message?",
             job_cluster=creative_data
         )
         db.session.add(visual_roles)
@@ -69,7 +69,7 @@ def seed_creative_data():
 
         leadership_roles = Subgroup(
             name="Creative Leadership",
-            question="How appealing is it to you to lead creative projects and guide the vision behind visuals or campaigns?",
+            subgroup_question="How appealing is it to you to lead creative projects and guide the vision behind visuals or campaigns?",
             job_cluster=creative_data
         )
         db.session.add(leadership_roles)

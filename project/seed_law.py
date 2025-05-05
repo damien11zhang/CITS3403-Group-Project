@@ -10,7 +10,7 @@ def seed_law():
         # Subgroup 1: Support Roles
         support_roles = Subgroup(
             name="Support Roles",
-            question="Do behind the scene roles that help important sectors function appeal to you?",
+            subgroup_question="Do behind the scene roles that help important sectors function appeal to you?",
             job_cluster=law
         )
         db.session.add(support_roles)
@@ -25,7 +25,7 @@ def seed_law():
         # Subgroup 2: Law and Justice
         law_justice = Subgroup(
             name="Law and Justice",
-            question="Do you have a strong interest in courtroom settings and influencing legal outcomes through argument or decision-making?",
+            subgroup_question="Do you have a strong interest in courtroom settings and influencing legal outcomes through argument or decision-making?",
             job_cluster=law
         )
         db.session.add(law_justice)
@@ -44,7 +44,7 @@ def seed_law():
         # Subgroup 3: Public Protection
         public_protection = Subgroup(
             name="Public Protection",
-            question="Are you excited by active, high-stakes roles where you serve and protect others during emergencies?",
+            subgroup_question="Are you excited by active, high-stakes roles where you serve and protect others during emergencies?",
             job_cluster=law
         )
         db.session.add(public_protection)

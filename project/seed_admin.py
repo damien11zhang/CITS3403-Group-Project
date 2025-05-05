@@ -10,7 +10,7 @@ def seed_admin():
         # Subgroup 1: Frontline Support
         frontline_support = Subgroup(
             name="Frontline Support",
-            question="How much do you enjoy helping people solve problems in real-time and being the first point of contact for questions or concerns?",
+            subgroup_question="How much do you enjoy helping people solve problems in real-time and being the first point of contact for questions or concerns?",
             job_cluster=admin
         )
         db.session.add(frontline_support)
@@ -27,7 +27,7 @@ def seed_admin():
         # Subgroup 2: Information Management
         information_management = Subgroup(
             name="Information Management",
-            question="Do you find satisfaction in keeping things organized and making sure nothing gets overlooked?",
+            subgroup_question="Do you find satisfaction in keeping things organized and making sure nothing gets overlooked?",
             job_cluster=admin
         )
         db.session.add(information_management)
@@ -42,7 +42,7 @@ def seed_admin():
         # Subgroup 3: People & Events
         people_events = Subgroup(
             name="People & Events",
-            question="How much do you like bringing people together and making sure everything runs smoothly behind the scenes?",
+            subgroup_question="How much do you like bringing people together and making sure everything runs smoothly behind the scenes?",
             job_cluster=admin
         )
         db.session.add(people_events)
@@ -57,7 +57,7 @@ def seed_admin():
         #Subgroup 4: Internal Operations
         internal_operations = Subgroup(
             name="Internal Operations",
-            question="Do you enjoy keeping things on track and making sure day-to-day tasks are handled smoothly?",
+            subgroup_question="Do you enjoy keeping things on track and making sure day-to-day tasks are handled smoothly?",
             job_cluster=admin
         )
         db.session.add(internal_operations)
@@ -69,7 +69,8 @@ def seed_admin():
                 question_2="How much do you enjoy managing logistics and ensuring plans run smoothly?", subgroup=internal_operations)
             Job(title="Personal Assistant", question_1="How comfortable are you juggling multiple priorities for someone else?",
                 question_2="How much do you enjoy being in a role where anticipation and proactivity matter?", subgroup=internal_operations)
-        
+        ]
+
         db.session.add_all(jobs_frontline_support + jobs_information_management + jobs_people_events + jobs_internal_operations)
         db.session.commit()
         print("Admin & Organisation cluster with subgroups seeded successfully.")

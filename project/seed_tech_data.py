@@ -8,7 +8,7 @@ def seed_tech_data():
 
         data_roles = Subgroup(
             name="Data-Centric Roles",
-            question="How interested are you in using data to make decisions, uncover insights, or power smart systems?",
+            subgroup_question="How interested are you in using data to make decisions, uncover insights, or power smart systems?",
             job_cluster=tech_data
         )
         db.session.add(data_roles)
@@ -24,7 +24,7 @@ def seed_tech_data():
 
         dev_roles = Subgroup(
             name="Software Development Roles",
-            question="How appealing is the idea of building digital tools or apps that people use every day?",
+            subgroup_question="How appealing is the idea of building digital tools or apps that people use every day?",
             job_cluster=tech_data
         )
         db.session.add(dev_roles)
@@ -39,7 +39,7 @@ def seed_tech_data():
         ]
         infra_cloud_roles = Subgroup(
             name="Infrastructure and Cloud Roles",
-            question="How interested are you in setting up and maintaining the technology that keeps apps running reliably?",
+            subgroup_question="How interested are you in setting up and maintaining the technology that keeps apps running reliably?",
             job_cluster=tech_data
         )
         db.session.add(infra_cloud_roles)
@@ -52,7 +52,7 @@ def seed_tech_data():
         ]
         security_storage_roles = Subgroup(
             name="Security and Storage Roles",
-            question="How appealing is the idea of protecting information and making sure it’s organized and accessible?",
+            subgroup_question="How appealing is the idea of protecting information and making sure it’s organized and accessible?",
             job_cluster=tech_data
         )
         db.session.add(security_storage_roles)

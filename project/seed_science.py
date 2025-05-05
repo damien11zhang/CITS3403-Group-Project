@@ -23,20 +23,20 @@ with app.app_context():
         Job(
             title="Biomedical Scientist",
             subgroup=lab_med_subgroup,
-            first_question="Do you find it rewarding to study human biology to advance medical treatments?",
-            second_question="Are you interested in using lab-based techniques to diagnose or prevent disease?"
+            question_1="Do you find it rewarding to study human biology to advance medical treatments?",
+            question_2="Are you interested in using lab-based techniques to diagnose or prevent disease?"
         ),
         Job(
             title="Clinical Research Associate",
             subgroup=lab_med_subgroup,
-            first_question="Are you interested in overseeing clinical trials to ensure safe and ethical testing of new treatments?",
-            second_question="Do you enjoy working at the intersection of science, medicine, and regulatory compliance?"
+            question_1="Are you interested in overseeing clinical trials to ensure safe and ethical testing of new treatments?",
+            question_2="Do you enjoy working at the intersection of science, medicine, and regulatory compliance?"
         ),
         Job(
             title="Biotechnologist",
             subgroup=lab_med_subgroup,
-            first_question="Are you passionate about using living organisms to develop new products or technologies?",
-            second_question="Do you enjoy working with genetic engineering, microbiology, or biochemical processes?"
+            question_1="Are you passionate about using living organisms to develop new products or technologies?",
+            question_2="Do you enjoy working with genetic engineering, microbiology, or biochemical processes?"
         ),
     ])
 
@@ -52,20 +52,20 @@ with app.app_context():
         Job(
             title="Environmental Scientist",
             subgroup=env_earth_subgroup,
-            first_question="Are you passionate about understanding and solving environmental issues like pollution or climate change?",
-            second_question="Do you enjoy working with data and ecosystems to promote sustainability?"
+            question_1="Are you passionate about understanding and solving environmental issues like pollution or climate change?",
+            question_2="Do you enjoy working with data and ecosystems to promote sustainability?"
         ),
         Job(
             title="Agricultural Scientist",
             subgroup=env_earth_subgroup,
-            first_question="Are you curious about improving crop yields and sustainable farming practices?",
-            second_question="Do you enjoy applying biology and chemistry to improve food production?"
+            question_1="Are you curious about improving crop yields and sustainable farming practices?",
+            question_2="Do you enjoy applying biology and chemistry to improve food production?"
         ),
         Job(
             title="Geoscientist",
             subgroup=env_earth_subgroup,
-            first_question="Are you drawn to studying the Earth’s physical structure, processes, and resources?",
-            second_question="Do you enjoy analyzing rock, soil, and environmental samples to understand our planet?"
+            question_1="Are you drawn to studying the Earth’s physical structure, processes, and resources?",
+            question_2="Do you enjoy analyzing rock, soil, and environmental samples to understand our planet?"
         ),
     ])
 
@@ -81,14 +81,14 @@ with app.app_context():
         Job(
             title="Materials Scientist",
             subgroup=materials_subgroup,
-            first_question="Are you fascinated by studying and creating new materials to solve engineering or industrial problems?",
-            second_question="Do you enjoy experimenting with physical and chemical properties at the microscopic level?"
+            question_1="Are you fascinated by studying and creating new materials to solve engineering or industrial problems?",
+            question_2="Do you enjoy experimenting with physical and chemical properties at the microscopic level?"
         ),
         Job(
             title="Forensic Scientist",
             subgroup=materials_subgroup,
-            first_question="Are you interested in analyzing evidence to assist in criminal investigations?",
-            second_question="Do you enjoy applying scientific methods to uncover the truth in legal cases?"
+            question_1="Are you interested in analyzing evidence to assist in criminal investigations?",
+            question_2="Do you enjoy applying scientific methods to uncover the truth in legal cases?"
         ),
     ])
 
@@ -104,14 +104,14 @@ with app.app_context():
         Job(
             title="Researcher",
             subgroup=sci_comm_subgroup,
-            first_question="Do you enjoy forming hypotheses and testing them through structured investigations?",
-            second_question="Are you motivated by discovering new knowledge and contributing to scientific understanding?"
+            question_1="Do you enjoy forming hypotheses and testing them through structured investigations?",
+            question_2="Are you motivated by discovering new knowledge and contributing to scientific understanding?"
         ),
         Job(
             title="Science Policy Analyst",
             subgroup=sci_comm_subgroup,
-            first_question="Are you interested in shaping public policy based on scientific evidence and trends?",
-            second_question="Do you enjoy evaluating research to inform decision-makers and the public?"
+            question_1="Are you interested in shaping public policy based on scientific evidence and trends?",
+            question_2="Do you enjoy evaluating research to inform decision-makers and the public?"
         ),
     ])
 

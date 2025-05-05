@@ -10,7 +10,7 @@ def seed_health():
         # Subgroup 1: Clinical & Emergency
         clinical_emergency = Subgroup(
             name="Clinical & Emergency",
-            question="Do you enjoy providing immediate, hands-on care in dynamic or high-pressure situations?",
+            subgroup_question="Do you enjoy providing immediate, hands-on care in dynamic or high-pressure situations?",
             job_cluster=health
         )
         db.session.add(clinical_emergency)
@@ -27,7 +27,7 @@ def seed_health():
         # Subgroup 2: Therapy & Rehabilitation
         therapy_rehab = Subgroup(
             name="Therapy & Rehabilitation",
-            question="Do you enjoy helping others recover or improve their physical and mental abilities?",
+            subgroup_question="Do you enjoy helping others recover or improve their physical and mental abilities?",
             job_cluster=health
         )
         db.session.add(therapy_rehab)
@@ -46,7 +46,7 @@ def seed_health():
         # Subgroup 3: Nutrition & Medication
         nutrition_medication = Subgroup(
             name="Nutrition & Medication",
-            question="Do you enjoy advising people on nutrition, wellness, or medication use?",
+            subgroup_question="Do you enjoy advising people on nutrition, wellness, or medication use?",
             job_cluster=health
         )
         db.session.add(nutrition_medication)
@@ -61,7 +61,7 @@ def seed_health():
         # Subgroup 4: Diagnostics
         diagnostics = Subgroup(
             name="Diagnostics",
-            question="Do you enjoy analyzing medical samples or data to assist in diagnoses?",
+            subgroup_question="Do you enjoy analyzing medical samples or data to assist in diagnoses?",
             job_cluster=health
         )
         db.session.add(diagnostics)

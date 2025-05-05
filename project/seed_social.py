@@ -10,7 +10,7 @@ def seed_social():
         # Subgroup 1: Education & Guidance
         education_guidance = Subgroup(
             name="Education & Guidance",
-            question="Do you enjoy teaching, advising, or helping others grow in their personal or professional life?",
+            subgroup_question="Do you enjoy teaching, advising, or helping others grow in their personal or professional life?",
             job_cluster=social
         )
         db.session.add(education_guidance)
@@ -27,7 +27,7 @@ def seed_social():
         # Subgroup 2: Emotional & Social Support
         emotional_support = Subgroup(
             name="Emotional & Social Support",
-            question="Do you enjoy supporting others through emotional or social challenges in their lives?",
+            subgroup_question="Do you enjoy supporting others through emotional or social challenges in their lives?",
             job_cluster=social
         )
         db.session.add(emotional_support)
@@ -44,7 +44,7 @@ def seed_social():
         # Subgroup 3: Community & Coordination
         community_coordination = Subgroup(
             name="Community & Coordination",
-            question="Do you enjoy organizing people or events, and working closely with teams or the public?",
+            subgroup_question="Do you enjoy organizing people or events, and working closely with teams or the public?",
             job_cluster=social
         )
         db.session.add(community_coordination)

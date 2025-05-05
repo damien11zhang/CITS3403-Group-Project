@@ -11,7 +11,7 @@ def seed_engineering():
         # Subgroup 1: Infrastructure & Environment (Civil, Mining, Project)
         infra_env = Subgroup(
             name="Infrastructure & Environment",
-            question="Do you enjoy planning and managing large-scale physical projects that shape environments and communities?",
+            subgroup_question="Do you enjoy planning and managing large-scale physical projects that shape environments and communities?",
             job_cluster=engineering
         )
         db.session.add(infra_env)
@@ -28,7 +28,7 @@ def seed_engineering():
         # Subgroup 2: Mechanical Systems & Design (Mechanical, Electrical, Automation & Robotics, Aeronautical)
         mech_design = Subgroup(
             name="Mechanical Systems & Design",
-            question="Are you drawn to designing and refining complex physical systems and machines?",
+            subgroup_question="Are you drawn to designing and refining complex physical systems and machines?",
             job_cluster=engineering
         )
         db.session.add(mech_design)
@@ -47,7 +47,7 @@ def seed_engineering():
         # Subgroup 3: Process & Production (Chemical, Industrial)
         process_prod = Subgroup(
             name="Process & Production",
-            question="Do you enjoy improving production efficiency and ensuring processes run smoothly and safely?",
+            subgroup_question="Do you enjoy improving production efficiency and ensuring processes run smoothly and safely?",
             job_cluster=engineering
         )
         db.session.add(process_prod)
@@ -62,7 +62,7 @@ def seed_engineering():
         # Subgroup 4: Software & Systems (Software)
         software_sys = Subgroup(
             name="Software & Systems",
-            question="Do you enjoy building digital systems that help solve real-world problems?",
+            subgroup_question="Do you enjoy building digital systems that help solve real-world problems?",
             job_cluster=engineering
         )
         db.session.add(software_sys)

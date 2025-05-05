@@ -10,7 +10,7 @@ def seed_trade():
         # Subgroup 1: Construction
         construction = Subgroup(
             name="Construction",
-            question="Do you enjoy physical work on a project that could last multiple months?",
+            subgroup_question="Do you enjoy physical work on a project that could last multiple months?",
             job_cluster=trade
         )
         db.session.add(construction)
@@ -29,7 +29,7 @@ def seed_trade():
         # Subgroup 2: Residential Trades
         residential_trades = Subgroup(
             name="Residential Trades",
-            question="Does helping people with some issues directly on their property appeal to you?",
+            subgroup_question="Does helping people with some issues directly on their property appeal to you?",
             job_cluster=trade
         )
         db.session.add(residential_trades)
@@ -46,7 +46,7 @@ def seed_trade():
         # Subgroup 3: Workshop Trades
         workshop_trades = Subgroup(
             name="Workshop Trades",
-            question="Does working from a workshop as opposed to on a site appeal to you?",
+            subgroup_question="Does working from a workshop as opposed to on a site appeal to you?",
             job_cluster=trade
         )
         db.session.add(workshop_trades)
