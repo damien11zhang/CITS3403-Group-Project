@@ -1,20 +1,44 @@
 {% extends "base.html" %}
-{% block title %}Career Quiz – Section 1{% endblock %}
+{% block title %}CareerCompas – Interest Quiz{% endblock %}
 
 {% block content %}
 <div class="quiz-page-wrapper">
-  <h1 class="quiz-heading">Select 3 Statements That Describe You Best</h1>
-  <form method="POST" action="{{ url_for('quiz') }}">
-    <div class="quiz-card-grid">
-      {% for cluster in clusters %}
-      <div class="quiz-card" onclick="toggleCard(this)">
-        <input type="checkbox" name="selected_clusters" value="{{ cluster.id }}" hidden>
-        {{ cluster.description }}
-      </div>
-      {% endfor %}
+  <h1 class="quiz-heading">CareerCompas</h1>
+  <h2 class="subheading">Interest and Career Test</h2>
+
+  <div class="intro-banner vertical-banner">
+    <div class="intro-card">
+      <img src="{{ url_for('static', filename='images/one.png') }}" class="intro-img" alt="Know your career">
+      <h4>Know your career</h4>
+      <p>Find the best career which suits you!</p>
     </div>
-    <button class="button" type="submit">Next</button>
-  </form>
+    <div class="intro-card">
+      <img src="{{ url_for('static', filename='images/two.png') }}" class="intro-img" alt="Get the privilege">
+      <h4>Get the privilege</h4>
+      <p>Access curated courses, groups, and opportunities based on your result.</p>
+    </div>
+    <div class="intro-card">
+      <img src="{{ url_for('static', filename='images/three.png') }}" class="intro-img" alt="Stay empowered">
+      <h4>Stay empowered</h4>
+      <p>Receive ongoing support tailored to your interests and strengths.</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Select 3 Statements That Describe You Best</h2>
+    <p style="margin-bottom: 2rem;">Be yourself and answer honestly!</p>
+    <form method="POST" action="{{ url_for('quiz') }}">
+      <div class="quiz-card-grid">
+        {% for cluster in clusters %}
+        <div class="quiz-card" onclick="toggleCard(this)">
+          <input type="checkbox" name="selected_clusters" value="{{ cluster.id }}" hidden>
+          {{ cluster.description }}
+        </div>
+        {% endfor %}
+      </div>
+      <button class="button" type="submit">Next</button>
+    </form>
+  </div>
 </div>
 
 <script>
