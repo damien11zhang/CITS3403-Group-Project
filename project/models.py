@@ -4,6 +4,7 @@ class JobCluster(db.Model):
     __tablename__ = 'job_clusters'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False, unique=True)
+    description = db.Column(db.String(300), nullable=False)
     subgroups = db.relationship('Subgroup', backref='job_cluster', lazy=True)
 
 class Subgroup(db.Model):
