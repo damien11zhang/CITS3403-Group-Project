@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash
-from werkzeug.security import generate_password_hash
+from werkzeug.security import generate_password_hash, check_password_hash
 from flask_migrate import Migrate
 from uuid import uuid4
 from flask_login import LoginManager, UserMixin, login_user, logout_user, current_user, login_required
@@ -49,15 +49,14 @@ def support():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        username = request.form.get('username')
-        password = request.form.get('password')
-
+        username = request.form['username']
+        password = request.form['password']
+        
         user = User.query.filter_by(username=username).first()
-        if user and user.password == password:
+        if user and check_password_hash(user.password, password): 
             login_user(user)
             return redirect(url_for('profile'))
-        return 'Invalid username or password.'
-
+        flash('Invalid login credentials', 'danger')
     return render_template('login.html')
 
 @login_manager.user_loader
