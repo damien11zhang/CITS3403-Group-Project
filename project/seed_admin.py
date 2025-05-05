@@ -66,7 +66,7 @@ def seed_admin():
             Job(title="Administrative Assistant", question_1="How much do you enjoy helping others work efficiently?", 
                 question_2="How much do you enjoy roles that are routine with occasional unexpected tasks?", subgroup=internal_operations),
             Job(title="Scheduling Assistant", question_1="How much does coordinating appointments appeal you?",
-                question_2="How much do you enjoy managing logistics and ensuring plans run smoothly?", subgroup=internal_operations)
+                question_2="How much do you enjoy managing logistics and ensuring plans run smoothly?", subgroup=internal_operations),
             Job(title="Personal Assistant", question_1="How comfortable are you juggling multiple priorities for someone else?",
                 question_2="How much do you enjoy being in a role where anticipation and proactivity matter?", subgroup=internal_operations)
         ]
