@@ -50,7 +50,7 @@ def seed_admin():
         jobs_people_events = [
             Job(title="Human Resources", question_1="How much do you enjoy supporting others throughout their workplace career?",
                 question_2="How comfortable are you with balancing empathy and workplace policy?", subgroup=people_events),
-            Job(title="Event Planner", question_1=" How do you like creating experiences that others will enjoy or remember?",
+            Job(title="Event Planner", question_1="How do you like creating experiences that others will enjoy or remember?",
                 question_2="How comfortable are you managing small details on a tight deadline?", subgroup=people_events)
         ]
         
