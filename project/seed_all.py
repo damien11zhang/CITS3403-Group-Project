@@ -10,7 +10,7 @@ SEED_FILES = [
     "seed_social.py",
     "seed_trade.py",
     "seed_tech_data.py",
-    "seed_technology.py",
+    "seed_creative.py",
     "seed_law.py"
 ]
 
