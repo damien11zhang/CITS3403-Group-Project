@@ -51,11 +51,19 @@ def login():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        
         user = User.query.filter_by(username=username).first()
-        if user and check_password_hash(user.password, password): 
-            login_user(user)
-            return redirect(url_for('profile'))
+        
+        if user:
+            print(f"Found user: {user.username}, Checking password...")
+            if check_password_hash(user.password, password): 
+                print("Password matched!")
+                login_user(user)
+                return redirect(url_for('profile'))
+            else:
+                print("Password did not match.")
+        else:
+            print("User not found.")
+        
         flash('Invalid login credentials', 'danger')
     return render_template('login.html')
 
@@ -95,7 +103,7 @@ def signup():
 @app.route('/profile')
 @login_required
 def profile():
-    return f'Welcome {current_user.username}!'
+    return render_template('profile.html')
 
 @app.route('/quiz', methods=['GET', 'POST'])
 def quiz():
