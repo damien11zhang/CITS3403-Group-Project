@@ -7,7 +7,6 @@
 <form method="POST" action="{{ url_for('quiz4') }}">
     {% for job in jobs %}
         <div class="job-block">
-            <h3>{{ job.title }}</h3>
             <p>{{ job.question_2 }}</p>
             <div class="slider-group">
                 <label for="job_q2_{{ job.id }}">Your Interest Level</label>
