@@ -143,7 +143,7 @@ def quiz2():
     return render_template('quiz2.html', subgroups=subgroups)
 
 @app.route('/quiz3', methods=['GET', 'POST'])
-def quiz_stage3():
+def quiz3():
     if request.method == 'POST':
         passing_jobs = []
         job_scores = {}
@@ -192,7 +192,7 @@ def quiz_stage3():
 
     return render_template('quiz3.html', jobs=jobs)
 @app.route('/quiz4', methods=['GET', 'POST'])
-def quiz_stage4():
+def quiz4():
     if request.method == 'POST':
         job_scores = session.get('job_scores', {})  # job_id: subgroup + Q1 score
         final_scores = {}
