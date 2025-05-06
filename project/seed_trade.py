@@ -6,7 +6,8 @@ def seed_trade():
         # Cluster: Trade & Skilled work
         trade = JobCluster(
                            name="Trades & Practical Work",
-                           description="Fix, build, work hands-on")
+                           description="Use hands-on skills to construct, maintain, and repair physical objects and infrastructure.",
+                           question="I like doing practical, hands-on work and seeing the results of my efforts.")
         db.session.add(trade)
 
         # Subgroup 1: Construction

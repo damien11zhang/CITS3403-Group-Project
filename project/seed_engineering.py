@@ -7,7 +7,8 @@ def seed_engineering():
         # Create Job Cluster
         engineering = JobCluster(
                                  name="Engineering & Systems",
-                                 description="Build, innovate, solve technically")
+                                 description="Design and improve machines, structures, and systems that solve real-world problems.",
+                                 question="I enjoy figuring out how systems or machines work and how to improve them.")
         db.session.add(engineering)
 
         # Subgroup 1: Infrastructure & Environment (Civil, Mining, Project)

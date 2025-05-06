@@ -6,7 +6,8 @@ def seed_admin():
         # Cluster: Admin & Organisation
         admin = JobCluster(
             name="Admin & Organisation",
-            description="Organize, support, and coordinate systems")
+            description="Organize, support, and coordinate systems",
+            question="I enjoy organizing tasks, keeping things structured, and making sure everything runs smoothly.")
 
         db.session.add(admin)
 

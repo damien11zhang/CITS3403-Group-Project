@@ -6,7 +6,8 @@ def seed_social():
         # Cluster: Social & People
         social = JobCluster(
                             name="Social & Community Services",
-                            description="Support, connect, empower people")
+                            description="Support and empower individuals and communities through care, guidance, and engagement.",
+                            question="I like helping people feel heard, supported, or understood.")
         db.session.add(social)
 
         # Subgroup 1: Education & Guidance
