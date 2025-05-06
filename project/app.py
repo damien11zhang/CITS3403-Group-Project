@@ -153,7 +153,6 @@ def quiz3():
                 job_id = int(key.split('_')[2])
                 score = int(value)
 
-                # Save Q1 response
                 db.session.add(UserResponse(
                     session_id=session['session_id'],
                     question_type='first',
@@ -161,16 +160,17 @@ def quiz3():
                     score=score
                 ))
 
-                # Get subgroup score from previous stage
+                # Get subgroup score
                 job = Job.query.get(job_id)
-                subgroup_score = db.session.query(UserResponse).filter_by(
+                subgroup_response = UserResponse.query.filter_by(
                     session_id=session['session_id'],
                     question_type='subgroup',
                     target_id=job.subgroup_id
                 ).first()
 
-                total_score = score + (subgroup_score.score if subgroup_score else 0)
-                job_scores[str(job_id)] = total_score  # Must store str keys in session
+                subgroup_score = subgroup_response.score if subgroup_response else 0
+                total_score = score + subgroup_score
+                job_scores[str(job_id)] = total_score
 
                 if score >= 4:
                     passing_jobs.append(job_id)
@@ -181,16 +181,17 @@ def quiz3():
 
         return redirect(url_for('quiz4'))
 
-    # Get subgroups that passed stage 2
+    # Get jobs from subgroups that scored ≥5
     subgroup_responses = UserResponse.query.filter_by(
         session_id=session['session_id'],
         question_type='subgroup'
     ).all()
-
     passing_subgroup_ids = [res.target_id for res in subgroup_responses if res.score >= 5]
+
     jobs = Job.query.filter(Job.subgroup_id.in_(passing_subgroup_ids)).all()
 
     return render_template('quiz3.html', jobs=jobs)
+
 @app.route('/quiz4', methods=['GET', 'POST'])
 def quiz4():
     if request.method == 'POST':
