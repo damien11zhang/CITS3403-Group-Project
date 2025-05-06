@@ -93,21 +93,15 @@ def profile():
 def quiz():
     if request.method == 'POST':
         selected = request.form.getlist('selected_clusters')
-        if len(selected) != 3:
-            return "Please select exactly 3 clusters."
-
-        user_id = 1  # TEMPORARY, replace with session-based user later
-
-        for cid in selected:
-            db.session.add(UserSelectedCluster(user_id=user_id, cluster_id=cid))
-        
-        db.session.commit()
-
-        session['selected_clusters'] = selected  # <-- this is key!
-
+        session['selected_clusters'] = selected
         return redirect(url_for('quiz2'))
 
     clusters = JobCluster.query.all()
+    print("=== DEBUG: CLUSTERS LOADED ===")
+    for c in clusters:
+        print(f"{c.id} - {c.name} - {c.description}")
+    print("==============================")
+
     return render_template("quiz.html", clusters=clusters)
 
 @app.route('/quiz2', methods=['GET', 'POST'])

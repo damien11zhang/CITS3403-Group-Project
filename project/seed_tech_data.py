@@ -3,7 +3,9 @@ from models import JobCluster, Subgroup, Job
 
 def seed_tech_data():
     with app.app_context():
-        tech_data = JobCluster(name="Tech & Data")
+        tech_data = JobCluster(
+                               name="Tech & Data",
+                               description="Code, analyze, build systems")
         db.session.add(tech_data)
 
         data_roles = Subgroup(
@@ -66,3 +68,5 @@ def seed_tech_data():
         db.session.add_all(jobs_data + jobs_dev + jobs_infra_cloud + jobs_security_storage)
         db.session.commit()
         print("Tech & Data cluster seeded successfully.")
+
+seed_tech_data()

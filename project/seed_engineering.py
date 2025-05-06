@@ -5,7 +5,9 @@ from models import JobCluster, Subgroup, Job
 def seed_engineering():
     with app.app_context():
         # Create Job Cluster
-        engineering = JobCluster(name="Engineering and Systems")
+        engineering = JobCluster(
+                                 name="Engineering & Systems",
+                                 description="Build, innovate, solve technically")
         db.session.add(engineering)
 
         # Subgroup 1: Infrastructure & Environment (Civil, Mining, Project)
@@ -78,3 +80,5 @@ def seed_engineering():
         # Commit changes
         db.session.commit()
         print("Engineering & Systems cluster seeded successfully.")
+
+seed_engineering()

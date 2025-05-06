@@ -314,8 +314,8 @@ a:hover {
 
 .quiz-card-grid {
   display: grid;
-  grid-template-columns: 1fr;
-  gap: 1.2rem;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
   margin-bottom: 2rem;
 }
 
@@ -331,12 +331,13 @@ a:hover {
 }
 
 .quiz-card:hover {
-  background-color: #f8f8ff;
+  transform: scale(1.02);
+  background-color: #eef;
 }
 
 .quiz-card.selected {
-  border-color: #4f46e5;
-  background-color: #eef2ff;
+  background-color: #dbeafe;
+  border: 2px solid #6366f1;
 }
 
 .subheading {
@@ -362,12 +363,12 @@ a:hover {
 }
 
 .quiz-card {
-  background: white;
+  background: #f8f8f8;
   border-radius: 12px;
   padding: 1.5rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
-  text-align: center;
-  width: 280px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  cursor: pointer;
+  transition: transform 0.2s ease, background-color 0.2s;
 }
 
 .info-section-wrapper {

@@ -4,7 +4,9 @@ from models import JobCluster, Subgroup, Job
 def seed_health():
     with app.app_context():
         # Cluster: Health & Care
-        health = JobCluster(name="Health & Care")
+        health = JobCluster(
+                            name="Health & Wellbeing",
+                            description="Care, heal, support others")
         db.session.add(health)
 
         # Subgroup 1: Clinical & Emergency
@@ -74,3 +76,5 @@ def seed_health():
         db.session.add_all(jobs_clinical_emergency + jobs_therapy_rehab + jobs_nutrition_medication + jobs_diagnostics)
         db.session.commit()
         print("Health & Care cluster with subgroups seeded successfully.")
+
+seed_health()

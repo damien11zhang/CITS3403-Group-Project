@@ -4,7 +4,9 @@ from models import JobCluster, Subgroup, Job
 def seed_law():
     with app.app_context():
         # Cluster: Law and Public Service
-        law = JobCluster(name="Law and Public Service")
+        law = JobCluster(
+                         name="Law, Government & Safety",
+                         description="Protect, enforce, uphold fairness")
         db.session.add(law)
 
         # Subgroup 1: Support Roles
@@ -64,3 +66,5 @@ def seed_law():
         db.session.add_all(jobs_support_roles + jobs_law_justice + jobs_public_protection)
         db.session.commit()
         print("Law & Public Service cluster with subgroups seeded successfully.")
+
+seed_law()

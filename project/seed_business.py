@@ -3,7 +3,10 @@ from models import JobCluster, Subgroup, Job
 
 def seed_business_strategy_data():
     with app.app_context():
-        biz_strategy = JobCluster(name="Business & Strategy")
+        biz_strategy = JobCluster(
+                                  name="Business & Strategy",
+                                  description="Plan, lead, solve problems"
+                                  )
         db.session.add(biz_strategy)
 
         strategy_roles = Subgroup(

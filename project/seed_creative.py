@@ -3,7 +3,9 @@ from models import JobCluster, Subgroup, Job
 
 def seed_creative_data():
     with app.app_context():
-        creative_data = JobCluster(name="Creative & Visual")
+        creative_data = JobCluster(
+                                   name="Creative & Design",
+                                   description="Design, imagine, create visually")
         db.session.add(creative_data)
 
         design_roles = Subgroup(
@@ -88,3 +90,5 @@ def seed_creative_data():
         db.session.add_all(jobs_design + jobs_motion + jobs_visual + jobs_leadership)
         db.session.commit()
         print("Creative & Visual cluster seeded successfully.")
+
+seed_creative_data()

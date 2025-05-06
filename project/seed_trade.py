@@ -4,7 +4,9 @@ from models import JobCluster, Subgroup, Job
 def seed_trade():
     with app.app_context():
         # Cluster: Trade & Skilled work
-        trade = JobCluster(name="Trade & Skilled Work")
+        trade = JobCluster(
+                           name="Trades & Practical Work",
+                           description="Fix, build, work hands-on")
         db.session.add(trade)
 
         # Subgroup 1: Construction
@@ -64,3 +66,5 @@ def seed_trade():
         db.session.add_all(jobs_construction + jobs_residential_trades + jobs_workshop_trades)
         db.session.commit()
         print("Trade & Skilled Work cluster with subgroups seeded successfully.")
+
+seed_trade()

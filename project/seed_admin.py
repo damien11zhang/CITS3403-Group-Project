@@ -4,7 +4,10 @@ from models import JobCluster, Subgroup, Job
 def seed_admin():
     with app.app_context():
         # Cluster: Admin & Organisation
-        admin = JobCluster(name="Admin & Organisation")
+        admin = JobCluster(
+            name="Admin & Organisation",
+            description="Organize, support, and coordinate systems")
+
         db.session.add(admin)
 
         # Subgroup 1: Frontline Support
@@ -74,3 +77,5 @@ def seed_admin():
         db.session.add_all(jobs_frontline_support + jobs_information_management + jobs_people_events + jobs_internal_operations)
         db.session.commit()
         print("Admin & Organisation cluster with subgroups seeded successfully.")
+
+seed_admin()

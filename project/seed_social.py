@@ -4,7 +4,9 @@ from models import JobCluster, Subgroup, Job
 def seed_social():
     with app.app_context():
         # Cluster: Social & People
-        social = JobCluster(name="Social & People")
+        social = JobCluster(
+                            name="Social & Community Services",
+                            description="Support, connect, empower people")
         db.session.add(social)
 
         # Subgroup 1: Education & Guidance
@@ -63,3 +65,5 @@ def seed_social():
         db.session.add_all(jobs_education_guidance + jobs_emotional_support + jobs_community_coordination)
         db.session.commit()
         print("Social & People cluster with subgroups seeded successfully.")
+
+seed_social()

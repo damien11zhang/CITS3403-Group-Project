@@ -2,12 +2,12 @@ from app import app, db
 from models import JobCluster, Subgroup, Job
 
 with app.app_context():
-    # Clear existing data (optional for isolated testing)
-    db.drop_all()
-    db.create_all()
+    
 
     # Create JobCluster
-    science = JobCluster(name="Science and Research")
+    science = JobCluster(
+                         name="Science & Environment",
+                         description="Research, discover, understand nature")
     db.session.add(science)
 
     # Subgroup 1: Laboratory & Medical Research
