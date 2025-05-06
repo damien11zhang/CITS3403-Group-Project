@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}Your Top Career Matches{% endblock %}
+
+{% block content %}
+<h1>Your Top 5 Career Matches</h1>
+
+{% if top_jobs %}
+    <ol>
+    {% for job, score in top_jobs %}
+        <li>
+            <strong>{{ job.title }}</strong><br>
+            Total Score: {{ score }}
+        </li>
+    {% endfor %}
+    </ol>
+{% else %}
+    <p>No results available. Please complete the quiz first.</p>
+{% endif %}
+
+<a href="{{ url_for('quiz') }}">Take the Quiz Again</a>
+{% endblock %}

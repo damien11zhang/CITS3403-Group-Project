@@ -226,9 +226,25 @@ def quiz4():
 
     return render_template('quiz4.html', jobs=jobs)
 
-@app.route('/results')
+@app.route('/results', methods=['GET'])
 def results():
-    return render_template("results.html")
+    # Retrieve the job scores from the session
+    job_scores = session.get('job_scores', {})
+
+    # If there are no job scores, redirect to the quiz page
+    if not job_scores:
+        return redirect(url_for('quiz'))
+
+    # Sort jobs by their total scores in descending order
+    sorted_jobs = sorted(job_scores.items(), key=lambda x: x[1], reverse=True)
+
+    # Get the top 5 jobs
+    top_jobs = []
+    for job_id, score in sorted_jobs[:5]:
+        job = Job.query.get(job_id)  # Fetch the job using its ID
+        top_jobs.append((job, score))  # Append the job and score to the list
+
+    return render_template('results.html', top_jobs=top_jobs)
 
 @app.route('/logout')
 def logout():
