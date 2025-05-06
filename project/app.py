@@ -89,10 +89,21 @@ def profile():
     
     return render_template("profile.html", username=session.get('username'))
 
+import uuid
+
 @app.route('/quiz', methods=['GET', 'POST'])
 def quiz():
     if request.method == 'POST':
         selected = request.form.getlist('selected_clusters')
+        if len(selected) != 3:
+            return "Please select exactly 3 clusters."
+
+        # Generate a unique session ID for this user if not already present
+        if 'session_id' not in session:
+            session['session_id'] = str(uuid.uuid4())
+            print(f"=== NEW SESSION ID CREATED: {session['session_id']} ===")
+
+        # Save selected clusters to session
         session['selected_clusters'] = selected
         return redirect(url_for('quiz2'))
 
@@ -118,7 +129,7 @@ def quiz2():
                 score = int(value)
 
                 response = UserResponse(
-                    session_id=session.sid,
+                    session_id=session['session_id'],
                     question_type='subgroup',
                     target_id=subgroup_id,
                     score=score
@@ -144,7 +155,7 @@ def quiz_stage3():
 
                 # Save Q1 response
                 db.session.add(UserResponse(
-                    session_id=session.sid,
+                    session_id=session['session_id'],
                     question_type='first',
                     target_id=job_id,
                     score=score
@@ -153,7 +164,7 @@ def quiz_stage3():
                 # Get subgroup score from previous stage
                 job = Job.query.get(job_id)
                 subgroup_score = db.session.query(UserResponse).filter_by(
-                    session_id=session.sid,
+                    session_id=session['session_id'],
                     question_type='subgroup',
                     target_id=job.subgroup_id
                 ).first()
@@ -172,7 +183,7 @@ def quiz_stage3():
 
     # Get subgroups that passed stage 2
     subgroup_responses = UserResponse.query.filter_by(
-        session_id=session.sid,
+        session_id=session['session_id'],
         question_type='subgroup'
     ).all()
 
@@ -192,7 +203,7 @@ def quiz_stage4():
                 q2_score = int(value)
 
                 db.session.add(UserResponse(
-                    session_id=session.sid,
+                    session_id=session['session_id'],
                     question_type='second',
                     target_id=job_id,
                     score=q2_score
