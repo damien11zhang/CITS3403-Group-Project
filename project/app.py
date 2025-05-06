@@ -137,7 +137,7 @@ def quiz2():
                 db.session.add(response)
 
         db.session.commit()
-        return redirect(url_for('quiz_stage3'))
+        return redirect(url_for('quiz3'))
 
     subgroups = Subgroup.query.filter(Subgroup.job_cluster_id.in_(selected_ids)).all()
     return render_template('quiz2.html', subgroups=subgroups)
@@ -179,7 +179,7 @@ def quiz_stage3():
         session['job_scores'] = job_scores
         session['passing_jobs'] = passing_jobs
 
-        return redirect(url_for('quiz_stage4'))
+        return redirect(url_for('quiz4'))
 
     # Get subgroups that passed stage 2
     subgroup_responses = UserResponse.query.filter_by(
