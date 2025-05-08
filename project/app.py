@@ -32,9 +32,22 @@ def test():
 def about():
     return render_template("about.html")
 
-@app.route('/support')
-def support():
-    return render_template("support.html")
+@app.route('/suggest', methods=['GET', 'POST'])
+def suggest():
+    if request.method == 'POST':
+        suggestion = Suggestion(
+            user_id=session.get('user_id', 'guest'),
+            job_title=request.form['job_title'],
+            description=request.form.get('description'),
+            question_1=request.form.get('question_1'),
+            question_2=request.form.get('question_2')
+        )
+        db.session.add(suggestion)
+        db.session.commit()
+        flash("Thanks for your suggestion!")
+        return redirect(url_for('suggest'))
+
+    return render_template('suggest.html')
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
