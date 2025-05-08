@@ -1,20 +1,44 @@
 {% extends "base.html" %}
 {% block title %}Suggest a Job{% endblock %}
 {% block content %}
-<h1>Suggest a New Career Path</h1>
-<form method="POST">
-    <label for="job_title">Job Title:</label>
-    <input type="text" name="job_title" required><br><br>
+<div class="container mt-4">
+    <div class="text-center mb-4">
+        <h1>Suggest a New Career Path</h1>
+        <p class="lead">We appreciate your feedback and would love to hear how we could improve the quiz, add new career ideas, or tailor it better to your interests.</p>
+        <img src="{{ url_for('static', filename='images/feedback.png') }}" alt="Feedback Illustration" style="max-width: 300px;" class="img-fluid mt-2">
+    </div>
 
-    <label for="description">Why is this job useful to include?</label><br>
-    <textarea name="description" rows="3"></textarea><br><br>
+    <div class="section image-section centered">
+        <img src="{{ url_for('static', filename='images/idea.jpg') }}" alt="Idea Image" class="about-image" />
+    </div>
 
-    <label for="question_1">Suggested Question 1:</label>
-    <input type="text" name="question_1"><br><br>
+    <form method="POST">
+        <div class="mb-3">
+            <label for="job_title" class="form-label">Job Title:</label>
+            <input type="text" class="form-control" name="job_title" required>
+        </div>
 
-    <label for="question_2">Suggested Question 2:</label>
-    <input type="text" name="question_2"><br><br>
+        <div class="mb-3">
+            <label for="description" class="form-label">Why is this job useful to include?</label>
+            <textarea name="description" class="form-control" rows="3"></textarea>
+        </div>
 
-    <button type="submit">Submit Suggestion</button>
-</form>
+        <div class="mb-3">
+            <label for="question_1" class="form-label">Suggested Question 1:</label>
+            <input type="text" class="form-control" name="question_1">
+        </div>
+
+        <div class="mb-3">
+            <label for="question_2" class="form-label">Suggested Question 2:</label>
+            <input type="text" class="form-control" name="question_2">
+        </div>
+
+        <button type="submit" class="btn btn-primary">Submit Suggestion</button>
+    </form>
+
+    <div class="section image-section centered">
+        <img src="{{ url_for('static', filename='images/feedback.jpg') }}" alt="Feedback Image" class="about-image" />
+    </div>
+
+</div>
 {% endblock %}
