@@ -123,6 +123,11 @@ import uuid
 @app.route('/quiz', methods=['GET', 'POST'])
 def quiz():
     if request.method == 'POST':
+        # Clear all previous quiz-related session data
+        for key in ['session_id', 'selected_clusters', 'asked_subgroups',
+                    'job_scores', 'passing_jobs', 'top_jobs']:
+            session.pop(key, None)
+
         selected = request.form.getlist('selected_clusters')
         if len(selected) != 3:
             return "Please select exactly 3 clusters."
@@ -145,31 +150,41 @@ def quiz():
     return render_template("quiz.html", clusters=clusters)
 
 @app.route('/quiz2', methods=['GET', 'POST'])
+
 def quiz2():
     selected_ids = session.get('selected_clusters', [])
-
     if not selected_ids:
         return redirect(url_for('quiz'))
 
-    if request.method == 'POST':
-        for key, value in request.form.items():
-            if key.startswith('score_'):
-                subgroup_id = int(key.split('_')[1])
-                score = int(value)
+    if 'asked_subgroups' not in session:
+        session['asked_subgroups'] = []
 
-                response = UserResponse(
-                    session_id=session['session_id'],
-                    question_type='subgroup',
-                    target_id=subgroup_id,
-                    score=score
-                )
-                db.session.add(response)
+    # Get all relevant subgroups
+    all_subgroups = Subgroup.query.filter(Subgroup.job_cluster_id.in_(selected_ids)).all()
+    remaining_subgroups = [sg for sg in all_subgroups if sg.id not in session['asked_subgroups']]
 
-        db.session.commit()
+    if not remaining_subgroups:
         return redirect(url_for('quiz3'))
 
-    subgroups = Subgroup.query.filter(Subgroup.job_cluster_id.in_(selected_ids)).all()
-    return render_template('quiz2.html', subgroups=subgroups)
+    # Serve one subgroup at a time
+    current_subgroup = remaining_subgroups[0]
+
+    if request.method == 'POST':
+        score = int(request.form.get('score'))
+
+        response = UserResponse(
+            session_id=session['session_id'],
+            question_type='subgroup',
+            target_id=current_subgroup.id,
+            score=score
+        )
+        db.session.add(response)
+        db.session.commit()
+
+        session['asked_subgroups'].append(current_subgroup.id)
+        return redirect(url_for('quiz2'))  # Move to next subgroup
+
+    return render_template('quiz2.html', subgroup=current_subgroup)
 
 @app.route('/quiz3', methods=['GET', 'POST'])
 def quiz3():
