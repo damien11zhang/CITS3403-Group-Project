@@ -7,7 +7,7 @@
 <form method="POST" action="{{ url_for('quiz2') }}">
     {% for subgroup in subgroups %}
         <div class="section text-center">
-            <p class="question-text">{{ subgroup.job_cluster.question }}</p>
+            <p class="question-text">{{ subgroup.subgroup_question }}</p>
 
             <div class="slider-group">
                 <label for="score_{{ subgroup.id }}" class="slider-label">Your Interest Level</label>
