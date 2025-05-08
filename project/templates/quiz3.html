@@ -2,10 +2,11 @@
 {% block title %}Quiz Stage 3{% endblock %}
 
 {% block content %}
-<h1>Stage 3: First Job-Specific Questions</h1>
+<h1 class="text-center">CareerCompass Quiz</h1>
+<h2 class="subheading">Please answer the following questions using the slider to show your interest 0-10</h2>
 <form method="POST" action="{{ url_for('quiz3') }}">
     {% for job in jobs %}
-        <div class="job-block">
+        <div class="section text-center">
             <p>{{ job.question_1 }}</p>
             <div class="slider-group">
                 <label for="job_q1_{{ job.id }}">Your Interest Level</label>

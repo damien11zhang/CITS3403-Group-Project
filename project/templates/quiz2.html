@@ -3,7 +3,8 @@
 {% block title %}Quiz Stage 2{% endblock %}
 
 {% block content %}
-<h1 class="text-center">Stage 2: Subgroup Questions</h1>
+<h1 class="text-center">CareerCompass Quiz</h1>
+<h2 class="subheading">Please answer the following questions using the slider to show your interest 0-10</h2>
 <form method="POST" action="{{ url_for('quiz2') }}">
     {% for subgroup in subgroups %}
         <div class="section text-center">
