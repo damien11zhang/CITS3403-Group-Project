@@ -56,7 +56,7 @@ def seed_health():
         jobs_nutrition_medication = [
             Job(title="Dietitian / Nutritionist", question_1="Do you like giving personalized nutrition advice to help people improve their health?",
                 question_2="Do you enjoy creating meal or diet plans tailored to someone's goals?", subgroup=nutrition_medication),
-            Job(title="Pharmacist", question_1="Do you enjoy giving advice about medication and ensuring it’s used safely?",
+            Job(title="Pharmacist", question_1="Do you enjoy giving advice about medication and ensuring it is used safely?",
                 question_2="Are you confident explaining complex medical information in simple terms?", subgroup=nutrition_medication)
         ]
 

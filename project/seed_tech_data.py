@@ -54,7 +54,7 @@ def seed_tech_data():
         ]
         security_storage_roles = Subgroup(
             name="Security and Storage Roles",
-            subgroup_question="How appealing is the idea of protecting information and making sure it’s organized and accessible?",
+            subgroup_question="How appealing is the idea of protecting information and making sure it is organised and accessible?",
             job_cluster=tech_data
         )
         db.session.add(security_storage_roles)

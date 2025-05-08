@@ -67,7 +67,7 @@ def seed_business_strategy_data():
                 subgroup=marketing_roles),
             Job(title="Brand Manager",
                 question_1="How curious are you about shaping how a product or company is seen by the public?",
-                question_2="How appealing is it to manage a brand’s message across social media, ads, and packaging?",
+                question_2="How appealing is it to manage a brand message across social media, ads, and packaging?",
                 subgroup=marketing_roles)
         ]
 

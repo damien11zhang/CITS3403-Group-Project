@@ -64,7 +64,7 @@ with app.app_context():
         Job(
             title="Geoscientist",
             subgroup=env_earth_subgroup,
-            question_1="Are you drawn to studying the Earth’s physical structure, processes, and resources?",
+            question_1="Are you drawn to studying the physical structure, processes, and resources of the Earth?",
             question_2="Do you enjoy analyzing rock, soil, and environmental samples to understand our planet?"
         ),
     ])
