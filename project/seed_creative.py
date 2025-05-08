@@ -5,8 +5,7 @@ def seed_creative_data():
     with app.app_context():
         creative_data = JobCluster(
                                    name="Creative & Design",
-                                   description="Express ideas and emotions through visuals, storytelling, and imaginative design.",
-                                   question="I enjoy coming up with creative ideas or visuals to express something.")
+                                   description="Express ideas and emotions through visuals, storytelling, and imaginative design.")
         db.session.add(creative_data)
 
         design_roles = Subgroup(

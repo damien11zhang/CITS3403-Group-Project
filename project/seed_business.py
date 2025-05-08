@@ -5,8 +5,7 @@ def seed_business_strategy_data():
     with app.app_context():
         biz_strategy = JobCluster(
                                   name="Business & Strategy",
-                                  description="Lead teams, solve business challenges, and drive organizational growth through planning and analysis.",
-                                  question="I find satisfaction in planning ahead or creating strategies to achieve a goal."
+                                  description="Lead teams, solve business challenges, and drive organizational growth through planning and analysis."
                                   )
         db.session.add(biz_strategy)
 

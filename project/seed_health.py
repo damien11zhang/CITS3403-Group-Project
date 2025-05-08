@@ -6,8 +6,7 @@ def seed_health():
         # Cluster: Health & Care
         health = JobCluster(
                            name="Health & Wellbeing",
-                           description="Care for people's physical and mental health through treatment, support, and rehabilitation.",
-                           question="I feel fulfilled when caring for others physical or mental well-being.")
+                           description="Care for people's physical and mental health through treatment, support, and rehabilitation.")
         db.session.add(health)
 
         # Subgroup 1: Clinical & Emergency

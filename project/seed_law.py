@@ -6,8 +6,7 @@ def seed_law():
         # Cluster: Law and Public Service
         law = JobCluster(
                          name="Law, Government & Safety",
-                         description="Protect public interests, enforce laws, and promote justice in communities.",
-                         question="I am passionate about fairness, rules, and standing up for what is right.")
+                         description="Protect public interests, enforce laws, and promote justice in communities.")
         db.session.add(law)
 
         # Subgroup 1: Support Roles
