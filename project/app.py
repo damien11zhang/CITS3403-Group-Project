@@ -25,6 +25,7 @@ class User(UserMixin, db.Model):
     username = db.Column(db.String(100), nullable=False, unique=True)
     email = db.Column(db.String(100), nullable=False, unique=True)
     password = db.Column(db.String(100), nullable=False)
+    bio = db.Column(db.Text, nullable=True)
 
 @app.route('/')
 def index():
@@ -296,6 +297,4 @@ def logout():
     return redirect(url_for('login'))
 
 if __name__ == '__main__':
-    with app.app_context():
-        db.create_all()
     app.run(debug=True)
