@@ -117,14 +117,8 @@ def signup():
 @app.route('/profile')
 @login_required
 def profile():
-    user_id = session.get('user_id')  # Assuming user_id is stored in session
-    if not user_id:
-        return redirect(url_for('login'))
-
-    # Query all quiz sessions for the logged-in user
+    user_id = current_user.id
     quiz_sessions = QuizSession.query.filter_by(user_id=user_id).all()
-
-    # Pass quiz sessions to the template
     return render_template('profile.html', user=current_user, quiz_sessions=quiz_sessions)
 
 import uuid
