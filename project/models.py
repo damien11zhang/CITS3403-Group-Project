@@ -33,7 +33,7 @@ class UserSelectedCluster(db.Model):
 class UserResponse(db.Model):
     __tablename__ = 'user_responses'
     id = db.Column(db.Integer, primary_key=True)
-    session_id = db.Column(db.String(100), nullable=False)
+    session_id = db.Column(db.String(100), db.ForeignKey('quiz_sessions.session_id'), nullable=False)
     question_type = db.Column(db.String(50), nullable=False)  # 'subgroup', 'first', 'second'
     target_id = db.Column(db.Integer, nullable=False)
     score = db.Column(db.Integer, nullable=False)
