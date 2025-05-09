@@ -1,4 +1,5 @@
 from extensions import db
+from datetime import datetime, timezone
 
 class JobCluster(db.Model):
     __tablename__ = 'job_clusters'
@@ -36,7 +37,7 @@ class UserResponse(db.Model):
     question_type = db.Column(db.String(50), nullable=False)  # 'subgroup', 'first', 'second'
     target_id = db.Column(db.Integer, nullable=False)
     score = db.Column(db.Integer, nullable=False)
-    timestamp = db.Column(db.DateTime, server_default=db.func.now())
+    created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
 
 class Suggestion(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -46,3 +47,10 @@ class Suggestion(db.Model):
     question_1 = db.Column(db.String(300), nullable=True)
     question_2 = db.Column(db.String(300), nullable=True)
     timestamp = db.Column(db.DateTime, server_default=db.func.now())
+
+class QuizSession(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
+    session_id = db.Column(db.String(255), unique=True)
+    started_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
+    completed_at = db.Column(db.DateTime, nullable=True)
