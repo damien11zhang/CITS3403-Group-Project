@@ -25,6 +25,7 @@ class User(UserMixin, db.Model):
     username = db.Column(db.String(100), nullable=False, unique=True)
     email = db.Column(db.String(100), nullable=False, unique=True)
     password = db.Column(db.String(100), nullable=False)
+    bio = db.Column(db.Text, nullable=True)
 
 @app.route('/')
 def index():
@@ -116,7 +117,15 @@ def signup():
 @app.route('/profile')
 @login_required
 def profile():
-    return render_template('profile.html', user=current_user)
+    user_id = session.get('user_id')  # Assuming user_id is stored in session
+    if not user_id:
+        return redirect(url_for('login'))
+
+    # Query all quiz sessions for the logged-in user
+    quiz_sessions = QuizSession.query.filter_by(user_id=user_id).all()
+
+    # Pass quiz sessions to the template
+    return render_template('profile.html', user=current_user, quiz_sessions=quiz_sessions)
 
 import uuid
 
@@ -233,37 +242,46 @@ def quiz3():
 @app.route('/quiz4', methods=['GET', 'POST'])
 def quiz4():
     session_id = session.get('session_id')
-    if not session_id:
+    user_id = session.get('user_id')  # Assuming user_id is stored in session
+    if not session_id or not user_id:
         return redirect(url_for('quiz'))
 
     if request.method == 'POST':
         job_scores = session.get('job_scores', {})  # job_id: subgroup + Q1 score
         final_scores = {}
 
+        # Create a new QuizSession for this user
+        quiz_session = QuizSession(session_id=session_id, user_id=user_id)
+        db.session.add(quiz_session)
+        db.session.commit()
+
         for key, value in request.form.items():
             if key.startswith('job_q2_'):
                 job_id = int(key.split('_')[2])
                 q2_score = int(value)
 
-                db.session.add(UserResponse(
+                # Add UserResponse for this question
+                response = UserResponse(
                     session_id=session_id,
                     question_type='second',
                     target_id=job_id,
                     score=q2_score
-                ))
+                )
+                db.session.add(response)
 
+                # Calculate the total score for the job
                 total = job_scores.get(str(job_id), 0) + q2_score
                 final_scores[job_id] = total
 
         db.session.commit()
 
-        # Top 5 jobs
+        # Store the top 5 jobs in the session
         top_jobs = sorted(final_scores.items(), key=lambda x: x[1], reverse=True)[:5]
         session['top_jobs'] = [job_id for job_id, score in top_jobs]
 
         return redirect(url_for('results'))
 
-    # Show only jobs that passed in quiz3
+    # On GET: Show only jobs that passed in quiz3
     passing_jobs = session.get('passing_jobs', [])
     jobs = Job.query.filter(Job.id.in_(passing_jobs)).all()
 
@@ -296,6 +314,4 @@ def logout():
     return redirect(url_for('login'))
 
 if __name__ == '__main__':
-    with app.app_context():
-        db.create_all()
     app.run(debug=True)

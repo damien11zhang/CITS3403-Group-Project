@@ -1,4 +1,5 @@
 from extensions import db
+from datetime import datetime, timezone
 
 class JobCluster(db.Model):
     __tablename__ = 'job_clusters'
@@ -36,7 +37,7 @@ class UserResponse(db.Model):
     question_type = db.Column(db.String(50), nullable=False)  # 'subgroup', 'first', 'second'
     target_id = db.Column(db.Integer, nullable=False)
     score = db.Column(db.Integer, nullable=False)
-    timestamp = db.Column(db.DateTime, server_default=db.func.now())
+    created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
 
 class Suggestion(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -46,3 +47,14 @@ class Suggestion(db.Model):
     question_1 = db.Column(db.String(300), nullable=True)
     question_2 = db.Column(db.String(300), nullable=True)
     timestamp = db.Column(db.DateTime, server_default=db.func.now())
+
+class QuizSession(db.Model):
+    __tablename__ = 'quiz_sessions'
+
+    id = db.Column(db.Integer, primary_key=True)
+    session_id = db.Column(db.String(100), unique=True, nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
+    created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
+
+    user = db.relationship('User', backref='quiz_sessions')
+    responses = db.relationship('UserResponse', backref='quiz_session', lazy=True)
