@@ -53,6 +53,29 @@
 
             <button type="submit">Update Profile</button>
     </section>
+    
+    <h1>Your Quiz History</h1>
+
+    {% if quiz_sessions %}
+        <ul>
+            {% for session in quiz_sessions %}
+                <li>
+                    <strong>Quiz Date:</strong> {{ session.created_at.strftime('%Y-%m-%d %H:%M:%S') }}
+                    <ul>
+                        {% for response in session.responses %}
+                            <li>
+                                <strong>Question Type:</strong> {{ response.question_type }}<br>
+                                <strong>Target ID:</strong> {{ response.target_id }}<br>
+                                <strong>Score:</strong> {{ response.score }}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No quiz history found.</p>
+    {% endif %}
 
     <footer>
         <p>&copy; CITS3403 Group Project</p>
