@@ -27,6 +27,13 @@ class User(UserMixin, db.Model):
     password = db.Column(db.String(100), nullable=False)
     bio = db.Column(db.Text, nullable=True)
 
+def validate_quiz_session():
+    """Helper function to validate if a quiz session exists."""
+    if 'session_id' not in session:
+        flash("Please start the quiz first.", "warning")
+        return False
+    return True
+
 @app.route('/')
 def index():
     return redirect(url_for('login'))
@@ -154,8 +161,10 @@ def quiz():
 
 @app.route('/quiz2', methods=['GET', 'POST'])
 def quiz2():
-    selected_ids = session.get('selected_clusters', [])
+    if not validate_quiz_session():
+        return redirect(url_for('quiz'))
 
+    selected_ids = session.get('selected_clusters', [])
     if not selected_ids:
         return redirect(url_for('quiz'))
 
@@ -176,15 +185,16 @@ def quiz2():
         db.session.commit()
         return redirect(url_for('quiz3'))
 
-    # 🟢 Load all subgroups for selected clusters
+    # Load all subgroups for selected clusters
     subgroups = Subgroup.query.filter(Subgroup.job_cluster_id.in_(selected_ids)).all()
     return render_template('quiz2.html', subgroups=subgroups)
 
 @app.route('/quiz3', methods=['GET', 'POST'])
 def quiz3():
-    session_id = session.get('session_id')
-    if not session_id:
+    if not validate_quiz_session():
         return redirect(url_for('quiz'))
+
+    session_id = session.get('session_id')
 
     # Filter valid subgroups (score >= 5)
     subgroup_responses = UserResponse.query.filter_by(
@@ -235,9 +245,17 @@ def quiz3():
 
 @app.route('/quiz4', methods=['GET', 'POST'])
 def quiz4():
+    if not validate_quiz_session():
+        return redirect(url_for('quiz'))
+
     session_id = session.get('session_id')
     user_id = session.get('user_id')  # Assuming user_id is stored in session
-    if not session_id or not user_id:
+    if not user_id:
+        return redirect(url_for('login'))
+
+    passing_jobs = session.get('passing_jobs', [])
+    if not passing_jobs:
+        flash("No valid jobs found. Please restart the quiz.", "warning")
         return redirect(url_for('quiz'))
 
     if request.method == 'POST':
@@ -276,19 +294,20 @@ def quiz4():
         return redirect(url_for('results'))
 
     # On GET: Show only jobs that passed in quiz3
-    passing_jobs = session.get('passing_jobs', [])
     jobs = Job.query.filter(Job.id.in_(passing_jobs)).all()
-
     return render_template('quiz4.html', jobs=jobs)
 
 @app.route('/results', methods=['GET'])
 def results():
+    # Check if the session contains valid quiz data
+    top_jobs = session.get('top_jobs', None)
+    if not top_jobs:
+        # Redirect to the quiz start page if no quiz data exists
+        flash("No quiz results found. Please complete a quiz first.", "warning")
+        return redirect(url_for('quiz'))
+
     # Retrieve the job scores from the session
     job_scores = session.get('job_scores', {})
-
-    # If there are no job scores, redirect to the quiz page
-    if not job_scores:
-        return redirect(url_for('quiz'))
 
     # Sort jobs by their total scores in descending order
     sorted_jobs = sorted(job_scores.items(), key=lambda x: x[1], reverse=True)
@@ -304,6 +323,10 @@ def results():
 @app.route('/logout')
 @login_required
 def logout():
+    # Clear all quiz-related session data
+    for key in ['session_id', 'selected_clusters', 'asked_subgroups', 'job_scores', 'passing_jobs', 'top_jobs']:
+        session.pop(key, None)
+    
     logout_user()
     return redirect(url_for('login'))
 
