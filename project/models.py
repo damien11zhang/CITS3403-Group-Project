@@ -49,8 +49,12 @@ class Suggestion(db.Model):
     timestamp = db.Column(db.DateTime, server_default=db.func.now())
 
 class QuizSession(db.Model):
+    __tablename__ = 'quiz_sessions'
+
     id = db.Column(db.Integer, primary_key=True)
+    session_id = db.Column(db.String(100), unique=True, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
-    session_id = db.Column(db.String(255), unique=True)
-    started_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
-    completed_at = db.Column(db.DateTime, nullable=True)
+    created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
+
+    user = db.relationship('User', backref='quiz_sessions')
+    responses = db.relationship('UserResponse', backref='quiz_session', lazy=True)
