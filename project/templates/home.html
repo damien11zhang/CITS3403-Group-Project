@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% block title %}CareerCompass - Home{% endblock %}
+{% block content %}
+
+<div class="container my-5">
+
+  <!-- 1. Hero Section -->
+  <div class="text-center mb-5">
+    <h1 class="display-4">Discover Your Future Career</h1>
+    <p class="lead">Take our personalized career quiz to explore job paths aligned with your interests and strengths.</p>
+    <img src="{{ url_for('static', filename='images/quiz_intro.svg.jpg') }}" alt="Quiz Illustration" class="img-fluid my-3" style="max-height: 300px;">
+    <a href="{{ url_for('quiz') }}" class="btn btn-primary btn-lg mt-3">Take the Quiz</a>
+  </div>
+
+  <!-- 2 & 3. Side-by-side containers -->
+  <div class="row mb-5">
+    <!-- Example Top 5 Results Card -->
+    <div class="col-md-6 mb-4">
+      <div class="card shadow-sm h-100">
+        <div class="card-body">
+          <h3 class="card-title">See Your Top 5 Jobs</h3>
+          <p class="card-text">Share your personalized job results with friends and compare pathways.</p>
+          <ul class="list-group list-group-flush mb-3">
+            <li class="list-group-item">1. Software Engineer</li>
+            <li class="list-group-item">2. Mechanical Engineer</li>
+            <li class="list-group-item">3. Data Analyst</li>
+            <li class="list-group-item">4. Civil Engineer</li>
+            <li class="list-group-item">5. Project Manager</li>
+          </ul>
+          <a href="{{ url_for('login') }}" class="btn btn-outline-primary">Log In / Sign Up</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quiz History Feature -->
+    <div class="col-md-6 mb-4">
+      <div class="card shadow-sm h-100">
+        <div class="card-body">
+          <h3 class="card-title">Track Your Progress</h3>
+          <p class="card-text">Retake the quiz as your interests evolve and view your quiz history anytime.</p>
+          <img src="{{ url_for('static', filename='images/history.svg.jpg') }}" alt="History" class="img-fluid my-3" style="max-height: 180px;">
+          <a href="{{ url_for('profile') }}" class="btn btn-outline-secondary">View My Profile</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4 & 5. Side-by-side containers -->
+  <div class="row mb-5">
+    <!-- Learn More About Us -->
+    <div class="col-md-6 mb-4">
+      <div class="card shadow-sm h-100">
+        <div class="card-body">
+          <h3 class="card-title">Learn More About Us</h3>
+          <p class="card-text">Understand why we built this tool and how we’re helping students navigate careers.</p>
+          <img src="{{ url_for('static', filename='images/about_us.svg.jpg') }}" alt="About Us" class="img-fluid my-3" style="max-height: 180px;">
+          <a href="{{ url_for('about') }}" class="btn btn-outline-info">About Us</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Suggestions -->
+    <div class="col-md-6 mb-4">
+      <div class="card shadow-sm h-100">
+        <div class="card-body">
+          <h3 class="card-title">Have Suggestions?</h3>
+          <p class="card-text">We’d love your feedback! Help us improve by suggesting new features or jobs.</p>
+          <img src="{{ url_for('static', filename='images/suggest.svg.jpg') }}" alt="Suggestions" class="img-fluid my-3" style="max-height: 180px;">
+          <a href="{{ url_for('suggest') }}" class="btn btn-outline-success">Make a Suggestion</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+{% endblock %}
