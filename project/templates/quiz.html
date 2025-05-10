@@ -1,58 +1,71 @@
 {% extends "base.html" %}
-{% block title %}CareerCompas – Interest Quiz{% endblock %}
+{% block title %}CareerCompass – Interest Quiz{% endblock %}
 
 {% block content %}
-<div class="quiz-page-wrapper">
-  <h1 class="quiz-heading">CareerCompass</h1>
-  <h2 class="subheading">Interest and Career Quiz</h2>
+  <div class="quiz-page-wrapper">
+    <div class="hero">
+      <h1 class="quiz-heading">CareerCompass</h1>
+      <h2 class="subheading">Interest and Career Quiz</h2>
 
-  <div class="intro-banner vertical-banner">
-    <div class="intro-card">
-      <img src="{{ url_for('static', filename='images/one.png') }}" class="intro-img" alt="Know your career">
-      <h4>Know your career</h4>
-      <p>Find the best career which suits you!</p>
-    </div>
-    <div class="intro-card">
-      <img src="{{ url_for('static', filename='images/two.png') }}" class="intro-img" alt="Get the privilege">
-      <h4>Get the privilege</h4>
-      <p>Access curated courses, groups, and opportunities based on your result.</p>
-    </div>
-    <div class="intro-card">
-      <img src="{{ url_for('static', filename='images/three.png') }}" class="intro-img" alt="Stay empowered">
-      <h4>Stay empowered</h4>
-      <p>Receive ongoing support tailored to your interests and strengths.</p>
-    </div>
-  </div>
-
-  <div class="section">
-    <h2>Select 3 Statements That Describe You Best</h2>
-    <p style="margin-bottom: 2rem;">Be yourself and answer honestly!</p>
-    <form method="POST" action="{{ url_for('quiz') }}">
-      <div class="quiz-card-grid">
-        {% for cluster in clusters %}
-        <div class="quiz-card" onclick="toggleCard(this)">
-          <input type="checkbox" name="selected_clusters" value="{{ cluster.id }}" hidden>
-          <p>{{ cluster.description }}</p>
+      <div class="info-card-row">
+        <div class="info-card">
+          <img src="{{ url_for('static', filename='images/one.png') }}"
+               class="icon-img" alt="Step 1">
+          <h4>Explore Careers</h4>
+          <p>Browse clusters and find out what interests you most.</p>
         </div>
-        {% endfor %}
+        <div class="info-card">
+          <img src="{{ url_for('static', filename='images/two.png') }}"
+               class="icon-img" alt="Step 2">
+          <h4>Take the Quiz</h4>
+          <p>Select statements that resonate and learn where you belong.</p>
+        </div>
+        <div class="info-card">
+          <img src="{{ url_for('static', filename='images/three.png') }}"
+               class="icon-img" alt="Step 3">
+          <h4>Get Results</h4>
+          <p>Receive matched careers and tailored opportunities instantly.</p>
+        </div>
       </div>
-      <button class="button" type="submit">Next</button>
-    </form>
+
+      {# 2. Scroll-down arrow #}
+      <a href="#quizSection" class="scroll-down" aria-label="Scroll down"></a>
+    </div>
+
+    <div class="section" id="quizSection">
+      <h2>Select 3 Statements That Describe You Best</h2>
+      <p style="margin-bottom: 2rem; text-align: center;">
+        Be yourself and answer honestly!
+      </p>
+      <form method="POST" action="{{ url_for('quiz') }}">
+        <div class="quiz-card-grid">
+          {% for cluster in clusters %}
+            <div class="quiz-card" onclick="toggleCard(this)">
+              <input type="checkbox"
+                     name="selected_clusters"
+                     value="{{ cluster.id }}"
+                     hidden>
+              <p>{{ cluster.description }}</p>
+            </div>
+          {% endfor %}
+        </div>
+        <button class="button" type="submit">Next</button>
+      </form>
+    </div>
   </div>
-</div>
 
-<script>
-function toggleCard(card) {
-  const checkbox = card.querySelector('input[type="checkbox"]');
-  checkbox.checked = !checkbox.checked;
-  card.classList.toggle('selected');
+  <script>
+    function toggleCard(card) {
+      const checkbox = card.querySelector('input[type="checkbox"]');
+      checkbox.checked = !checkbox.checked;
+      card.classList.toggle('selected');
 
-  const selected = document.querySelectorAll('.quiz-card.selected');
-  if (selected.length > 3) {
-    alert("You can only select up to 3 statements.");
-    checkbox.checked = false;
-    card.classList.remove('selected');
-  }
-}
-</script>
+      const selected = document.querySelectorAll('.quiz-card.selected');
+      if (selected.length > 3) {
+        alert("You can only select up to 3 statements.");
+        checkbox.checked = false;
+        card.classList.remove('selected');
+      }
+    }
+  </script>
 {% endblock %}
