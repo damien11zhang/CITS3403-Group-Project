@@ -159,6 +159,10 @@ input[type="range"]::-moz-range-thumb {
   margin-bottom: 1.5rem;
 }
 
+.card:hover {
+  transform: translateY(-5px);
+}
+
 .card-grid {
   display: flex;
   flex-direction: column;

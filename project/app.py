@@ -36,7 +36,7 @@ def validate_quiz_session():
 
 @app.route('/')
 def index():
-    return redirect(url_for('login'))
+    return render_template('home.html')
 
 @app.route('/base')
 def base():
