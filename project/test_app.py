@@ -21,4 +21,4 @@ class FlaskTestCase(unittest.TestCase):
         self.assertIn(b"Select 3 Statements", response.data)
 
 if __name__ == '__main__':
-    unittest.main()
+    unittest.main() 
