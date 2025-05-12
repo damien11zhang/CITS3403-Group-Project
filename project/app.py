@@ -107,10 +107,11 @@ def signup():
             flash('Passwords do not match')
             return render_template('signup.html')
         
-        if email in users:
+        existing_user = User.query.filter_by(email=email).first()
+        if existing_user:
             flash('Email already registered')
             return render_template('signup.html')
-        
+            
         new_user = User(email=(email), username=(username), password=(generate_password_hash(password)))
         db.session.add(new_user)
         db.session.commit()
