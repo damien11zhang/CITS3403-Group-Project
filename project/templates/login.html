@@ -6,6 +6,7 @@
 <section class="section">
   <h2>Login to Your Account</h2>
   <form action="{{ url_for('login') }}" method="POST">
+    {{ csrf_token() }}
     <label for="username">Username</label>
     <input type="username" id="username" name="username" required />
 
