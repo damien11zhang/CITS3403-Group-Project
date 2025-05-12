@@ -8,7 +8,6 @@ from extensions import db  # <--- new way
 from models import *
 
 app = Flask(__name__)
-users = {}
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///career_quiz.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -112,10 +111,10 @@ def signup():
             flash('Email already registered')
             return render_template('signup.html')
         
-        users[email] = {
-            'username': username,
-            'password': generate_password_hash(password)
-        }
+        new_user = User(email=(email), username=(username), password=(generate_password_hash(password)))
+        db.session.add(new_user)
+        db.session.commit()
+        
         flash('Account created successfully! Please log in.')
         return redirect(url_for('login'))
     
