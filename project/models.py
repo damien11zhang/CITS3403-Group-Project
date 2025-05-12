@@ -6,6 +6,12 @@ class JobCluster(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False, unique=True)
     description = db.Column(db.String(300), nullable=False)
+     # New attribute columns
+    social = db.Column(db.Integer, nullable=False)
+    physical = db.Column(db.Integer, nullable=False)
+    leadership = db.Column(db.Integer, nullable=False)
+    creativity = db.Column(db.Integer, nullable=False)
+    logic = db.Column(db.Integer, nullable=False)
     subgroups = db.relationship('Subgroup', backref='job_cluster', lazy=True)
 
 class Subgroup(db.Model):
