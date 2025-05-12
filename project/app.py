@@ -8,7 +8,6 @@ from extensions import db  # <--- new way
 from models import *
 
 app = Flask(__name__)
-users = {}
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///career_quiz.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -36,7 +35,7 @@ def validate_quiz_session():
 
 @app.route('/')
 def index():
-    return redirect(url_for('login'))
+    return render_template('home.html')
 
 @app.route('/base')
 def base():
@@ -108,14 +107,15 @@ def signup():
             flash('Passwords do not match')
             return render_template('signup.html')
         
-        if email in users:
+        existing_user = User.query.filter_by(email=email).first()
+        if existing_user:
             flash('Email already registered')
             return render_template('signup.html')
+            
+        new_user = User(email=(email), username=(username), password=(generate_password_hash(password)))
+        db.session.add(new_user)
+        db.session.commit()
         
-        users[email] = {
-            'username': username,
-            'password': generate_password_hash(password)
-        }
         flash('Account created successfully! Please log in.')
         return redirect(url_for('login'))
     
