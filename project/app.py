@@ -3,6 +3,8 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_migrate import Migrate
 from uuid import uuid4
 from flask_login import LoginManager, UserMixin, login_user, logout_user, current_user, login_required
+from flask_wtf import CSRFProtect
+
 
 from extensions import db  # <--- new way
 from models import *
@@ -15,6 +17,7 @@ app.config['SECRET_KEY'] = 'your_random_secret_key'
 
 login_manager = LoginManager(app)
 login_manager.login_view = 'login'
+csrf = CSRFProtect(app) 
 
 db.init_app(app)  # <--- wajib!
 migrate = Migrate(app, db)
