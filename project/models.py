@@ -2,18 +2,27 @@ from extensions import db
 from datetime import datetime, timezone
 from flask_login import UserMixin
 
+friendships = db.Table(
+'friendships',
+db.Column('user_id', db.Integer, db.ForeignKey('user.id'), primary_key=True),
+db.Column('friend_id', db.Integer, db.ForeignKey('user.id'), primary_key=True)
+)
+
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(100), nullable=False, unique=True)
     email = db.Column(db.String(100), nullable=False, unique=True)
     password = db.Column(db.String(100), nullable=False)
     bio = db.Column(db.Text, nullable=True)
-    
-    friendships = db.Table(
-    'friendships',
-    db.Column('user_id', db.Integer, db.ForeignKey('user.id'), primary_key=True),
-    db.Column('friend_id', db.Integer, db.ForeignKey('user.id'), primary_key=True)
-)
+
+    friends = db.relationship(
+        'User',
+        secondary=friendships,
+        primaryjoin=(id == friendships.c.user_id),
+        secondaryjoin=(id == friendships.c.friend_id),
+        backref='friend_of'
+    )
+
 class FriendRequest(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     from_user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
