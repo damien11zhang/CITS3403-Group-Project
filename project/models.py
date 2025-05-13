@@ -1,5 +1,6 @@
 from extensions import db
 from datetime import datetime, timezone
+from flask_login import UserMixin
 
 friendships = db.Table(
     'friendships',

@@ -4,8 +4,6 @@ from flask_migrate import Migrate
 from uuid import uuid4
 from flask_login import LoginManager, UserMixin, login_user, logout_user, current_user, login_required
 from flask_wtf import CSRFProtect
-
-
 from extensions import db  # <--- new way
 from models import *
 
