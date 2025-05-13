@@ -1,6 +1,12 @@
 from extensions import db
 from datetime import datetime, timezone
 
+friendships = db.Table(
+    'friendships',
+    db.Column('user_id', db.Integer, db.ForeignKey('user.id'), primary_key=True),
+    db.Column('friend_id', db.Integer, db.ForeignKey('user.id'), primary_key=True)
+)
+
 class JobCluster(db.Model):
     __tablename__ = 'job_clusters'
     id = db.Column(db.Integer, primary_key=True)
