@@ -22,13 +22,6 @@ csrf = CSRFProtect(app)
 db.init_app(app)  # <--- wajib!
 migrate = Migrate(app, db)
 
-class User(UserMixin, db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(100), nullable=False, unique=True)
-    email = db.Column(db.String(100), nullable=False, unique=True)
-    password = db.Column(db.String(100), nullable=False)
-    bio = db.Column(db.Text, nullable=True)
-
 def validate_quiz_session():
     """Helper function to validate if a quiz session exists."""
     if 'session_id' not in session:
