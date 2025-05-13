@@ -5,7 +5,7 @@ from uuid import uuid4
 from flask_login import LoginManager, UserMixin, login_user, logout_user, current_user, login_required
 from flask_wtf import CSRFProtect
 from extensions import db  # <--- new way
-from models import *
+from models import User, JobCluster, Subgroup, Job, UserResponse, QuizSession, Suggestion, FriendRequest
 
 app = Flask(__name__)
 
@@ -313,6 +313,29 @@ def results():
         top_jobs.append((job, score))  # Append the job and score to the list
 
     return render_template('results.html', top_jobs=top_jobs)
+
+@app.route('/add_friend/<int:friend_id>', methods=['POST'])
+@login_required
+def add_friend(friend_id):
+    friend = User.query.get(friend_id)
+    if friend and friend != current_user and friend not in current_user.friends:
+        current_user.friends.append(friend)
+        db.session.commit()
+        flash(f"You are now friends with {friend.username}")
+    else:
+        flash("Cannot add this user.")
+    return redirect(url_for('profile'))
+
+@app.route('/friend/<int:friend_id>')
+@login_required
+def view_friend(friend_id):
+    friend = User.query.get(friend_id)
+    if friend not in current_user.friends:
+        flash("You're not friends with this user.")
+        return redirect(url_for('profile'))
+
+    quiz_sessions = QuizSession.query.filter_by(user_id=friend.id).all()
+    return render_template('friend_profile.html', friend=friend, quiz_sessions=quiz_sessions)
 
 @app.route('/logout')
 @login_required
