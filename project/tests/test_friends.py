@@ -2,11 +2,13 @@
 import pytest
 from project.app import app as flask_app
 from project.extensions import db as _db
+from project.models import User, FriendRequest  # Import your models
 
 @pytest.fixture
 def app():
     flask_app.config['TESTING'] = True
     flask_app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
+    flask_app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     with flask_app.app_context():
         yield flask_app
 
@@ -16,11 +18,13 @@ def client(app):
 
 @pytest.fixture
 def db(app):
+    # Initialize the database with the app
+    _db.init_app(app)
     with app.app_context():
         _db.create_all()
         yield _db
         _db.drop_all()
-        
+
 def test_send_friend_request(client, db):
     # Create two users
     user1 = User(username="user1", email="user1@example.com", password="password")
