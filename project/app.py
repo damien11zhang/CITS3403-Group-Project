@@ -5,7 +5,7 @@ from uuid import uuid4
 from flask_login import LoginManager, UserMixin, login_user, logout_user, current_user, login_required
 from flask_wtf import CSRFProtect
 from collections import defaultdict
-from forms import LoginForm
+from forms import LoginForm, SignupForm
 from extensions import db  # <--- new way
 from models import User, JobCluster, Subgroup, Job, UserResponse, QuizSession, Suggestion, FriendRequest
 
@@ -92,33 +92,20 @@ def load_user(user_id):
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
-    if request.method == 'POST':
-        username = request.form.get('username')
-        email = request.form.get('email')
-        password = request.form.get('password')
-        confirm_password = request.form.get('confirm_password')
-        
-        if not username or not email or not password:
-            flash('All fields are required')
-            return render_template('signup.html')
-        
-        if password != confirm_password:
-            flash('Passwords do not match')
-            return render_template('signup.html')
-        
-        existing_user = User.query.filter_by(email=email).first()
+    form = SignupForm()
+    if form.validate_on_submit():
+        existing_user = User.query.filter_by(email=form.email.data).first()
         if existing_user:
             flash('Email already registered')
-            return render_template('signup.html')
-            
-        new_user = User(email=(email), username=(username), password=(generate_password_hash(password)))
+            return render_template('signup.html', form=form)
+
+        hashed_pw = generate_password_hash(form.password.data)
+        new_user = User(username=form.username.data, email=form.email.data, password=hashed_pw)
         db.session.add(new_user)
         db.session.commit()
-        
         flash('Account created successfully! Please log in.')
         return redirect(url_for('login'))
-    
-    return render_template("signup.html")
+    return render_template("signup.html", form=form)
 
 @app.route('/profile')
 @login_required
