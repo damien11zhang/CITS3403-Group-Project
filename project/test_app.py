@@ -1,6 +1,6 @@
 import unittest
 import uuid
-from app import app, db, User
+from app import app, db
 from datetime import datetime
 
 class FlaskTestCase(unittest.TestCase):
