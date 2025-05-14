@@ -4,10 +4,10 @@ from flask_migrate import Migrate
 from uuid import uuid4
 from flask_login import LoginManager, UserMixin, login_user, logout_user, current_user, login_required
 from flask_wtf import CSRFProtect
-
-
+from collections import defaultdict
+from forms import LoginForm, SignupForm
 from extensions import db  # <--- new way
-from models import *
+from models import User, JobCluster, Subgroup, Job, UserResponse, QuizSession, Suggestion, FriendRequest
 
 app = Flask(__name__)
 app.config['WTF_CSRF_ENABLED'] = False
@@ -22,13 +22,6 @@ csrf = CSRFProtect(app)
 
 db.init_app(app)  
 migrate = Migrate(app, db)
-
-class User(UserMixin, db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(100), nullable=False, unique=True)
-    email = db.Column(db.String(100), nullable=False, unique=True)
-    password = db.Column(db.String(100), nullable=False)
-    bio = db.Column(db.Text, nullable=True)
 
 def validate_quiz_session():
     """Helper function to validate if a quiz session exists."""
@@ -72,10 +65,14 @@ def suggest():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
+    form = LoginForm()
+    
+    if form.validate_on_submit():
+        username = form.username.data
+        password = form.password.data
+
         user = User.query.filter_by(username=username).first()
+<<<<<<< HEAD
         
         if user:
             print(f"Found user: {user.username}, Checking password...")
@@ -90,11 +87,17 @@ def login():
                     return redirect(url_for('profile'))
             else:
                 print("Password did not match.")
+=======
+
+        if user and check_password_hash(user.password, password):
+            login_user(user)
+            flash('Logged in successfully.')
+            return redirect(url_for('profile'))  # Adjust as needed
+>>>>>>> feature/friend
         else:
-            print("User not found.")
-        
-        flash('Invalid login credentials', 'danger')
-    return render_template('login.html')
+            flash('Invalid username or password.')
+
+    return render_template('login.html', form=form)
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -102,33 +105,20 @@ def load_user(user_id):
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
-    if request.method == 'POST':
-        username = request.form.get('username')
-        email = request.form.get('email')
-        password = request.form.get('password')
-        confirm_password = request.form.get('confirm_password')
-        
-        if not username or not email or not password:
-            flash('All fields are required')
-            return render_template('signup.html')
-        
-        if password != confirm_password:
-            flash('Passwords do not match')
-            return render_template('signup.html')
-        
-        existing_user = User.query.filter_by(email=email).first()
+    form = SignupForm()
+    if form.validate_on_submit():
+        existing_user = User.query.filter_by(email=form.email.data).first()
         if existing_user:
             flash('Email already registered')
-            return render_template('signup.html')
-            
-        new_user = User(email=(email), username=(username), password=(generate_password_hash(password)))
+            return render_template('signup.html', form=form)
+
+        hashed_pw = generate_password_hash(form.password.data)
+        new_user = User(username=form.username.data, email=form.email.data, password=hashed_pw)
         db.session.add(new_user)
         db.session.commit()
-        
         flash('Account created successfully! Please log in.')
         return redirect(url_for('login'))
-    
-    return render_template("signup.html")
+    return render_template("signup.html", form=form)
 
 @app.route('/profile')
 @login_required
@@ -297,38 +287,126 @@ def quiz4():
 
         db.session.commit()
 
-        # Store the top 5 jobs in the session
+        # Store scores in session so /results can use them
+        session['job_scores'] = final_scores 
         top_jobs = sorted(final_scores.items(), key=lambda x: x[1], reverse=True)[:5]
         session['top_jobs'] = [job_id for job_id, score in top_jobs]
 
         return redirect(url_for('results'))
 
-    # On GET: Show only jobs that passed in quiz3
+    # GET method
     jobs = Job.query.filter(Job.id.in_(passing_jobs)).all()
     return render_template('quiz4.html', jobs=jobs)
 
 @app.route('/results', methods=['GET'])
 def results():
     # Check if the session contains valid quiz data
-    top_jobs = session.get('top_jobs', None)
-    if not top_jobs:
-        # Redirect to the quiz start page if no quiz data exists
+    top_jobs_session = session.get('top_jobs', None)
+    if not top_jobs_session:
         flash("No quiz results found. Please complete a quiz first.", "warning")
         return redirect(url_for('quiz'))
 
-    # Retrieve the job scores from the session
+    # Retrieve job scores
     job_scores = session.get('job_scores', {})
-
-    # Sort jobs by their total scores in descending order
     sorted_jobs = sorted(job_scores.items(), key=lambda x: x[1], reverse=True)
 
     # Get the top 5 jobs
     top_jobs = []
+    attribute_totals = defaultdict(int)
+
     for job_id, score in sorted_jobs[:5]:
         job = Job.query.get(job_id)  # Fetch the job using its ID
         top_jobs.append((job, score))  # Append the job and score to the list
 
-    return render_template('results.html', top_jobs=top_jobs)
+    return render_template(
+        'results.html',
+        top_jobs=top_jobs,
+        attribute_totals=dict(attribute_totals)
+    )
+
+@app.route('/add_friend/<int:friend_id>', methods=['POST'])
+@login_required
+def add_friend(friend_id):
+    friend = User.query.get(friend_id)
+    if friend and friend != current_user and friend not in current_user.friends:
+        current_user.friends.append(friend)
+        db.session.commit()
+        flash(f"You are now friends with {friend.username}")
+    else:
+        flash("Cannot add this user.")
+    return redirect(url_for('profile'))
+
+@app.route('/friend/<int:friend_id>')
+@login_required
+def view_friend(friend_id):
+    friend = User.query.get(friend_id)
+    if friend not in current_user.friends:
+        flash("You're not friends with this user.")
+        return redirect(url_for('profile'))
+
+    quiz_sessions = QuizSession.query.filter_by(user_id=friend.id).all()
+    return render_template('friend_profile.html', friend=friend, quiz_sessions=quiz_sessions)
+
+@app.route('/send_friend_request/<int:to_user_id>', methods=['POST'])
+@login_required
+def send_friend_request(to_user_id):
+    to_user = User.query.get(to_user_id)
+    if not to_user or to_user == current_user:
+        flash("Invalid user.", "danger")
+        return redirect(url_for('profile'))
+
+    # Check if a request already exists
+    existing_request = FriendRequest.query.filter_by(
+        from_user_id=current_user.id, to_user_id=to_user_id
+    ).first()
+    if existing_request:
+        flash("Friend request already sent.", "warning")
+        return redirect(url_for('profile'))
+
+    # Create a new friend request
+    friend_request = FriendRequest(from_user_id=current_user.id, to_user_id=to_user_id)
+    db.session.add(friend_request)
+    db.session.commit()
+    flash("Friend request sent!", "success")
+    return redirect(url_for('profile'))
+
+@app.route('/friend_requests')
+@login_required
+def friend_requests():
+    requests = FriendRequest.query.filter_by(to_user_id=current_user.id, status='pending').all()
+    return render_template('friend_requests.html', requests=requests)
+
+@app.route('/accept_friend_request/<int:request_id>', methods=['POST'])
+@login_required
+def accept_friend_request(request_id):
+    friend_request = FriendRequest.query.get(request_id)
+    if not friend_request or friend_request.to_user_id != current_user.id:
+        flash("Invalid friend request.", "danger")
+        return redirect(url_for('friend_requests'))
+
+    # Add the friendship
+    current_user.friends.append(friend_request.from_user)
+    friend_request.from_user.friends.append(current_user)
+
+    # Update the request status
+    friend_request.status = 'accepted'
+    db.session.commit()
+    flash("Friend request accepted!", "success")
+    return redirect(url_for('friend_requests'))
+
+@app.route('/decline_friend_request/<int:request_id>', methods=['POST'])
+@login_required
+def decline_friend_request(request_id):
+    friend_request = FriendRequest.query.get(request_id)
+    if not friend_request or friend_request.to_user_id != current_user.id:
+        flash("Invalid friend request.", "danger")
+        return redirect(url_for('friend_requests'))
+
+    # Update the request status
+    friend_request.status = 'declined'
+    db.session.commit()
+    flash("Friend request declined.", "info")
+    return redirect(url_for('friend_requests'))
 
 @app.route('/logout')
 @login_required

@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %}Friend Requests{% endblock %}
+
+{% block content %}
+<h2>Pending Friend Requests</h2>
+<ul>
+    {% for request in requests %}
+        <li>
+            {{ request.from_user.username }}
+            <form action="{{ url_for('accept_friend_request', request_id=request.id) }}" method="POST" style="display:inline;">
+                <button type="submit" class="btn btn-success">Accept</button>
+            </form>
+            <form action="{{ url_for('decline_friend_request', request_id=request.id) }}" method="POST" style="display:inline;">
+                <button type="submit" class="btn btn-danger">Decline</button>
+            </form>
+        </li>
+    {% endfor %}
+</ul>
+{% endblock %}
