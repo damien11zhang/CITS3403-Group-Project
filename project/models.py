@@ -17,7 +17,7 @@ class User(UserMixin, db.Model):
     email = db.Column(db.String(100), nullable=False, unique=True)
     password = db.Column(db.String(100), nullable=False)
     bio = db.Column(db.Text, nullable=True)
-    join_date = db.Column(db.DateTime, default=datetime.utcnow)  # Add this line
+    join_date = db.Column(db.DateTime, default=datetime.now(datetime.timezone.utc))  # Add this line
 
     friends = db.relationship(
         'User',
