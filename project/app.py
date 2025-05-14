@@ -10,6 +10,7 @@ from extensions import db  # <--- new way
 from models import *
 
 app = Flask(__name__)
+app.config['WTF_CSRF_ENABLED'] = False
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///career_quiz.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -19,7 +20,7 @@ login_manager = LoginManager(app)
 login_manager.login_view = 'login'
 csrf = CSRFProtect(app) 
 
-db.init_app(app)  # <--- wajib!
+db.init_app(app)  
 migrate = Migrate(app, db)
 
 class User(UserMixin, db.Model):

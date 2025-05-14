@@ -22,6 +22,11 @@
         <p><strong>Email:</strong> {{ user.email }}</p>
         <p><strong>Location:</strong> {{ user.location }}</p>
         <p><strong>Joined on:</strong> {{ user.join_date.strftime('%Y-%m-%d') }}</p>
+        {% if user.join_date %}
+            <p><strong>Joined on:</strong> {{ user.join_date.strftime('%Y-%m-%d') }}</p>
+        {% else %}
+            <p><strong>Joined on:</strong> Unknown</p>
+        {% endif %}
     </section>
 
     <section class="card">
