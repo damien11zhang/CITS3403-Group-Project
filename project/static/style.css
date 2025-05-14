@@ -217,10 +217,10 @@ input[type="range"]::-moz-range-thumb {
 
 /* Gradually reduce card size by rank */
 .rank-1 { background-color: #4A90E2; flex-basis: 22%; font-size: 1.2rem; }
-.rank-2 { background-color: #50E3C2; flex-basis: 21%; font-size: 1.1rem; }
-.rank-3 { background-color: #F5A623; flex-basis: 20%; font-size: 1.05rem; }
-.rank-4 { background-color: #D0021B; flex-basis: 19%; font-size: 1rem; }
-.rank-5 { background-color: #7B92AA; flex-basis: 18%; font-size: 0.95rem; }
+.rank-2 { background-color: #50E3C2; flex-basis: 18%; font-size: 1.1rem; }
+.rank-3 { background-color: #F5A623; flex-basis: 15%; font-size: 1.05rem; }
+.rank-4 { background-color: #D0021B; flex-basis: 13%; font-size: 1rem; }
+.rank-5 { background-color: #7B92AA; flex-basis: 12%; font-size: 0.95rem; }
 
 .card-rank {
     font-weight: bold;
