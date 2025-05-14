@@ -23,7 +23,7 @@ class FlaskTestCase(unittest.TestCase):
 
         with app.app_context():
             user = User.query.filter_by(username=self.username).first()
-            user.join_date = datetime.now(datetime.timezone.utc)  # This will now work
+            user.join_date = datetime.utcnow  # This will now work
             db.session.commit()
 
     def login(self):
