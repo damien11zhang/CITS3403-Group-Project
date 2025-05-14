@@ -1,10 +1,10 @@
-# Ignore Python cache
+# Python cache
 __pycache__/
 *.pyc
 
-# Ignore database files
+# Database & instance folder
 *.db
 instance/
 
-# Ignore virtual environment
+# Virtual environment
 venv/
