@@ -3,10 +3,12 @@ from datetime import datetime, timezone
 from flask_login import UserMixin
 
 friendships = db.Table(
-'friendships',
-db.Column('user_id', db.Integer, db.ForeignKey('user.id'), primary_key=True),
-db.Column('friend_id', db.Integer, db.ForeignKey('user.id'), primary_key=True)
+    'friendships',
+    db.Column('user_id', db.Integer, db.ForeignKey('user.id'), primary_key=True),
+    db.Column('friend_id', db.Integer, db.ForeignKey('user.id'), primary_key=True),
+    extend_existing=True
 )
+print("Defining friendships table")
 
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
