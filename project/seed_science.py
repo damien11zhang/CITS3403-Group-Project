@@ -7,7 +7,12 @@ with app.app_context():
     # Create JobCluster
     science = JobCluster(
                          name="Science & Environment",
-                         description="Research, discover, understand nature")
+                         description="Research, discover, understand nature",
+                                social=3,
+                                physical=2,
+                                leadership=5,
+                                creativity=5,
+                                logic=9)
     db.session.add(science)
 
     # Subgroup 1: Laboratory & Medical Research

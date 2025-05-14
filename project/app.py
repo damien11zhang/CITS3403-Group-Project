@@ -10,6 +10,7 @@ from extensions import db  # <--- new way
 from models import *
 
 app = Flask(__name__)
+app.config['WTF_CSRF_ENABLED'] = False
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///career_quiz.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -19,7 +20,7 @@ login_manager = LoginManager(app)
 login_manager.login_view = 'login'
 csrf = CSRFProtect(app) 
 
-db.init_app(app)  # <--- wajib!
+db.init_app(app)  
 migrate = Migrate(app, db)
 
 class User(UserMixin, db.Model):
@@ -81,7 +82,12 @@ def login():
             if check_password_hash(user.password, password): 
                 print("Password matched!")
                 login_user(user)
-                return redirect(url_for('profile'))
+                session['user_id'] = user.id
+
+                if 'session_id' in session:
+                    return redirect(url_for('quiz4'))
+                else:
+                    return redirect(url_for('profile'))
             else:
                 print("Password did not match.")
         else:
@@ -252,9 +258,10 @@ def quiz4():
         return redirect(url_for('quiz'))
 
     session_id = session.get('session_id')
-    user_id = session.get('user_id')  # Assuming user_id is stored in session
-    if not user_id:
+    if not current_user.is_authenticated:
         return redirect(url_for('login'))
+    user_id = current_user.id
+
 
     passing_jobs = session.get('passing_jobs', [])
     if not passing_jobs:
