@@ -1,8 +1,8 @@
 """Initial migration with correct models
 
-Revision ID: 873d21a432c3
+Revision ID: 50a761ed1c40
 Revises: 
-Create Date: 2025-05-14 11:32:16.088782
+Create Date: 2025-05-14 16:54:42.745172
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '873d21a432c3'
+revision = '50a761ed1c40'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -50,12 +50,28 @@ def upgrade():
     sa.UniqueConstraint('email'),
     sa.UniqueConstraint('username')
     )
+    op.create_table('friend_request',
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('from_user_id', sa.Integer(), nullable=False),
+    sa.Column('to_user_id', sa.Integer(), nullable=False),
+    sa.Column('status', sa.String(length=20), nullable=True),
+    sa.ForeignKeyConstraint(['from_user_id'], ['user.id'], name='fk_friend_request_from_user'),
+    sa.ForeignKeyConstraint(['to_user_id'], ['user.id'], name='fk_friend_request_to_user'),
+    sa.PrimaryKeyConstraint('id')
+    )
+    op.create_table('friendships',
+    sa.Column('user_id', sa.Integer(), nullable=False),
+    sa.Column('friend_id', sa.Integer(), nullable=False),
+    sa.ForeignKeyConstraint(['friend_id'], ['user.id'], ),
+    sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
+    sa.PrimaryKeyConstraint('user_id', 'friend_id')
+    )
     op.create_table('quiz_sessions',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('session_id', sa.String(length=100), nullable=False),
     sa.Column('user_id', sa.Integer(), nullable=True),
     sa.Column('created_at', sa.DateTime(), nullable=True),
-    sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
+    sa.ForeignKeyConstraint(['user_id'], ['user.id'], name='fk_quiz_session_user'),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('session_id')
     )
@@ -64,14 +80,14 @@ def upgrade():
     sa.Column('name', sa.String(length=100), nullable=False),
     sa.Column('job_cluster_id', sa.Integer(), nullable=False),
     sa.Column('subgroup_question', sa.String(length=300), nullable=False),
-    sa.ForeignKeyConstraint(['job_cluster_id'], ['job_clusters.id'], ),
+    sa.ForeignKeyConstraint(['job_cluster_id'], ['job_clusters.id'], name='fk_subgroup_job_cluster'),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('user_selected_clusters',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('user_id', sa.String(length=100), nullable=False),
     sa.Column('cluster_id', sa.Integer(), nullable=False),
-    sa.ForeignKeyConstraint(['cluster_id'], ['job_clusters.id'], ),
+    sa.ForeignKeyConstraint(['cluster_id'], ['job_clusters.id'], name='fk_user_selected_cluster_job_cluster'),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('jobs',
@@ -80,7 +96,7 @@ def upgrade():
     sa.Column('subgroup_id', sa.Integer(), nullable=False),
     sa.Column('question_1', sa.String(length=300), nullable=False),
     sa.Column('question_2', sa.String(length=300), nullable=False),
-    sa.ForeignKeyConstraint(['subgroup_id'], ['subgroups.id'], ),
+    sa.ForeignKeyConstraint(['subgroup_id'], ['subgroups.id'], name='fk_job_subgroup'),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('user_responses',
@@ -90,7 +106,7 @@ def upgrade():
     sa.Column('target_id', sa.Integer(), nullable=False),
     sa.Column('score', sa.Integer(), nullable=False),
     sa.Column('created_at', sa.DateTime(), nullable=True),
-    sa.ForeignKeyConstraint(['session_id'], ['quiz_sessions.session_id'], ),
+    sa.ForeignKeyConstraint(['session_id'], ['quiz_sessions.session_id'], name='fk_user_response_quiz_session'),
     sa.PrimaryKeyConstraint('id')
     )
     # ### end Alembic commands ###
@@ -103,6 +119,8 @@ def downgrade():
     op.drop_table('user_selected_clusters')
     op.drop_table('subgroups')
     op.drop_table('quiz_sessions')
+    op.drop_table('friendships')
+    op.drop_table('friend_request')
     op.drop_table('user')
     op.drop_table('suggestion')
     op.drop_table('job_clusters')
