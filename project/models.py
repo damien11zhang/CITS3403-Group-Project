@@ -51,7 +51,11 @@ class Subgroup(db.Model):
     __tablename__ = 'subgroups'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
-    job_cluster_id = db.Column(db.Integer, db.ForeignKey('job_clusters.id'), nullable=False)
+    job_cluster_id = db.Column(
+        db.Integer,
+        db.ForeignKey('job_clusters.id', name='fk_subgroup_job_cluster'),
+        nullable=False
+    )
     subgroup_question = db.Column(db.String(300), nullable=False)
     jobs = db.relationship('Job', backref='subgroup', lazy=True)
 
@@ -59,7 +63,11 @@ class Job(db.Model):
     __tablename__ = 'jobs'
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100), nullable=False)
-    subgroup_id = db.Column(db.Integer, db.ForeignKey('subgroups.id'), nullable=False)
+    subgroup_id = db.Column(
+        db.Integer,
+        db.ForeignKey('subgroups.id', name='fk_job_subgroup'),
+        nullable=False
+    )
     question_1 = db.Column(db.String(300), nullable=False)
     question_2 = db.Column(db.String(300), nullable=False)
 
@@ -67,32 +75,35 @@ class UserSelectedCluster(db.Model):
     __tablename__ = 'user_selected_clusters'
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.String(100), nullable=False)  # email or guest
-    cluster_id = db.Column(db.Integer, db.ForeignKey('job_clusters.id'), nullable=False)
+    cluster_id = db.Column(
+        db.Integer,
+        db.ForeignKey('job_clusters.id', name='fk_user_selected_cluster_job_cluster'),
+        nullable=False
+    )
 
 class UserResponse(db.Model):
     __tablename__ = 'user_responses'
     id = db.Column(db.Integer, primary_key=True)
-    session_id = db.Column(db.String(100), db.ForeignKey('quiz_sessions.session_id'), nullable=False)
+    session_id = db.Column(
+        db.String(100),
+        db.ForeignKey('quiz_sessions.session_id', name='fk_user_response_quiz_session'),
+        nullable=False
+    )
     question_type = db.Column(db.String(50), nullable=False)  # 'subgroup', 'first', 'second'
     target_id = db.Column(db.Integer, nullable=False)
     score = db.Column(db.Integer, nullable=False)
     created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
-
-class Suggestion(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.String(100), nullable=True)  # Optional, or link to User
-    job_title = db.Column(db.String(100), nullable=False)
-    description = db.Column(db.Text, nullable=True)
-    question_1 = db.Column(db.String(300), nullable=True)
-    question_2 = db.Column(db.String(300), nullable=True)
-    timestamp = db.Column(db.DateTime, server_default=db.func.now())
 
 class QuizSession(db.Model):
     __tablename__ = 'quiz_sessions'
 
     id = db.Column(db.Integer, primary_key=True)
     session_id = db.Column(db.String(100), unique=True, nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
+    user_id = db.Column(
+        db.Integer,
+        db.ForeignKey('user.id', name='fk_quiz_session_user'),
+        nullable=True
+    )
     created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
 
     user = db.relationship('User', backref='quiz_sessions')
