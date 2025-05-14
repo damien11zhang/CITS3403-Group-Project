@@ -199,21 +199,55 @@ input[type="range"]::-moz-range-thumb {
 
 .card-row {
     display: flex;
-    justify-content: space-between;
     flex-wrap: wrap;
+    justify-content: center;
     gap: 1rem;
     margin: 2rem 0;
 }
 
 .career-card {
-    flex-grow: 1;
-    padding: 1rem;
     color: white;
     border-radius: 12px;
     text-align: center;
+    padding: 1rem;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    flex: 1 1 150px;
+    min-width: 150px;
     transition: transform 0.2s ease;
 }
+
+.rank-1 { background-color: #4A90E2; font-size: 1.2rem; }
+.rank-2 { background-color: #50E3C2; font-size: 1.1rem; }
+.rank-3 { background-color: #F5A623; font-size: 1.05rem; }
+.rank-4 { background-color: #D0021B; font-size: 1rem; }
+.rank-5 { background-color: #7B92AA; font-size: 0.95rem; }
+
+.card-rank {
+    font-weight: bold;
+    font-size: 1.2em;
+    margin-bottom: 0.5rem;
+}
+
+.card-title {
+    font-size: 1em;
+    margin-bottom: 0.3rem;
+}
+
+.card-score {
+    font-size: 0.9em;
+}
+
+@media (max-width: 768px) {
+    .career-card {
+        flex: 1 1 100%;
+    }
+}
+
+canvas {
+    max-width: 100%;
+    height: auto !important;
+}
+
 
 /* Gradually reduce card size by rank */
 .rank-1 { background-color: #4A90E2; flex-basis: 22%; font-size: 1.2rem; }
@@ -237,6 +271,16 @@ input[type="range"]::-moz-range-thumb {
     font-size: 0.9em;
 }
 
+@media (max-width: 768px) {
+    .career-card {
+        flex: 1 1 100%;
+    }
+}
+
+canvas {
+    max-width: 100%;
+    height: auto !important;
+}
 /* ===== Headings ===== */
 
 h1 {

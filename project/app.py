@@ -323,12 +323,23 @@ def results():
         key: int((value / max_val) * 100) for key, value in attribute_totals.items()
     }
 
+    # Calculate scores per subgroup
+    subgroup_scores = defaultdict(int)
+    for job_id, score in sorted_jobs[:5]:
+        job = Job.query.get(job_id)
+        if job:
+            subgroup_name = job.subgroup.name
+            subgroup_scores[subgroup_name] += score
+
+
     return render_template(
         'results.html',
         top_jobs=top_jobs,
         attribute_totals=dict(attribute_totals),
-        normalized_scores=normalized_scores
+        normalized_scores=normalized_scores,
+        subgroup_scores=dict(subgroup_scores)
     )
+
 
 @app.route('/add_friend/<int:friend_id>', methods=['POST'])
 @login_required

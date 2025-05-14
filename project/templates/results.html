@@ -18,6 +18,17 @@
 
 <h2 class="text-center mt-4">Attribute Profile Comparison</h2>
 <canvas id="pentagonChart" width="300" height="300"></canvas>
+<button id="downloadRadar" class="btn btn-secondary mt-2">Download Radar Chart</button>
+<script>
+document.getElementById('downloadRadar').addEventListener('click', () => {
+    const url = document.getElementById('pentagonChart').toDataURL("image/png");
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'attribute_profile_radar.png';
+    link.click();
+});
+</script>
+
 
 {% else %}
     <p>No results available. Please complete the quiz first.</p>
