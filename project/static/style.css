@@ -277,6 +277,11 @@ canvas {
     }
 }
 
+.chart-container {
+    max-width: 60%;
+    margin: 0 auto;
+}
+
 canvas {
     max-width: 100%;
     height: auto !important;
@@ -558,8 +563,9 @@ a:hover {
 
 /* === Footer === */
 .section {
-  margin-top: 0;
-  padding-top: 2rem;
+  margin: 3rem auto;
+  padding: 2rem;
+  max-width: 1000px;
 }
 
 .scroll-down {

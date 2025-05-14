@@ -6,24 +6,51 @@
 <h1 class="text-center">Your Top 5 Career Matches</h1>
 
 {% if top_jobs %}
-<div class="card-row">
-    {% for job, score in top_jobs %}
-        <div class="career-card rank-{{ loop.index }}">
-            <div class="card-rank">#{{ loop.index }}</div>
-            <div class="card-title">{{ job.title }}</div>
-            <div class="card-score">{{ '%.1f' % ((score / 30) * 100) }}%</div>
-        </div>
-    {% endfor %}
-</div>
+<section class="section">
+    <div class="card-row">
+        {% for job, score in top_jobs %}
+            <div class="career-card rank-{{ loop.index }}">
+                <div class="card-rank">#{{ loop.index }}</div>
+                <div class="card-title">{{ job.title }}</div>
+                <div class="card-score">{{ '%.1f' % ((score / 30) * 100) }}%</div>
+            </div>
+        {% endfor %}
+    </div>
+</section>
 
-<h2 class="text-center mt-5">Top Subgroups Breakdown</h2>
-<canvas id="subgroupChart" width="300" height="300"></canvas>
+<section class="section">
+    <h2 class="text-center">Top Subgroups Breakdown</h2>
+    <div class="chart-container">
+        <canvas id="subgroupChart"></canvas>
+    </div>
+</section>
+
+<section class="section">
+    <h2 class="text-center">Attribute Profile Comparison</h2>
+    <div class="chart-container">
+        <canvas id="pentagonChart"></canvas>
+        <button id="downloadRadar" class="button mt-2">Download Radar Chart</button>
+    </div>
+</section>
+
+{% else %}
+    <p>No results available. Please complete the quiz first.</p>
+{% endif %}
+
+<a href="{{ url_for('quiz') }}" class="button mt-4">Take the Quiz Again</a>
+
+<footer style="text-align: center; margin-top: 2rem;">
+    <p>&copy; CareerCompass</p>
+</footer>
+
 <!-- Chart.js CDN -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 <script>
 document.addEventListener("DOMContentLoaded", function () {
+    // Pie Chart
     const subgroupCtx = document.getElementById('subgroupChart').getContext('2d');
-    const subgroupChart = new Chart(subgroupCtx, {
+    new Chart(subgroupCtx, {
         type: 'pie',
         data: {
             labels: {{ subgroup_scores.keys() | list | tojson }},
@@ -41,83 +68,68 @@ document.addEventListener("DOMContentLoaded", function () {
         options: {
             plugins: {
                 legend: { position: 'bottom' }
+            },
+            responsive: true,
+            maintainAspectRatio: true
+        }
+    });
+
+    // Radar Chart
+    const radarCtx = document.getElementById('pentagonChart').getContext('2d');
+    new Chart(radarCtx, {
+        type: 'radar',
+        data: {
+            labels: ['Social', 'Physical', 'Leadership', 'Creativity', 'Logic'],
+            datasets: [
+                {
+                    label: 'Your Profile',
+                    data: [
+                        {{ normalized_scores.social }},
+                        {{ normalized_scores.physical }},
+                        {{ normalized_scores.leadership }},
+                        {{ normalized_scores.creativity }},
+                        {{ normalized_scores.logic }}
+                    ],
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    pointBackgroundColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 2
+                },
+                {
+                    label: 'Average Profile',
+                    data: [50, 50, 50, 50, 50],
+                    backgroundColor: 'rgba(201, 203, 207, 0.2)',
+                    borderColor: 'rgba(201, 203, 207, 1)',
+                    pointBackgroundColor: 'rgba(201, 203, 207, 1)',
+                    borderWidth: 2
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            scales: {
+                r: {
+                    min: 0,
+                    max: 100,
+                    ticks: { stepSize: 20 },
+                    pointLabels: { font: { size: 14 } }
+                }
+            },
+            plugins: {
+                legend: { position: 'bottom' }
             }
         }
     });
-});
-</script>
 
-</script>
-
-<h2 class="text-center mt-4">Attribute Profile Comparison</h2>
-<canvas id="pentagonChart" width="300" height="300"></canvas>
-<button id="downloadRadar" class="button">Download Radar Chart</button>
-<script>
-document.getElementById('downloadRadar').addEventListener('click', () => {
-    const url = document.getElementById('pentagonChart').toDataURL("image/png");
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = 'attribute_profile_radar.png';
-    link.click();
-});
-</script>
-
-{% else %}
-    <p>No results available. Please complete the quiz first.</p>
-{% endif %}
-
-<a href="{{ url_for('quiz') }}" class="button">Take the Quiz Again</a>
-
-<footer style="text-align: center; margin-top: 2rem;">
-    <p>&copy; CareerCompass</p>
-</footer>
-
-<!-- Chart.js CDN -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-const ctx = document.getElementById('pentagonChart').getContext('2d');
-const chart = new Chart(ctx, {
-    type: 'radar',
-    data: {
-        labels: ['Social', 'Physical', 'Leadership', 'Creativity', 'Logic'],
-        datasets: [
-            {
-                label: 'Your Profile',
-                data: [
-                    {{ normalized_scores.social }},
-                    {{ normalized_scores.physical }},
-                    {{ normalized_scores.leadership }},
-                    {{ normalized_scores.creativity }},
-                    {{ normalized_scores.logic }}
-                ],
-                backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                borderColor: 'rgba(54, 162, 235, 1)',
-                pointBackgroundColor: 'rgba(54, 162, 235, 1)',
-                borderWidth: 2
-            },
-            {
-                label: 'Average Profile',
-                data: [50, 50, 50, 50, 50],
-                backgroundColor: 'rgba(201, 203, 207, 0.2)',
-                borderColor: 'rgba(201, 203, 207, 1)',
-                pointBackgroundColor: 'rgba(201, 203, 207, 1)',
-                borderWidth: 2
-            }
-        ]
-    },
-    options: {
-        scales: {
-            r: {
-                min: 0,
-                max: 100,
-                ticks: { stepSize: 20 },
-                pointLabels: { font: { size: 14 } }
-            }
-        },
-        plugins: {
-            legend: { position: 'bottom' }
-        }
-    }
+    // Download radar chart
+    document.getElementById('downloadRadar').addEventListener('click', () => {
+        const url = document.getElementById('pentagonChart').toDataURL("image/png");
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'attribute_profile_radar.png';
+        link.click();
+    });
 });
 </script>
 {% endblock %}
