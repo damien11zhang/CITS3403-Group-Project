@@ -169,11 +169,11 @@ class FriendRequestTestCase(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
 
         # Re-query the users to ensure they are bound to the current session
-        with app.app_context():
-            user1 = User.query.get(1)
-            user2 = User.query.get(2)
-            self.assertIn(user1, user2.friends)
-            self.assertIn(user2, user1.friends)
+    with app.app_context():
+        user1 = User.query.get(1)
+        user2 = User.query.get(2)
+        self.assertIn(user1, user2.friends)
+        self.assertIn(user2, user1.friends)
 
 if __name__ == '__main__':
     unittest.main()

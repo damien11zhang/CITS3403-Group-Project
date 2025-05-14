@@ -1,2 +1,2 @@
 requirement.txt
-[insert packages here]
+[pip install email_validator]
