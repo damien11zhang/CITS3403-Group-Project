@@ -14,6 +14,15 @@
         </li>
     {% endfor %}
     </ol>
+
+    <h2>Likely Attribute Profile</h2>
+    <ul>
+        <li>Social: {{ attribute_totals.social }}</li>
+        <li>Physical: {{ attribute_totals.physical }}</li>
+        <li>Leadership: {{ attribute_totals.leadership }}</li>
+        <li>Creativity: {{ attribute_totals.creativity }}</li>
+        <li>Logic: {{ attribute_totals.logic }}</li>
+    </ul>
 {% else %}
     <p>No results available. Please complete the quiz first.</p>
 {% endif %}
@@ -23,5 +32,4 @@
 <footer style="text-align: center; margin-top: 2rem;">
     <p>&copy; CareerCompass</p>
 </footer>
-
 {% endblock %}

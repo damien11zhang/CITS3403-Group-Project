@@ -4,7 +4,7 @@ from flask_migrate import Migrate
 from uuid import uuid4
 from flask_login import LoginManager, UserMixin, login_user, logout_user, current_user, login_required
 from flask_wtf import CSRFProtect
-
+from collections import defaultdict
 
 from extensions import db  # <--- new way
 from models import *
@@ -303,25 +303,35 @@ def quiz4():
 @app.route('/results', methods=['GET'])
 def results():
     # Check if the session contains valid quiz data
-    top_jobs = session.get('top_jobs', None)
-    if not top_jobs:
-        # Redirect to the quiz start page if no quiz data exists
+    top_jobs_session = session.get('top_jobs', None)
+    if not top_jobs_session:
         flash("No quiz results found. Please complete a quiz first.", "warning")
         return redirect(url_for('quiz'))
 
-    # Retrieve the job scores from the session
+    # Retrieve job scores
     job_scores = session.get('job_scores', {})
-
-    # Sort jobs by their total scores in descending order
     sorted_jobs = sorted(job_scores.items(), key=lambda x: x[1], reverse=True)
 
     # Get the top 5 jobs
     top_jobs = []
-    for job_id, score in sorted_jobs[:5]:
-        job = Job.query.get(job_id)  # Fetch the job using its ID
-        top_jobs.append((job, score))  # Append the job and score to the list
+    attribute_totals = defaultdict(int)
 
-    return render_template('results.html', top_jobs=top_jobs)
+    for job_id, score in sorted_jobs[:5]:
+        job = Job.query.get(job_id)
+        if job:
+            top_jobs.append((job, score))
+            cluster = job.subgroup.job_cluster
+            attribute_totals['social']     += cluster.social     * score
+            attribute_totals['physical']   += cluster.physical   * score
+            attribute_totals['leadership'] += cluster.leadership * score
+            attribute_totals['creativity'] += cluster.creativity * score
+            attribute_totals['logic']      += cluster.logic      * score
+
+    return render_template(
+        'results.html',
+        top_jobs=top_jobs,
+        attribute_totals=dict(attribute_totals)
+    )
 
 @app.route('/logout')
 @login_required
