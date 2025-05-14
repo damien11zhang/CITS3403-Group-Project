@@ -114,3 +114,12 @@ class QuizSession(db.Model):
 
     user = db.relationship('User', backref='quiz_sessions')
     responses = db.relationship('UserResponse', backref='quiz_session', lazy=True)
+
+class Suggestion(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.String(100), nullable=True)  # Optional, or link to User
+    job_title = db.Column(db.String(100), nullable=False)
+    description = db.Column(db.Text, nullable=True)
+    question_1 = db.Column(db.String(300), nullable=True)
+    question_2 = db.Column(db.String(300), nullable=True)
+    timestamp = db.Column(db.DateTime, server_default=db.func.now())
