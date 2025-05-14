@@ -25,6 +25,7 @@ class User(UserMixin, db.Model):
         secondaryjoin=(id == friendships.c.friend_id),
         backref='friend_of'
     )
+    print("Defining User model")
 
 class FriendRequest(db.Model):
     id = db.Column(db.Integer, primary_key=True)
