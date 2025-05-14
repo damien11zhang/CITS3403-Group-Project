@@ -67,7 +67,7 @@ class QuizFlowTest(unittest.TestCase):
             slider.send_keys(Keys.ARROW_RIGHT * 5)
         driver.find_element(By.CSS_SELECTOR, "button.button[type='submit']").click()
 
-       # === SECTION 4: Demographic sliders ===
+        # === SECTION 4: Demographic sliders ===
         wait.until(EC.presence_of_all_elements_located((By.CSS_SELECTOR, "input[type='range']")))
         slider_count = len(driver.find_elements(By.CSS_SELECTOR, "input[type='range']"))
 
