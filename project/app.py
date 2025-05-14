@@ -72,7 +72,6 @@ def login():
         password = form.password.data
 
         user = User.query.filter_by(username=username).first()
-<<<<<<< HEAD
         
         if user:
             print(f"Found user: {user.username}, Checking password...")
@@ -87,13 +86,6 @@ def login():
                     return redirect(url_for('profile'))
             else:
                 print("Password did not match.")
-=======
-
-        if user and check_password_hash(user.password, password):
-            login_user(user)
-            flash('Logged in successfully.')
-            return redirect(url_for('profile'))  # Adjust as needed
->>>>>>> feature/friend
         else:
             flash('Invalid username or password.')
 
