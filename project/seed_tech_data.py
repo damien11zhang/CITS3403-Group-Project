@@ -5,7 +5,12 @@ def seed_tech_data():
     with app.app_context():
         tech_data = JobCluster(
                                 name="Tech & Data",
-                                description="Build software, analyze data, and create digital systems that solve technical problems.")
+                                description="Build software, analyze data, and create digital systems that solve technical problems.",
+                                social=3,
+                                physical=1,
+                                leadership=5,
+                                creativity=5,
+                                logic=10)
         db.session.add(tech_data)
 
         data_roles = Subgroup(
