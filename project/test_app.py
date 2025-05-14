@@ -23,7 +23,7 @@ class FlaskTestCase(unittest.TestCase):
 
         with app.app_context():
             user = User.query.filter_by(username=self.username).first()
-            user.join_date = datetime.utcnow()
+            user.join_date = datetime.now(datetime.timezone.utc)  # This will now work
             db.session.commit()
 
     def login(self):
@@ -57,8 +57,8 @@ class FlaskTestCase(unittest.TestCase):
 
     def test_send_friend_request(self):
         # Create two users
-        user1 = User(username="user1", email="user1@example.com", password="password")
-        user2 = User(username="user2", email="user2@example.com", password="password")
+        user1 = User(id=1, username="user1", email="user1@example.com", password="password")
+        user2 = User(id=2, username="user2", email="user2@example.com", password="password")
         with app.app_context():
             db.session.add_all([user1, user2])
             db.session.commit()
