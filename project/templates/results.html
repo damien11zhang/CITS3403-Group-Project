@@ -3,33 +3,78 @@
 {% block title %}Your Top Career Matches{% endblock %}
 
 {% block content %}
-<h1>Your Top 5 Career Matches</h1>
+<h1 class="text-center">Your Top 5 Career Matches</h1>
 
 {% if top_jobs %}
-    <ol>
+<div class="card-row">
     {% for job, score in top_jobs %}
-        <li>
-            <strong>{{ job.title }}</strong><br>
-            Total Score: {{ score }}
-        </li>
+        <div class="career-card rank-{{ loop.index }}">
+            <div class="card-rank">#{{ loop.index }}</div>
+            <div class="card-title">{{ job.title }}</div>
+            <div class="card-score">{{ '%.1f' % ((score / 30) * 100) }}%</div>
+        </div>
     {% endfor %}
-    </ol>
+</div>
 
-    <h2>Likely Attribute Profile</h2>
-    <ul>
-        <li>Social: {{ attribute_totals.social }}</li>
-        <li>Physical: {{ attribute_totals.physical }}</li>
-        <li>Leadership: {{ attribute_totals.leadership }}</li>
-        <li>Creativity: {{ attribute_totals.creativity }}</li>
-        <li>Logic: {{ attribute_totals.logic }}</li>
-    </ul>
+<h2 class="text-center mt-4">Attribute Profile Comparison</h2>
+<canvas id="pentagonChart" width="300" height="300"></canvas>
+
 {% else %}
     <p>No results available. Please complete the quiz first.</p>
 {% endif %}
 
-<a href="{{ url_for('quiz') }}">Take the Quiz Again</a>
+<a href="{{ url_for('quiz') }}" class="btn btn-primary mt-4">Take the Quiz Again</a>
 
 <footer style="text-align: center; margin-top: 2rem;">
     <p>&copy; CareerCompass</p>
 </footer>
+
+<!-- Chart.js CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+const ctx = document.getElementById('pentagonChart').getContext('2d');
+const chart = new Chart(ctx, {
+    type: 'radar',
+    data: {
+        labels: ['Social', 'Physical', 'Leadership', 'Creativity', 'Logic'],
+        datasets: [
+            {
+                label: 'Your Profile',
+                data: [
+                    {{ normalized_scores.social }},
+                    {{ normalized_scores.physical }},
+                    {{ normalized_scores.leadership }},
+                    {{ normalized_scores.creativity }},
+                    {{ normalized_scores.logic }}
+                ],
+                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                pointBackgroundColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 2
+            },
+            {
+                label: 'Average Profile',
+                data: [50, 50, 50, 50, 50],
+                backgroundColor: 'rgba(201, 203, 207, 0.2)',
+                borderColor: 'rgba(201, 203, 207, 1)',
+                pointBackgroundColor: 'rgba(201, 203, 207, 1)',
+                borderWidth: 2
+            }
+        ]
+    },
+    options: {
+        scales: {
+            r: {
+                min: 0,
+                max: 100,
+                ticks: { stepSize: 20 },
+                pointLabels: { font: { size: 14 } }
+            }
+        },
+        plugins: {
+            legend: { position: 'bottom' }
+        }
+    }
+});
+</script>
 {% endblock %}

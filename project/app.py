@@ -306,22 +306,36 @@ def results():
         flash("No quiz results found. Please complete a quiz first.", "warning")
         return redirect(url_for('quiz'))
 
-    # Retrieve job scores
+    # Retrieve job scores from session
     job_scores = session.get('job_scores', {})
     sorted_jobs = sorted(job_scores.items(), key=lambda x: x[1], reverse=True)
 
-    # Get the top 5 jobs
+    # Get the top 5 jobs and accumulate weighted attributes
     top_jobs = []
     attribute_totals = defaultdict(int)
 
     for job_id, score in sorted_jobs[:5]:
-        job = Job.query.get(job_id)  # Fetch the job using its ID
-        top_jobs.append((job, score))  # Append the job and score to the list
+        job = Job.query.get(job_id)
+        if job:
+            top_jobs.append((job, score))
+            cluster = job.subgroup.job_cluster
+            attribute_totals['social']     += cluster.social     * score
+            attribute_totals['physical']   += cluster.physical   * score
+            attribute_totals['leadership'] += cluster.leadership * score
+            attribute_totals['creativity'] += cluster.creativity * score
+            attribute_totals['logic']      += cluster.logic      * score
+
+    # Normalize scores to a 0–100 scale
+    max_val = max(attribute_totals.values(), default=1)
+    normalized_scores = {
+        key: int((value / max_val) * 100) for key, value in attribute_totals.items()
+    }
 
     return render_template(
         'results.html',
         top_jobs=top_jobs,
-        attribute_totals=dict(attribute_totals)
+        attribute_totals=dict(attribute_totals),
+        normalized_scores=normalized_scores
     )
 
 @app.route('/add_friend/<int:friend_id>', methods=['POST'])
