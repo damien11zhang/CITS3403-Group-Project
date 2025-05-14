@@ -25,8 +25,16 @@ class User(UserMixin, db.Model):
 
 class FriendRequest(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    from_user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    to_user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    from_user_id = db.Column(
+        db.Integer,
+        db.ForeignKey('user.id', name='fk_friend_request_from_user'),
+        nullable=False
+    )
+    to_user_id = db.Column(
+        db.Integer,
+        db.ForeignKey('user.id', name='fk_friend_request_to_user'),
+        nullable=False
+    )
     status = db.Column(db.String(20), default='pending')  # pending, accepted, declined
 
     from_user = db.relationship('User', foreign_keys=[from_user_id])

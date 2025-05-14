@@ -337,6 +337,67 @@ def view_friend(friend_id):
     quiz_sessions = QuizSession.query.filter_by(user_id=friend.id).all()
     return render_template('friend_profile.html', friend=friend, quiz_sessions=quiz_sessions)
 
+@app.route('/send_friend_request/<int:to_user_id>', methods=['POST'])
+@login_required
+def send_friend_request(to_user_id):
+    to_user = User.query.get(to_user_id)
+    if not to_user or to_user == current_user:
+        flash("Invalid user.", "danger")
+        return redirect(url_for('profile'))
+
+    # Check if a request already exists
+    existing_request = FriendRequest.query.filter_by(
+        from_user_id=current_user.id, to_user_id=to_user_id
+    ).first()
+    if existing_request:
+        flash("Friend request already sent.", "warning")
+        return redirect(url_for('profile'))
+
+    # Create a new friend request
+    friend_request = FriendRequest(from_user_id=current_user.id, to_user_id=to_user_id)
+    db.session.add(friend_request)
+    db.session.commit()
+    flash("Friend request sent!", "success")
+    return redirect(url_for('profile'))
+
+@app.route('/friend_requests')
+@login_required
+def friend_requests():
+    requests = FriendRequest.query.filter_by(to_user_id=current_user.id, status='pending').all()
+    return render_template('friend_requests.html', requests=requests)
+
+@app.route('/accept_friend_request/<int:request_id>', methods=['POST'])
+@login_required
+def accept_friend_request(request_id):
+    friend_request = FriendRequest.query.get(request_id)
+    if not friend_request or friend_request.to_user_id != current_user.id:
+        flash("Invalid friend request.", "danger")
+        return redirect(url_for('friend_requests'))
+
+    # Add the friendship
+    current_user.friends.append(friend_request.from_user)
+    friend_request.from_user.friends.append(current_user)
+
+    # Update the request status
+    friend_request.status = 'accepted'
+    db.session.commit()
+    flash("Friend request accepted!", "success")
+    return redirect(url_for('friend_requests'))
+
+@app.route('/decline_friend_request/<int:request_id>', methods=['POST'])
+@login_required
+def decline_friend_request(request_id):
+    friend_request = FriendRequest.query.get(request_id)
+    if not friend_request or friend_request.to_user_id != current_user.id:
+        flash("Invalid friend request.", "danger")
+        return redirect(url_for('friend_requests'))
+
+    # Update the request status
+    friend_request.status = 'declined'
+    db.session.commit()
+    flash("Friend request declined.", "info")
+    return redirect(url_for('friend_requests'))
+
 @app.route('/logout')
 @login_required
 def logout():

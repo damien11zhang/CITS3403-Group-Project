@@ -36,6 +36,35 @@
     </section>
 
     <section class="card">
+        <h2>Your Friends</h2>
+        <ul>
+        {% for friend in current_user.friends %}
+        <li>{{ friend.username }}</li>
+        {% endfor %}
+        </ul>
+
+        <h2>Send Friend Request</h2>
+        <form action="{{ url_for('send_friend_request', to_user_id=user.id) }}" method="POST">
+        <button type="submit">Send Friend Request</button>
+        </form>
+    <section class="card">
+
+        <h2>Friend Requests</h2>
+        <ul>
+            {% for request in friend_requests %}
+                <li>
+                    {{ request.from_user.username }}
+                    <form action="{{ url_for('accept_friend_request', request_id=request.id) }}" method="POST" style="display:inline;">
+                        <button type="submit">Accept</button>
+                    </form>
+                    <form action="{{ url_for('decline_friend_request', request_id=request.id) }}" method="POST" style="display:inline;">
+                        <button type="submit">Decline</button>
+                    </form>
+                </li>
+            {% endfor %}
+        </ul>
+    <section class="card">
+        
         <h2>Update Profile</h2>
         <form action="{{ url_for('profile') }}" method="POST">
             <label for="username">Username:</label>
@@ -49,7 +78,7 @@
     </section>
 
     <section class="card">
-        <h2>Your Quiz History</h2>
+        <h3>Your Quiz History</h3>
 
         {% if quiz_sessions %}
             <ul>
