@@ -268,13 +268,14 @@ def quiz4():
 
         db.session.commit()
 
-        # Store the top 5 jobs in the session
+        # Store scores in session so /results can use them
+        session['job_scores'] = final_scores 
         top_jobs = sorted(final_scores.items(), key=lambda x: x[1], reverse=True)[:5]
         session['top_jobs'] = [job_id for job_id, score in top_jobs]
 
         return redirect(url_for('results'))
 
-    # On GET: Show only jobs that passed in quiz3
+    # GET method
     jobs = Job.query.filter(Job.id.in_(passing_jobs)).all()
     return render_template('quiz4.html', jobs=jobs)
 
