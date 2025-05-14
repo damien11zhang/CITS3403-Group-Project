@@ -12,11 +12,12 @@ print("Defining friendships table")
 
 class User(UserMixin, db.Model):
     __tablename__ = 'user'
-    id = db.Column(db.Integer, primary_key=True, extend_existing=True)
-    username = db.Column(db.String(100), nullable=False, unique=True, extend_existing=True)
-    email = db.Column(db.String(100), nullable=False, unique=True, extend_existing=True)
-    password = db.Column(db.String(100), nullable=False, extend_existing=True)
-    bio = db.Column(db.Text, nullable=True, extend_existing=True)
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(100), nullable=False, unique=True)
+    email = db.Column(db.String(100), nullable=False, unique=True)
+    password = db.Column(db.String(100), nullable=False)
+    bio = db.Column(db.Text, nullable=True)
+    join_date = db.Column(db.DateTime, default=datetime.now)  # Add this line
 
     friends = db.relationship(
         'User',
@@ -25,7 +26,6 @@ class User(UserMixin, db.Model):
         secondaryjoin=(id == friendships.c.friend_id),
         backref='friend_of'
     )
-    print("Defining User model")
 
 class FriendRequest(db.Model):
     id = db.Column(db.Integer, primary_key=True)
