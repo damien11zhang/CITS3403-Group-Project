@@ -64,27 +64,21 @@ def suggest():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    form = LoginForm()
     if request.method == 'POST':
-        print("Form submitted. Valid?", form.validate_on_submit())
-        print("Errors:", form.errors)
-
-    if form.validate_on_submit():
-        username = form.username.data
-        password = form.password.data
+        username = request.form.get('username')
+        password = request.form.get('password')
 
         user = User.query.filter_by(username=username).first()
-        print("User found?", user is not None)
 
-        if user:
-            print("Skipping password check temporarily")
+        if user and check_password_hash(user.password, password):
             login_user(user)
+            flash('Logged in successfully.')
             return redirect(url_for('profile'))
         else:
-            print("Login failed — incorrect credentials")
-            flash('Invalid username or password.', 'danger')
+            flash('Invalid username or password.')
+            return redirect(url_for('login'))
 
-    return render_template('login.html', form=form)
+    return render_template('login.html')
 
 @login_manager.user_loader
 def load_user(user_id):
