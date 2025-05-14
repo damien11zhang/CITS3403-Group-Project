@@ -5,7 +5,7 @@ from uuid import uuid4
 from flask_login import LoginManager, UserMixin, login_user, logout_user, current_user, login_required
 from flask_wtf import CSRFProtect
 from collections import defaultdict
-
+from forms import LoginForm
 from extensions import db  # <--- new way
 from models import User, JobCluster, Subgroup, Job, UserResponse, QuizSession, Suggestion, FriendRequest
 
@@ -64,24 +64,19 @@ def suggest():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
+    form = LoginForm()
+    if form.validate_on_submit():
+        username = form.username.data
+        password = form.password.data
         user = User.query.filter_by(username=username).first()
         
-        if user:
-            print(f"Found user: {user.username}, Checking password...")
-            if check_password_hash(user.password, password): 
-                print("Password matched!")
-                login_user(user)
-                return redirect(url_for('profile'))
-            else:
-                print("Password did not match.")
+        if user and check_password_hash(user.password, password):
+            login_user(user)
+            return redirect(url_for('profile'))
         else:
-            print("User not found.")
-        
-        flash('Invalid login credentials', 'danger')
-    return render_template('login.html')
+            flash('Invalid login credentials', 'danger')
+    
+    return render_template('login.html', form=form)
 
 @login_manager.user_loader
 def load_user(user_id):
