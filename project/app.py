@@ -310,15 +310,8 @@ def results():
     attribute_totals = defaultdict(int)
 
     for job_id, score in sorted_jobs[:5]:
-        job = Job.query.get(job_id)
-        if job:
-            top_jobs.append((job, score))
-            cluster = job.subgroup.job_cluster
-            attribute_totals['social']     += cluster.social     * score
-            attribute_totals['physical']   += cluster.physical   * score
-            attribute_totals['leadership'] += cluster.leadership * score
-            attribute_totals['creativity'] += cluster.creativity * score
-            attribute_totals['logic']      += cluster.logic      * score
+        job = Job.query.get(job_id)  # Fetch the job using its ID
+        top_jobs.append((job, score))  # Append the job and score to the list
 
     return render_template(
         'results.html',
