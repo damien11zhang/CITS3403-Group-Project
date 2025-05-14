@@ -21,7 +21,6 @@
         <p><strong>Username:</strong> {{ user.username }}</p>
         <p><strong>Email:</strong> {{ user.email }}</p>
         <p><strong>Location:</strong> {{ user.location }}</p>
-        <p><strong>Joined on:</strong> {{ user.join_date.strftime('%Y-%m-%d') }}</p>
         {% if user.join_date %}
             <p><strong>Joined on:</strong> {{ user.join_date.strftime('%Y-%m-%d') }}</p>
         {% else %}
