@@ -2,7 +2,7 @@
 import pytest
 from project.app import app as flask_app
 from project.extensions import db as _db
-from project.models import * # Import your models
+from project.models import friendships, User, FriendRequest
 
 @pytest.fixture
 def app():
