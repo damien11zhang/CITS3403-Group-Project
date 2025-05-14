@@ -16,6 +16,33 @@
     {% endfor %}
 </div>
 
+<h2 class="text-center mt-5">Top Subgroups Breakdown</h2>
+<canvas id="subgroupChart" width="300" height="300"></canvas>
+<script>
+const subgroupCtx = document.getElementById('subgroupChart').getContext('2d');
+const subgroupChart = new Chart(subgroupCtx, {
+    type: 'pie',
+    data: {
+        labels: {{ subgroup_scores.keys() | list | tojson }},
+        datasets: [{
+            label: 'Subgroup Scores',
+            data: {{ subgroup_scores.values() | list | tojson }},
+            backgroundColor: [
+                '#4A90E2', '#50E3C2', '#F5A623', '#D0021B', '#7B92AA',
+                '#B67DF5', '#FF69B4', '#2ECC71', '#FF8C00', '#00CED1'
+            ],
+            borderColor: '#fff',
+            borderWidth: 1
+        }]
+    },
+    options: {
+        plugins: {
+            legend: { position: 'bottom' }
+        }
+    }
+});
+</script>
+
 <h2 class="text-center mt-4">Attribute Profile Comparison</h2>
 <canvas id="pentagonChart" width="300" height="300"></canvas>
 <button id="downloadRadar" class="btn btn-secondary mt-2">Download Radar Chart</button>
@@ -28,7 +55,6 @@ document.getElementById('downloadRadar').addEventListener('click', () => {
     link.click();
 });
 </script>
-
 
 {% else %}
     <p>No results available. Please complete the quiz first.</p>
