@@ -6,8 +6,8 @@
 <h2 class="subheading">Please answer the following questions using the slider to show your interest 0-10</h2>
 <form method="POST" action="{{ url_for('quiz3') }}">
     {% for job in jobs %}
-        <div class="section text-center">
-            <p>{{ job.question_1 }}</p>
+        <div class="section slider-card text-center">
+            <p >{{ job.question_1 }}</p>
             <div class="slider-group">
                 <label for="job_q1_{{ job.id }}">Your Interest Level</label>
                 <div class="slider-wrapper">
