@@ -7,7 +7,7 @@
 <h2 class="subheading">Please answer the following questions using the slider to show your interest 0-10</h2>
 <form method="POST" action="{{ url_for('quiz2') }}">
     {% for subgroup in subgroups %}
-        <div class="section text-center">
+        <div class="section slider-card text-center">
             <p class="question-text">{{ subgroup.subgroup_question }}</p>
 
             <div class="slider-group">
