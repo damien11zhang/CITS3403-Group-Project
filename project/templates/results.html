@@ -29,7 +29,11 @@
     <h2 class="text-center">Attribute Profile Comparison</h2>
     <div class="chart-container">
         <canvas id="pentagonChart"></canvas>
-        <button id="downloadRadar" class="button mt-2">Download Radar Chart</button>
+        <p id="topAttribute" class="text-center mt-2" style="font-weight: bold; font-size: 1.2rem;"></p>
+        <div class="text-center mt-2">
+            <button id="downloadRadar" class="button">Download Radar Chart</button>
+            <a href="{{ url_for('friend_requests') }}" class="button">Share with your friends</a>
+        </div>
     </div>
 </section>
 
@@ -48,10 +52,10 @@
 
 <script>
 document.addEventListener("DOMContentLoaded", function () {
-    // Pie Chart
+    // Pie (Donut) Chart
     const subgroupCtx = document.getElementById('subgroupChart').getContext('2d');
     new Chart(subgroupCtx, {
-        type: 'pie',
+        type: 'doughnut',
         data: {
             labels: {{ subgroup_scores.keys() | list | tojson }},
             datasets: [{
@@ -66,30 +70,48 @@ document.addEventListener("DOMContentLoaded", function () {
             }]
         },
         options: {
-            plugins: {
-                legend: { position: 'bottom' }
-            },
+            cutout: '50%',
             responsive: true,
-            maintainAspectRatio: true
+            maintainAspectRatio: true,
+            plugins: {
+                legend: { position: 'bottom' },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            const label = context.label || '';
+                            const value = context.parsed;
+                            return `${label}: ${value}`;
+                        }
+                    }
+                }
+            }
         }
     });
 
-    // Radar Chart
+    // Radar Chart with top attribute highlight
     const radarCtx = document.getElementById('pentagonChart').getContext('2d');
+
+    const labels = ['Social', 'Physical', 'Leadership', 'Creativity', 'Logic'];
+    const userData = [
+        {{ normalized_scores.social }},
+        {{ normalized_scores.physical }},
+        {{ normalized_scores.leadership }},
+        {{ normalized_scores.creativity }},
+        {{ normalized_scores.logic }}
+    ];
+
+    const maxIndex = userData.indexOf(Math.max(...userData));
+    const topAttribute = labels[maxIndex];
+    document.getElementById('topAttribute').innerText = `Your strongest attribute: ${topAttribute}`;
+
     new Chart(radarCtx, {
         type: 'radar',
         data: {
-            labels: ['Social', 'Physical', 'Leadership', 'Creativity', 'Logic'],
+            labels: labels,
             datasets: [
                 {
                     label: 'Your Profile',
-                    data: [
-                        {{ normalized_scores.social }},
-                        {{ normalized_scores.physical }},
-                        {{ normalized_scores.leadership }},
-                        {{ normalized_scores.creativity }},
-                        {{ normalized_scores.logic }}
-                    ],
+                    data: userData,
                     backgroundColor: 'rgba(54, 162, 235, 0.2)',
                     borderColor: 'rgba(54, 162, 235, 1)',
                     pointBackgroundColor: 'rgba(54, 162, 235, 1)',
@@ -112,12 +134,24 @@ document.addEventListener("DOMContentLoaded", function () {
                 r: {
                     min: 0,
                     max: 100,
-                    ticks: { stepSize: 20 },
-                    pointLabels: { font: { size: 14 } }
+                    ticks: {
+                        stepSize: 20,
+                        display: true
+                    },
+                    pointLabels: {
+                        font: { size: 14 }
+                    }
                 }
             },
             plugins: {
-                legend: { position: 'bottom' }
+                legend: { position: 'bottom' },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return `${context.dataset.label}: ${context.formattedValue}`;
+                        }
+                    }
+                }
             }
         }
     });
