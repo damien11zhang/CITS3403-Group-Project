@@ -3,33 +3,169 @@
 {% block title %}Your Top Career Matches{% endblock %}
 
 {% block content %}
-<h1>Your Top 5 Career Matches</h1>
+<h1 class="text-center">Your Top 5 Career Matches</h1>
 
 {% if top_jobs %}
-    <ol>
-    {% for job, score in top_jobs %}
-        <li>
-            <strong>{{ job.title }}</strong><br>
-            Total Score: {{ score }}
-        </li>
-    {% endfor %}
-    </ol>
+<section class="section">
+    <div class="card-row">
+        {% for job, score in top_jobs %}
+            <div class="career-card rank-{{ loop.index }}">
+                <div class="card-rank">#{{ loop.index }}</div>
+                <div class="card-title">{{ job.title }}</div>
+                <div class="card-score">{{ '%.1f' % ((score / 30) * 100) }}%</div>
+            </div>
+        {% endfor %}
+    </div>
+</section>
 
-    <h2>Likely Attribute Profile</h2>
-    <ul>
-        <li>Social: {{ attribute_totals.social }}</li>
-        <li>Physical: {{ attribute_totals.physical }}</li>
-        <li>Leadership: {{ attribute_totals.leadership }}</li>
-        <li>Creativity: {{ attribute_totals.creativity }}</li>
-        <li>Logic: {{ attribute_totals.logic }}</li>
-    </ul>
+<section class="section">
+    <h2 class="text-center">Top Subgroups Breakdown</h2>
+    <div class="chart-container">
+        <canvas id="subgroupChart"></canvas>
+    </div>
+</section>
+
+<section class="section">
+    <h2 class="text-center">Attribute Profile Comparison</h2>
+    <div class="chart-container">
+        <canvas id="pentagonChart"></canvas>
+        <p id="topAttribute" class="text-center mt-2" style="font-weight: bold; font-size: 1.2rem;"></p>
+        <div class="text-center mt-2">
+            <button id="downloadRadar" class="button">Download Radar Chart</button>
+        </div>
+    </div>
+</section>
+
 {% else %}
     <p>No results available. Please complete the quiz first.</p>
 {% endif %}
 
-<a href="{{ url_for('quiz') }}">Take the Quiz Again</a>
+<div class="button-row">
+  <a href="{{ url_for('quiz') }}" class="button">Take the Quiz Again</a>
+  <a href="{{ url_for('friend_requests') }}" class="button">Share with your friends</a>
+</div>
 
 <footer style="text-align: center; margin-top: 2rem;">
     <p>&copy; CareerCompass</p>
 </footer>
+
+<!-- Chart.js CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    // Pie (Donut) Chart
+    const subgroupCtx = document.getElementById('subgroupChart').getContext('2d');
+    new Chart(subgroupCtx, {
+        type: 'doughnut',
+        data: {
+            labels: {{ subgroup_scores.keys() | list | tojson }},
+            datasets: [{
+                label: 'Subgroup Scores',
+                data: {{ subgroup_scores.values() | list | tojson }},
+                backgroundColor: [
+                    '#4A90E2', '#50E3C2', '#F5A623', '#D0021B', '#7B92AA',
+                    '#B67DF5', '#FF69B4', '#2ECC71', '#FF8C00', '#00CED1'
+                ],
+                borderColor: '#fff',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            cutout: '50%',
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+                legend: { position: 'bottom' },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            const label = context.label || '';
+                            const value = context.parsed;
+                            return `${label}: ${value}`;
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+    // Radar Chart with top attribute highlight
+    const radarCtx = document.getElementById('pentagonChart').getContext('2d');
+
+    const labels = ['Social', 'Physical', 'Leadership', 'Creativity', 'Logic'];
+    const userData = [
+        {{ normalized_scores.social }},
+        {{ normalized_scores.physical }},
+        {{ normalized_scores.leadership }},
+        {{ normalized_scores.creativity }},
+        {{ normalized_scores.logic }}
+    ];
+
+    const maxIndex = userData.indexOf(Math.max(...userData));
+    const topAttribute = labels[maxIndex];
+    document.getElementById('topAttribute').innerText = `Your strongest attribute: ${topAttribute}`;
+
+    new Chart(radarCtx, {
+        type: 'radar',
+        data: {
+            labels: labels,
+            datasets: [
+                {
+                    label: 'Your Profile',
+                    data: userData,
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    pointBackgroundColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 2
+                },
+                {
+                    label: 'Average Profile',
+                    data: [50, 50, 50, 50, 50],
+                    backgroundColor: 'rgba(201, 203, 207, 0.2)',
+                    borderColor: 'rgba(201, 203, 207, 1)',
+                    pointBackgroundColor: 'rgba(201, 203, 207, 1)',
+                    borderWidth: 2
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            scales: {
+                r: {
+                    min: 0,
+                    max: 100,
+                    ticks: {
+                        stepSize: 20,
+                        display: true
+                    },
+                    pointLabels: {
+                        font: { size: 14 }
+                    }
+                }
+            },
+            plugins: {
+                legend: { position: 'bottom' },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return `${context.dataset.label}: ${context.formattedValue}`;
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+    // Download radar chart
+    document.getElementById('downloadRadar').addEventListener('click', () => {
+        const url = document.getElementById('pentagonChart').toDataURL("image/png");
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'attribute_profile_radar.png';
+        link.click();
+    });
+});
+</script>
 {% endblock %}

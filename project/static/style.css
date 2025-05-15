@@ -24,6 +24,17 @@ body {
   padding: 2rem;
 }
 
+/*.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.col-md-6 {
+  flex: 0 0 50%;
+  max-width: 50%;
+} */
+
 
 /* ===== Header Navigation ===== */
 .header {
@@ -59,9 +70,11 @@ body {
   border: none;
   border-radius: 8px;
   cursor: pointer;
+  text-align: center;
   transition: background 0.2s ease;
   font-size: 1rem;
-  width: 100%;
+  width: auto; /* Change width to auto */
+  display: inline-block; /* Ensure the button doesn't stretch */
 }
 
 .button:hover {
@@ -157,6 +170,14 @@ input[type="range"]::-moz-range-thumb {
   padding: 1.5rem;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   margin-bottom: 1.5rem;
+  display: flex;
+  flex-direction: column; /* Stack content vertically */
+  justify-content: space-between; /* Ensure spacing between content */
+  height: 100%; /* Ensure the card takes up the full height */
+}
+
+.card .button {
+  margin-top: auto; /* Push the button to the bottom */
 }
 
 .card:hover {
@@ -197,6 +218,110 @@ input[type="range"]::-moz-range-thumb {
   color: #1e1b4b;
 }
 
+.card-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+    margin: 2rem 0;
+}
+
+.career-card {
+    color: white;
+    border-radius: 12px;
+    text-align: center;
+    padding: 1rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    flex: 1 1 150px;
+    min-width: 150px;
+    transition: transform 0.2s ease;
+}
+
+.card-rank {
+    font-weight: bold;
+    font-size: 1.2em;
+    margin-bottom: 0.5rem;
+}
+
+.card-title {
+    font-size: 1em;
+    margin-bottom: 0.3rem;
+}
+
+.card-score {
+    font-size: 0.9em;
+}
+
+@media (max-width: 768px) {
+    .career-card {
+        flex: 1 1 100%;
+    }
+}
+
+/* Enhanced animation on top 5 job cards */
+.career-card {
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.career-card:hover {
+  transform: translateY(-6px) scale(1.05);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* Button container alignment */
+.button-row {
+  display: flex;
+  justify-content: space-between;
+  max-width: 1000px;
+  margin: 2rem auto 0;
+  padding: 0 2rem;
+}
+
+@media (max-width: 768px) {
+  .button-row {
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    padding: 0;
+  }
+}
+
+/* Gradually reduce card size by rank */
+.rank-1 { background-color: #4A90E2; flex-basis: 22%; font-size: 1.2rem; }
+.rank-2 { background-color: #50E3C2; flex-basis: 18%; font-size: 1.1rem; }
+.rank-3 { background-color: #F5A623; flex-basis: 15%; font-size: 1.05rem; }
+.rank-4 { background-color: #D0021B; flex-basis: 13%; font-size: 1rem; }
+.rank-5 { background-color: #7B92AA; flex-basis: 12%; font-size: 0.95rem; }
+
+.card-rank {
+    font-weight: bold;
+    font-size: 1.2em;
+    margin-bottom: 0.5rem;
+}
+
+.card-title {
+    font-size: 1em;
+    margin-bottom: 0.3rem;
+}
+
+.card-score {
+    font-size: 0.9em;
+}
+
+@media (max-width: 768px) {
+    .career-card {
+        flex: 1 1 100%;
+    }
+}
+
+.chart-container {
+    max-width: 60%;
+    margin: 0 auto;
+}
+
+canvas {
+    max-width: 100%;
+    height: auto !important;
+}
 
 /* ===== Headings ===== */
 
@@ -475,8 +600,9 @@ a:hover {
 
 /* === Footer === */
 .section {
-  margin-top: 0;
-  padding-top: 2rem;
+  margin: 3rem auto;
+  padding: 2rem;
+  max-width: 1000px;
 }
 
 .scroll-down {
