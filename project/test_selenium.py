@@ -17,7 +17,7 @@ class QuizFlowTest(unittest.TestCase):
     def setUpClass(cls):
         # Start Flask server in a background thread
         cls.server_thread = Thread(target=app.run, kwargs={"port": 5000})
-        cls.server_thread.setDaemon(True)
+        cls.server_thread.daemon = True
         cls.server_thread.start()
         time.sleep(1)  # wait for server to start
 
@@ -31,6 +31,7 @@ class QuizFlowTest(unittest.TestCase):
         service = Service(ChromeDriverManager().install())
         self.driver = webdriver.Chrome(service=service, options=options)
         self.driver.set_window_size(1920, 1080)
+        self.driver.implicitly_wait(3)
 
         self.base_url = "http://127.0.0.1:5000"
         self.wait = WebDriverWait(self.driver, 10)
@@ -59,7 +60,11 @@ class QuizFlowTest(unittest.TestCase):
         driver.find_element(By.ID, "password").send_keys(self.test_password)
         driver.find_element(By.CSS_SELECTOR, "input[type='submit']").click()
 
-        # === QUIZ SECTION 1: Choose 3 clusters ===
+        wait.until(EC.url_contains("/profile"))
+
+        driver.get(f"{self.base_url}/quiz")
+
+        # === QUIZ SECTION 1 ===
         driver.get(f"{self.base_url}/quiz")
         heading = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, ".quiz-heading")))
         self.assertIn("CareerCompass", heading.text)
@@ -75,9 +80,10 @@ class QuizFlowTest(unittest.TestCase):
         next_button = wait.until(EC.element_to_be_clickable((By.XPATH, "//button[normalize-space()='Next']")))
         driver.execute_script("arguments[0].scrollIntoView(true);", next_button)
         time.sleep(0.5)
-        next_button.click()
+        driver.execute_script("arguments[0].click();", next_button)
 
-        # === QUIZ SECTION 2: Interest sliders ===
+
+        # === QUIZ SECTION 2 ===
         sliders = wait.until(EC.presence_of_all_elements_located((By.CSS_SELECTOR, "input[type='range']")))
         for slider in sliders:
             driver.execute_script("arguments[0].scrollIntoView(true);", slider)
@@ -87,35 +93,36 @@ class QuizFlowTest(unittest.TestCase):
         btn2 = wait.until(EC.element_to_be_clickable((By.XPATH, "//button[normalize-space()='Continue to Stage 3']")))
         driver.execute_script("arguments[0].scrollIntoView(true);", btn2)
         time.sleep(0.5)
-        btn2.click()
+        driver.execute_script("arguments[0].click();", btn2)
 
-        # === QUIZ SECTION 3: Enjoyment sliders ===
-        sliders = wait.until(EC.presence_of_all_elements_located((By.CSS_SELECTOR, "input[type='range']")))
-        for slider in sliders:
+
+        # === SECTION 3 ===
+        slider_count = len(driver.find_elements(By.CSS_SELECTOR, "input[type='range']"))
+        for i in range(slider_count):
+            sliders = driver.find_elements(By.CSS_SELECTOR, "input[type='range']")
+            slider = sliders[i]
             driver.execute_script("arguments[0].scrollIntoView(true);", slider)
-            time.sleep(0.2)
             slider.send_keys(Keys.ARROW_RIGHT * 5)
 
         btn3 = wait.until(EC.element_to_be_clickable((By.XPATH, "//button[normalize-space()='Continue to Stage 4']")))
         driver.execute_script("arguments[0].scrollIntoView(true);", btn3)
         time.sleep(0.5)
-        btn3.click()
+        driver.execute_script("arguments[0].click();", btn3)
 
-        # === QUIZ SECTION 4 ===
-        wait.until(EC.presence_of_all_elements_located((By.CSS_SELECTOR, "input[type='range']")))
+
+        # === SECTION 4: Demographics sliders ===
         slider_count = len(driver.find_elements(By.CSS_SELECTOR, "input[type='range']"))
-
         for i in range(slider_count):
             sliders = driver.find_elements(By.CSS_SELECTOR, "input[type='range']")
             slider = sliders[i]
             driver.execute_script("arguments[0].scrollIntoView(true);", slider)
-            time.sleep(0.2)
             slider.send_keys(Keys.ARROW_RIGHT * 5)
 
         btn4 = wait.until(EC.element_to_be_clickable((By.XPATH, "//button[normalize-space()='See My Top Careers']")))
         driver.execute_script("arguments[0].scrollIntoView(true);", btn4)
         time.sleep(0.5)
-        btn4.click()
+        driver.execute_script("arguments[0].click();", btn4)
+
 
         # === RESULTS ===
         try:
