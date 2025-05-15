@@ -1,5 +1,7 @@
 import unittest
 import time
+import os
+from threading import Thread
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
@@ -8,17 +10,31 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
 from webdriver_manager.chrome import ChromeDriverManager
+from app import app  
 
 class QuizFlowTest(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        # Start Flask server in a background thread
+        cls.server_thread = Thread(target=app.run, kwargs={"port": 5000})
+        cls.server_thread.setDaemon(True)
+        cls.server_thread.start()
+        time.sleep(1)  # wait for server to start
+
     def setUp(self):
-        # Start browser and test setup
+        # Setup headless Chrome
+        options = webdriver.ChromeOptions()
+        options.add_argument("--headless")
+        options.add_argument("--no-sandbox")
+        options.add_argument("--disable-dev-shm-usage")
+
         service = Service(ChromeDriverManager().install())
-        self.driver = webdriver.Chrome(service=service)
-        self.driver.maximize_window()
+        self.driver = webdriver.Chrome(service=service, options=options)
+        self.driver.set_window_size(1920, 1080)
+
         self.base_url = "http://127.0.0.1:5000"
         self.wait = WebDriverWait(self.driver, 10)
 
-        # Generate unique test user
         timestamp = int(time.time())
         self.test_username = f"user{timestamp}"
         self.test_email = f"{self.test_username}@example.com"
@@ -35,9 +51,6 @@ class QuizFlowTest(unittest.TestCase):
         driver.find_element(By.ID, "password").send_keys(self.test_password)
         driver.find_element(By.ID, "confirm_password").send_keys(self.test_password)
         driver.find_element(By.CSS_SELECTOR, "input[type='submit']").click()
-
-
-        # Wait until redirected to login
         wait.until(EC.url_contains("/login"))
 
         # === LOGIN ===
@@ -48,7 +61,6 @@ class QuizFlowTest(unittest.TestCase):
 
         # === QUIZ SECTION 1: Choose 3 clusters ===
         driver.get(f"{self.base_url}/quiz")
-
         heading = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, ".quiz-heading")))
         self.assertIn("CareerCompass", heading.text)
 
@@ -89,7 +101,7 @@ class QuizFlowTest(unittest.TestCase):
         time.sleep(0.5)
         btn3.click()
 
-        # === QUIZ SECTION 4: Demographic sliders ===
+        # === QUIZ SECTION 4 ===
         wait.until(EC.presence_of_all_elements_located((By.CSS_SELECTOR, "input[type='range']")))
         slider_count = len(driver.find_elements(By.CSS_SELECTOR, "input[type='range']"))
 
@@ -117,5 +129,11 @@ class QuizFlowTest(unittest.TestCase):
     def tearDown(self):
         self.driver.quit()
 
+    @classmethod
+    def tearDownClass(cls):
+        try:
+            super().tearDownClass()
+        except AttributeError:
+             pass
 if __name__ == "__main__":
     unittest.main()
