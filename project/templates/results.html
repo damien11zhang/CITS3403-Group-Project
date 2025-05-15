@@ -6,36 +6,41 @@
 <h1 class="text-center">Your Top 5 Career Matches</h1>
 
 {% if top_jobs %}
-<section class="section">
+<div class="container">
+  <!-- Top 5 Jobs Section -->
+  <div class="section card">
+    <h2 class="text-center">Top 5 Jobs</h2>
     <div class="card-row">
-        {% for job, score in top_jobs %}
-            <div class="career-card rank-{{ loop.index }}">
-                <div class="card-rank">#{{ loop.index }}</div>
-                <div class="card-title">{{ job.title }}</div>
-                <div class="card-score">{{ '%.1f' % ((score / 30) * 100) }}%</div>
-            </div>
-        {% endfor %}
+      {% for job, score in top_jobs %}
+        <div class="career-card rank-{{ loop.index }}">
+          <div class="card-rank">#{{ loop.index }}</div>
+          <div class="card-title">{{ job.title }}</div>
+          <div class="card-score">{{ '%.1f' % ((score / 30) * 100) }}%</div>
+        </div>
+      {% endfor %}
     </div>
-</section>
+  </div>
 
-<section class="section">
+  <!-- Top Subgroups Breakdown Section -->
+  <div class="section card">
     <h2 class="text-center">Top Subgroups Breakdown</h2>
     <div class="chart-container">
-        <canvas id="subgroupChart"></canvas>
+      <canvas id="subgroupChart"></canvas>
     </div>
-</section>
+  </div>
 
-<section class="section">
+  <!-- Attribute Profile Comparison Section -->
+  <div class="section card">
     <h2 class="text-center">Attribute Profile Comparison</h2>
     <div class="chart-container">
-        <canvas id="pentagonChart"></canvas>
-        <p id="topAttribute" class="text-center mt-2" style="font-weight: bold; font-size: 1.2rem;"></p>
-        <div class="text-center mt-2">
-            <button id="downloadRadar" class="button">Download Radar Chart</button>
-        </div>
+      <canvas id="pentagonChart"></canvas>
+      <p id="topAttribute" class="text-center mt-2" style="font-weight: bold; font-size: 1.2rem;"></p>
+      <div class="text-center mt-2">
+        <button id="downloadRadar" class="button">Download Radar Chart</button>
+      </div>
     </div>
-</section>
-
+  </div>
+</div>
 {% else %}
     <p>No results available. Please complete the quiz first.</p>
 {% endif %}
