@@ -216,12 +216,6 @@ input[type="range"]::-moz-range-thumb {
     transition: transform 0.2s ease;
 }
 
-.rank-1 { background-color: #4A90E2; font-size: 1.2rem; }
-.rank-2 { background-color: #50E3C2; font-size: 1.1rem; }
-.rank-3 { background-color: #F5A623; font-size: 1.05rem; }
-.rank-4 { background-color: #D0021B; font-size: 1rem; }
-.rank-5 { background-color: #7B92AA; font-size: 0.95rem; }
-
 .card-rank {
     font-weight: bold;
     font-size: 1.2em;
@@ -243,11 +237,32 @@ input[type="range"]::-moz-range-thumb {
     }
 }
 
-canvas {
-    max-width: 100%;
-    height: auto !important;
+/* Enhanced animation on top 5 job cards */
+.career-card {
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.career-card:hover {
+  transform: translateY(-6px) scale(1.05);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
 }
 
+/* Button container alignment */
+.button-row {
+  display: flex;
+  justify-content: space-between;
+  max-width: 1000px;
+  margin: 2rem auto 0;
+  padding: 0 2rem;
+}
+
+@media (max-width: 768px) {
+  .button-row {
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    padding: 0;
+  }
+}
 
 /* Gradually reduce card size by rank */
 .rank-1 { background-color: #4A90E2; flex-basis: 22%; font-size: 1.2rem; }
@@ -286,6 +301,7 @@ canvas {
     max-width: 100%;
     height: auto !important;
 }
+
 /* ===== Headings ===== */
 
 h1 {

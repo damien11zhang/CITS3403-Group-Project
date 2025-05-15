@@ -32,7 +32,6 @@
         <p id="topAttribute" class="text-center mt-2" style="font-weight: bold; font-size: 1.2rem;"></p>
         <div class="text-center mt-2">
             <button id="downloadRadar" class="button">Download Radar Chart</button>
-            <a href="{{ url_for('friend_requests') }}" class="button">Share with your friends</a>
         </div>
     </div>
 </section>
@@ -41,7 +40,10 @@
     <p>No results available. Please complete the quiz first.</p>
 {% endif %}
 
-<a href="{{ url_for('quiz') }}" class="button mt-4">Take the Quiz Again</a>
+<div class="button-row">
+  <a href="{{ url_for('quiz') }}" class="button">Take the Quiz Again</a>
+  <a href="{{ url_for('friend_requests') }}" class="button">Share with your friends</a>
+</div>
 
 <footer style="text-align: center; margin-top: 2rem;">
     <p>&copy; CareerCompass</p>
