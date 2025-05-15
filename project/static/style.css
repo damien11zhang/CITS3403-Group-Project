@@ -170,6 +170,14 @@ input[type="range"]::-moz-range-thumb {
   padding: 1.5rem;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   margin-bottom: 1.5rem;
+  display: flex;
+  flex-direction: column; /* Stack content vertically */
+  justify-content: space-between; /* Ensure spacing between content */
+  height: 100%; /* Ensure the card takes up the full height */
+}
+
+.card .button {
+  margin-top: auto; /* Push the button to the bottom */
 }
 
 .card:hover {
