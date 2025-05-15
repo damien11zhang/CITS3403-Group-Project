@@ -240,9 +240,10 @@ def quiz4():
         return redirect(url_for('quiz'))
 
     session_id = session.get('session_id')
-    if not current_user.is_authenticated:
-        return redirect(url_for('login'))
-    user_id = current_user.id
+    if current_user.is_authenticated:
+        user_id = current_user.id
+    else:
+        user_id = None  # Or use a dummy ID if needed
 
 
     passing_jobs = session.get('passing_jobs', [])
