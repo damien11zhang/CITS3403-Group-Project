@@ -34,7 +34,8 @@ class QuizFlowTest(unittest.TestCase):
         driver.find_element(By.ID, "email").send_keys(self.test_email)
         driver.find_element(By.ID, "password").send_keys(self.test_password)
         driver.find_element(By.ID, "confirm_password").send_keys(self.test_password)
-        driver.find_element(By.CSS_SELECTOR, "button[type='submit']").click()
+        driver.find_element(By.CSS_SELECTOR, "input[type='submit']").click()
+
 
         # Wait until redirected to login
         wait.until(EC.url_contains("/login"))
@@ -43,7 +44,7 @@ class QuizFlowTest(unittest.TestCase):
         driver.get(f"{self.base_url}/login")
         wait.until(EC.presence_of_element_located((By.ID, "username"))).send_keys(self.test_username)
         driver.find_element(By.ID, "password").send_keys(self.test_password)
-        driver.find_element(By.CSS_SELECTOR, "button[type='submit']").click()
+        driver.find_element(By.CSS_SELECTOR, "input[type='submit']").click()
 
         # === QUIZ SECTION 1: Choose 3 clusters ===
         driver.get(f"{self.base_url}/quiz")
@@ -59,35 +60,50 @@ class QuizFlowTest(unittest.TestCase):
         selected = driver.find_elements(By.CSS_SELECTOR, ".quiz-card.selected")
         assert len(selected) == 3, f"Expected 3 cards selected, got {len(selected)}"
 
-        wait.until(EC.element_to_be_clickable((By.XPATH, "//button[normalize-space()='Next']"))).click()
+        next_button = wait.until(EC.element_to_be_clickable((By.XPATH, "//button[normalize-space()='Next']")))
+        driver.execute_script("arguments[0].scrollIntoView(true);", next_button)
+        time.sleep(0.5)
+        next_button.click()
 
-        # === SECTION 2: Interest sliders ===
+        # === QUIZ SECTION 2: Interest sliders ===
         sliders = wait.until(EC.presence_of_all_elements_located((By.CSS_SELECTOR, "input[type='range']")))
         for slider in sliders:
+            driver.execute_script("arguments[0].scrollIntoView(true);", slider)
+            time.sleep(0.2)
             slider.send_keys(Keys.ARROW_RIGHT * 5)
 
-        wait.until(EC.element_to_be_clickable((By.XPATH, "//button[normalize-space()='Continue to Stage 3']"))).click()
+        btn2 = wait.until(EC.element_to_be_clickable((By.XPATH, "//button[normalize-space()='Continue to Stage 3']")))
+        driver.execute_script("arguments[0].scrollIntoView(true);", btn2)
+        time.sleep(0.5)
+        btn2.click()
 
-        # === SECTION 3: Enjoyment sliders ===
+        # === QUIZ SECTION 3: Enjoyment sliders ===
         sliders = wait.until(EC.presence_of_all_elements_located((By.CSS_SELECTOR, "input[type='range']")))
         for slider in sliders:
+            driver.execute_script("arguments[0].scrollIntoView(true);", slider)
+            time.sleep(0.2)
             slider.send_keys(Keys.ARROW_RIGHT * 5)
 
-        wait.until(EC.element_to_be_clickable((By.XPATH, "//button[normalize-space()='Continue to Stage 4']"))).click()
+        btn3 = wait.until(EC.element_to_be_clickable((By.XPATH, "//button[normalize-space()='Continue to Stage 4']")))
+        driver.execute_script("arguments[0].scrollIntoView(true);", btn3)
+        time.sleep(0.5)
+        btn3.click()
 
-        # === SECTION 4: Demographic sliders ===
+        # === QUIZ SECTION 4: Demographic sliders ===
         wait.until(EC.presence_of_all_elements_located((By.CSS_SELECTOR, "input[type='range']")))
         slider_count = len(driver.find_elements(By.CSS_SELECTOR, "input[type='range']"))
 
         for i in range(slider_count):
-            sliders = driver.find_elements(By.CSS_SELECTOR, "input[type='range']")  # refresh to avoid stale
+            sliders = driver.find_elements(By.CSS_SELECTOR, "input[type='range']")
             slider = sliders[i]
             driver.execute_script("arguments[0].scrollIntoView(true);", slider)
             time.sleep(0.2)
             slider.send_keys(Keys.ARROW_RIGHT * 5)
 
-        wait.until(EC.element_to_be_clickable((By.XPATH, "//button[normalize-space()='See My Top Careers']"))).click()
-
+        btn4 = wait.until(EC.element_to_be_clickable((By.XPATH, "//button[normalize-space()='See My Top Careers']")))
+        driver.execute_script("arguments[0].scrollIntoView(true);", btn4)
+        time.sleep(0.5)
+        btn4.click()
 
         # === RESULTS ===
         try:
@@ -96,6 +112,7 @@ class QuizFlowTest(unittest.TestCase):
             self.assertIn("Your Top 5 Career Matches", result_header.text)
         except TimeoutException:
             self.fail("Did not reach /results page after completing quiz.")
+
 
     def tearDown(self):
         self.driver.quit()
