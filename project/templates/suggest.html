@@ -2,37 +2,36 @@
 {% block title %}Suggest Page{% endblock %}
 {% block content %}
 <div class="container">
-    <div class="section text-center">
-        <h1>Suggest a New Career Path</h1>
-        <p class="subheading">We appreciate your feedback and would love to hear how we could improve the quiz, add new career ideas, or tailor it better to your interests.</p>
-    </div>
+  <div class="section text-center">
+    <h1>Suggest a New Career Path</h1>
+    <p class="subheading">We appreciate your feedback and would love to hear how we could improve the quiz, add new career ideas, or tailor it better to your interests.</p>
+  </div>
 
-    <div class="section text-center"> 
-        <h2>Suggestion Form</h2>
+  <div class="section text-center"> 
+    <h2>Suggestion Form</h2>
     <form method="POST">
-        <label for="job_title">Job Title:</label>
-        <input type="text" name="job_title" required>
+      <label for="job_title">Job Title:</label>
+      <input type="text" name="job_title" required>
 
-        <label for="description">Why is this job useful to include?</label>
-        <textarea name="description" rows="3"></textarea>
+      <label for="description">Why is this job useful to include?</label>
+      <textarea name="description" rows="3"></textarea>
 
-        <label for="question_1">Suggested Question 1:</label>
-        <input type="text" name="question_1">
+      <label for="question_1">Suggested Question 1:</label>
+      <input type="text" name="question_1">
 
-        <label for="question_2">Suggested Question 2:</label>
-        <input type="text" name="question_2">
+      <label for="question_2">Suggested Question 2:</label>
+      <input type="text" name="question_2">
 
-        <button type="submit" class="button">Submit Suggestion</button>
+      <button type="submit" class="button">Submit Suggestion</button>
     </form>
-    </div>
+  </div>
 
-    <div class="section image-section centered">
-        <img src="{{ url_for('static', filename='images/idea.jpg') }}" alt="Idea Image" class="about-image" />
-    </div>
+  <div class="section image-section">
+    <img src="{{ url_for('static', filename='images/idea.jpg') }}" alt="Idea Image" class="about-image" />
+  </div>
 
-    <footer style="text-align: center; margin-top: 2rem;">
-        <p>&copy; CareerCompass</p>
-    </footer>
-    
+  <footer style="text-align: center; margin-top: 2rem;">
+    <p>&copy; CareerCompass</p>
+  </footer>
 </div>
 {% endblock %}

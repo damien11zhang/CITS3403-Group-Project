@@ -384,10 +384,11 @@ a:hover {
 }
 
 .about-image {
-  display: block;
-  margin: 2rem auto;
-  max-width: 80%;
-  height: auto;
+  max-width: 100%; /* Ensure images don't exceed their container width */
+  max-height: 300px; /* Limit the height of images */
+  object-fit: cover; /* Ensure images maintain aspect ratio */
+  margin: 1rem auto; /* Add consistent spacing around images */
+  display: block; /* Center images */
 }
 
 .image-section {

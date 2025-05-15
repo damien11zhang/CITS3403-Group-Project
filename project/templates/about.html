@@ -4,47 +4,46 @@
 
 {% block content %}
 <div class="container">
-    <div class="section">
-      <h1>About Us</h1>
+  <div class="section">
+    <h1>About Us</h1>
+  </div>
+
+  <div class="container about-page">
+    <div class="section layered-section">
+      <h1>Helping You Find Your Path</h1>
+      <p>
+        Choosing a career is one of the most important decisions a person will make — yet for many young people, it's also one of the most overwhelming. 
+        We saw countless friends, classmates, and peers struggling with the uncertainty of 'what to do next,' feeling lost when trying to navigate such a huge life decision.
+      </p>
+      <p>
+        We created this app because we believe that with the right guidance, everyone can find a path that fits their passions, strengths, and goals.
+        Our mission is to simplify this process, making it easier, more personalized, and less stressful.
+        We want to empower you to move forward with confidence toward a future that's right for you.
+      </p>
+      <p class="highlight-text">
+        Your future is full of potential — we're here to help you unlock it.
+      </p>
     </div>
 
-<div class="container about-page">
-  <div class="section layered-section">
+    <div class="section image-section">
+      <img src="{{ url_for('static', filename='images/image2.jpg') }}" alt="Uncertain of Future" class="about-image" />
+    </div>
 
-    <h1>Helping You Find Your Path</h1>
-    <p>
-      Choosing a career is one of the most important decisions a person will make — yet for many young people, it's also one of the most overwhelming. 
-      We saw countless friends, classmates, and peers struggling with the uncertainty of 'what to do next,' feeling lost when trying to navigate such a huge life decision.
-    </p>
-    <p>
-      We created this app because we believe that with the right guidance, everyone can find a path that fits their passions, strengths, and goals.
-      Our mission is to simplify this process, making it easier, more personalized, and less stressful.
-      We want to empower you to move forward with confidence toward a future that's right for you.
-    </p>
-    <p class="highlight-text">
-      Your future is full of potential — we're here to help you unlock it.
-    </p>
+    <div class="section layered-section">
+      <h2>Our Vision</h2>
+      <p>
+        We believe that no one should feel lost when thinking about their future.
+        Our platform is designed to make career exploration more intuitive, engaging, and encouraging — helping you make informed decisions with confidence.
+      </p>
+    </div>
+    
+    <div class="section image-section">
+      <img src="{{ url_for('static', filename='images/image1.jpg') }}" alt="Career Paths Illustration" class="about-image" />
+    </div>
+
+    <footer style="text-align: center; margin-top: 2rem;">
+      <p>&copy; CareerCompass</p>
+    </footer>
   </div>
-
-  <div class="section image-section centered">
-    <img src="{{ url_for('static', filename='images/image2.jpg') }}" alt="Uncertain of Future" class="about-image" />
-  </div>
-
-  <div class="section layered-section">
-    <h2>Our Vision</h2>
-    <p>
-      We believe that no one should feel lost when thinking about their future.
-      Our platform is designed to make career exploration more intuitive, engaging, and encouraging — helping you make informed decisions with confidence.
-    </p>
-  </div>
-  
-  <div class="section image-section centered">
-    <img src="{{ url_for('static', filename='images/image1.jpg') }}" alt="Career Paths Illustration" class="about-image" />
-  </div>
-
-  <footer style="text-align: center; margin-top: 2rem;">
-    <p>&copy; CareerCompass</p>
-</footer>
-
 </div>
 {% endblock %}
