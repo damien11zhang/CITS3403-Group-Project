@@ -24,16 +24,16 @@ body {
   padding: 2rem;
 }
 
-.row {
-  display: flex; /* Ensure rows use flexbox */
-  flex-wrap: wrap; /* Allow wrapping for smaller screens */
-  gap: 1rem; /* Add spacing between columns */
+/*.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
 }
 
 .col-md-6 {
-  flex: 0 0 50%; /* Ensure columns take up 50% of the row */
+  flex: 0 0 50%;
   max-width: 50%;
-}
+} */
 
 
 /* ===== Header Navigation ===== */
