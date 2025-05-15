@@ -2,37 +2,38 @@
 {% block title %}CareerCompass - Home{% endblock %}
 {% block content %}
 
-<h1 class="display-4">Discover Your Future Career with CareerCompass</h1>
+<h1 class="display-4 text-center my-5">Discover Your Future Career with CareerCompass</h1>
+
 <!-- Hero Section -->
-<div class="container">
+<div class="container mb-5">
   <div class="card shadow-sm h-100 text-center p-4">
     <h3 class="card-title mb-3">Take our personalized career quiz to explore job paths aligned with your interests and strengths</h3>
     <div class="d-flex justify-content-center">
       <img src="{{ url_for('static', filename='images/quiz_intro.svg.jpg') }}" alt="Quiz Illustration" class="img-fluid my-4" style="max-height: 300px;">
     </div>
-    <a href="{{ url_for('quiz') }}" class="button">Take the Quiz</a>
+    <a href="{{ url_for('quiz') }}" class="button mt-3">Take the Quiz</a>
   </div>
 </div>
 
 <!-- Top 5 Jobs & Progress -->
-<div class="container">
+<div class="container mb-5">
   <div class="row g-4">
     <!-- Top 5 Results -->
-  <div class="col-md-6">
-    <div class="card shadow-sm h-100 text-center p-4">
-      <h3 class="card-title mb-3">See Your Top 5 Jobs</h3>
-      <p class="card-text">Share your personalized job results with friends and compare pathways.</p>
-      <ul class="list-group list-group-flush my-3 mx-auto" style="max-width: 300px;">
-        <li class="list-group-item">Example:</li>
-        <li class="list-group-item">1. Software Engineer</li>
-        <li class="list-group-item">2. Mechanical Engineer</li>
-        <li class="list-group-item">3. Data Analyst</li>
-        <li class="list-group-item">4. Civil Engineer</li>
-        <li class="list-group-item">5. Project Manager</li>
-      </ul>
-      <a href="{{ url_for('login') }}" class="button">Log In / Sign Up</a>
+    <div class="col-md-6">
+      <div class="card shadow-sm h-100 text-center p-4">
+        <h3 class="card-title mb-3">See Your Top 5 Jobs</h3>
+        <p class="card-text">Share your personalized job results with friends and compare pathways.</p>
+        <ul class="list-group list-group-flush my-3 mx-auto" style="max-width: 300px;">
+          <li class="list-group-item">Example:</li>
+          <li class="list-group-item">1. Software Engineer</li>
+          <li class="list-group-item">2. Mechanical Engineer</li>
+          <li class="list-group-item">3. Data Analyst</li>
+          <li class="list-group-item">4. Civil Engineer</li>
+          <li class="list-group-item">5. Project Manager</li>
+        </ul>
+        <a href="{{ url_for('login') }}" class="button mt-4">Log In / Sign Up</a>
+      </div>
     </div>
-  </div>
 
     <!-- Quiz History -->
     <div class="col-md-6">
@@ -42,7 +43,7 @@
         <div class="d-flex justify-content-center">
           <img src="{{ url_for('static', filename='images/history.svg.jpg') }}" alt="History" class="img-fluid my-3" style="max-height: 180px;">
         </div>
-        <a href="{{ url_for('profile') }}" class="button">View My Profile</a>
+        <a href="{{ url_for('profile') }}" class="button mt-3">View My Profile</a>
       </div>
     </div>
   </div>
@@ -59,7 +60,7 @@
         <div class="d-flex justify-content-center">
           <img src="{{ url_for('static', filename='images/about_us.svg.jpg') }}" alt="About Us" class="img-fluid my-3" style="max-height: 180px;">
         </div>
-        <a href="{{ url_for('about') }}" class="button">About Us</a>
+        <a href="{{ url_for('about') }}" class="button mt-3">About Us</a>
       </div>
     </div>
 
@@ -71,7 +72,7 @@
         <div class="d-flex justify-content-center">
           <img src="{{ url_for('static', filename='images/suggest.svg.jpg') }}" alt="Suggestions" class="img-fluid my-3" style="max-height: 180px;">
         </div>
-        <a href="{{ url_for('suggest') }}" class="button">Make a Suggestion</a>
+        <a href="{{ url_for('suggest') }}" class="button mt-3">Make a Suggestion</a>
       </div>
     </div>
   </div>
