@@ -2,25 +2,25 @@
 {% block title %}CareerCompass - Home{% endblock %}
 {% block content %}
 
-<!-- 1. Hero Section -->
-<div class="container text-center my-5">
-  <h1 class="display-4">Discover Your Future Career</h1>
-  <p class="lead">Take our personalized career quiz to explore job paths aligned with your interests and strengths.</p>
-  <div class="d-flex justify-content-center">
-    <img src="{{ url_for('static', filename='images/quiz_intro.svg.jpg') }}" alt="Quiz Illustration" class="img-fluid my-3" style="max-height: 300px;">
+<!-- Hero Section -->
+<div class="container my-5">
+  <div class="text-center">
+    <h1 class="display-4">Discover Your Future Career</h1>
+    <p class="lead">Take our personalized career quiz to explore job paths aligned with your interests and strengths.</p>
+    <img src="{{ url_for('static', filename='images/quiz_intro.svg.jpg') }}" alt="Quiz Illustration" class="img-fluid my-4 mx-auto d-block" style="max-height: 300px;">
+    <a href="{{ url_for('quiz') }}" class="button">Take the Quiz</a>
   </div>
-  <a href="{{ url_for('quiz') }}" class="button mt-3">Take the Quiz</a>
 </div>
 
-<!-- 2 & 3. Side-by-side feature cards -->
+<!-- Top 5 Jobs & Progress -->
 <div class="container mb-5">
-  <div class="row">
+  <div class="row g-4">
     <!-- Top 5 Results -->
-    <div class="col-md-6 mb-4">
+    <div class="col-md-6">
       <div class="card shadow-sm h-100 text-center p-4">
-        <h3 class="card-title">See Your Top 5 Jobs</h3>
+        <h3 class="card-title mb-3">See Your Top 5 Jobs</h3>
         <p class="card-text">Share your personalized job results with friends and compare pathways.</p>
-        <ul class="list-group list-group-flush my-3 mx-auto text-start" style="max-width: 300px;" padding-bottom="20px">
+        <ul class="list-group list-group-flush my-3 mx-auto" style="max-width: 300px;">
           <li class="list-group-item">Example:</li>
           <li class="list-group-item">1. Software Engineer</li>
           <li class="list-group-item">2. Mechanical Engineer</li>
@@ -28,49 +28,42 @@
           <li class="list-group-item">4. Civil Engineer</li>
           <li class="list-group-item">5. Project Manager</li>
         </ul>
-         <p class="card-text"></p>
-        <a href="{{ url_for('login') }}" class="button mt-2">Log In / Sign Up</a>
+        <a href="{{ url_for('login') }}" class="button">Log In / Sign Up</a>
       </div>
     </div>
 
     <!-- Quiz History -->
-    <div class="col-md-6 mb-4">
+    <div class="col-md-6">
       <div class="card shadow-sm h-100 text-center p-4">
-        <h3 class="card-title">Track Your Progress</h3>
+        <h3 class="card-title mb-3">Track Your Progress</h3>
         <p class="card-text">Retake the quiz as your interests evolve and view your quiz history anytime.</p>
-        <div class="d-flex justify-content-center">
-          <img src="{{ url_for('static', filename='images/history.svg.jpg') }}" alt="History" class="img-fluid my-3" style="max-height: 180px;">
-        </div>
-        <a href="{{ url_for('profile') }}" class="button mt-2">View My Profile</a>
+        <img src="{{ url_for('static', filename='images/history.svg.jpg') }}" alt="History" class="img-fluid my-3 mx-auto d-block" style="max-height: 180px;">
+        <a href="{{ url_for('profile') }}" class="button">View My Profile</a>
       </div>
     </div>
   </div>
 </div>
 
-<!-- 4 & 5. More features -->
+<!-- About Us & Suggestions -->
 <div class="container mb-5">
-  <div class="row">
+  <div class="row g-4">
     <!-- About Us -->
-    <div class="col-md-6 mb-4">
+    <div class="col-md-6">
       <div class="card shadow-sm h-100 text-center p-4">
-        <h3 class="card-title">Learn More About Us</h3>
+        <h3 class="card-title mb-3">Learn More About Us</h3>
         <p class="card-text">Understand why we built this tool and how we’re helping students navigate careers.</p>
-        <div class="d-flex justify-content-center">
-          <img src="{{ url_for('static', filename='images/about_us.svg.jpg') }}" alt="About Us" class="img-fluid my-3" style="max-height: 180px;">
-        </div>
-        <a href="{{ url_for('about') }}" class="button mt-2">About Us</a>
+        <img src="{{ url_for('static', filename='images/about_us.svg.jpg') }}" alt="About Us" class="img-fluid my-3 mx-auto d-block" style="max-height: 180px;">
+        <a href="{{ url_for('about') }}" class="button">About Us</a>
       </div>
     </div>
 
     <!-- Suggestions -->
-    <div class="col-md-6 mb-4">
+    <div class="col-md-6">
       <div class="card shadow-sm h-100 text-center p-4">
-        <h3 class="card-title">Have Suggestions?</h3>
+        <h3 class="card-title mb-3">Have Suggestions?</h3>
         <p class="card-text">We’d love your feedback! Help us improve by suggesting new features or jobs.</p>
-        <div class="d-flex justify-content-center">
-          <img src="{{ url_for('static', filename='images/suggest.svg.jpg') }}" alt="Suggestions" class="img-fluid my-3" style="max-height: 180px;">
-        </div>
-        <a href="{{ url_for('suggest') }}" class="button mt-2">Make a Suggestion</a>
+        <img src="{{ url_for('static', filename='images/suggest.svg.jpg') }}" alt="Suggestions" class="img-fluid my-3 mx-auto d-block" style="max-height: 180px;">
+        <a href="{{ url_for('suggest') }}" class="button">Make a Suggestion</a>
       </div>
     </div>
   </div>
@@ -81,4 +74,3 @@
 </footer>
 
 {% endblock %}
-
