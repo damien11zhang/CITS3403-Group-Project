@@ -81,6 +81,25 @@ body {
   background-color: #4338ca;
 }
 
+/* === Flash Messages === */
+.flash-messages {
+  margin-top: 1rem;
+}
+
+.alert {
+  padding: 0.75rem;
+  border-radius: 5px;
+  margin-bottom: 1rem;
+  font-weight: 500;
+}
+
+.alert-warning {
+  background-color: #fff3cd;
+  color: #856404;
+  border: 1px solid #ffeeba;
+}
+
+
 /* ===== Forms & Inputs ===== */
 input[type="text"],
 input[type="email"],

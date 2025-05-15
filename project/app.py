@@ -66,30 +66,29 @@ def suggest():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
-    
+
     if form.validate_on_submit():
         username = form.username.data
         password = form.password.data
 
         user = User.query.filter_by(username=username).first()
-        
-        if user:
-            print(f"Found user: {user.username}, Checking password...")
-            if check_password_hash(user.password, password): 
-                print("Password matched!")
-                login_user(user)
-                session['user_id'] = user.id
 
-                if 'session_id' in session:
-                    return redirect(url_for('quiz4'))
-                else:
-                    return redirect(url_for('profile'))
+        if user and check_password_hash(user.password, password):
+            print("Password matched!")
+            login_user(user)
+            session['user_id'] = user.id
+
+            if 'session_id' in session:
+                return redirect(url_for('quiz4'))
             else:
-                print("Password did not match.")
+                return redirect(url_for('profile'))
         else:
+            print("Login failed.")
             flash('Invalid username or password.')
 
     return render_template('login.html', form=form)
+
+
 
 @login_manager.user_loader
 def load_user(user_id):

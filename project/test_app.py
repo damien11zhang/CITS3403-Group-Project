@@ -29,15 +29,16 @@ class CareerCompassTestCase(unittest.TestCase):
             db.session.commit()
 
     def test_signup(self):
-        new_email = f"{uuid.uuid4().hex[:8]}@test.com"
+        unique_id = uuid.uuid4().hex[:8]
         response = self.client.post('/signup', data={
-            'username': 'testuser',
-            'email': new_email,
+            'username': f'testuser_{unique_id}',
+            'email': f'{unique_id}@test.com',
             'password': 'abc123',
             'confirm_password': 'abc123'
         }, follow_redirects=True)
         self.assertEqual(response.status_code, 200)
         self.assertIn(b'Login', response.data)
+
 
     def test_signup_existing_email(self):
         response = self.client.post('/signup', data={
@@ -72,7 +73,7 @@ class CareerCompassTestCase(unittest.TestCase):
         # Access quiz stage 1
         response = self.client.get('/quiz', follow_redirects=True)
         self.assertEqual(response.status_code, 200)
-        self.assertIn(b'Select your interests', response.data)
+        self.assertIn(b'Select 3 Statements That Describe You Best', response.data)
 
         # Submit 3 clusters
         response = self.client.post('/quiz', data={
