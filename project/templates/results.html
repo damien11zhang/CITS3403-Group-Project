@@ -22,24 +22,24 @@
   </div>
 
   <!-- Top Subgroups Breakdown Section -->
-  <div class="section card">
-    <h2 class="text-center">Top Subgroups Breakdown</h2>
-    <div class="chart-container">
-      <canvas id="subgroupChart"></canvas>
-    </div>
+<div class="section card">
+  <h2 class="text-center">Top Subgroups Breakdown</h2>
+  <div class="chart-container">
+    <canvas id="subgroupChart" style="width: 400px; height: 400px;"></canvas> <!-- Adjusted size -->
   </div>
+</div>
 
-  <!-- Attribute Profile Comparison Section -->
-  <div class="section card">
-    <h2 class="text-center">Attribute Profile Comparison</h2>
-    <div class="chart-container">
-      <canvas id="pentagonChart"></canvas>
-      <p id="topAttribute" class="text-center mt-2" style="font-weight: bold; font-size: 1.2rem;"></p>
-      <div class="text-center mt-2">
-        <button id="downloadRadar" class="button">Download Radar Chart</button>
-      </div>
+<!-- Attribute Profile Comparison Section -->
+<div class="section card">
+  <h2 class="text-center">Attribute Profile Comparison</h2>
+  <div class="chart-container">
+    <canvas id="pentagonChart" style="width: 400px; height: 400px;"></canvas> <!-- Adjusted size -->
+    <p id="topAttribute" class="text-center mt-2" style="font-weight: bold; font-size: 1.2rem;"></p>
+    <div class="text-center mt-2">
+      <button id="downloadRadar" class="button">Download Radar Chart</button>
     </div>
   </div>
+</div>
 </div>
 {% else %}
     <p>No results available. Please complete the quiz first.</p>

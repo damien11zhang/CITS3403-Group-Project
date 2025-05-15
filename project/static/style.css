@@ -316,7 +316,18 @@ input[type="range"]::-moz-range-thumb {
 
 .chart-container {
     max-width: 60%;
-    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 1rem auto;
+}
+
+#subgroupChart,
+#pentagonChart {
+  max-width: 500px; /* Adjust the maximum width */
+  max-height: 500px; /* Adjust the maximum height */
+  width: 100%; /* Ensure responsiveness */
+  height: auto; /* Maintain aspect ratio */
 }
 
 canvas {
