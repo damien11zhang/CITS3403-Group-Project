@@ -24,6 +24,17 @@ body {
   padding: 2rem;
 }
 
+.row {
+  display: flex; /* Ensure rows use flexbox */
+  flex-wrap: wrap; /* Allow wrapping for smaller screens */
+  gap: 1rem; /* Add spacing between columns */
+}
+
+.col-md-6 {
+  flex: 0 0 50%; /* Ensure columns take up 50% of the row */
+  max-width: 50%;
+}
+
 
 /* ===== Header Navigation ===== */
 .header {
@@ -62,7 +73,8 @@ body {
   text-align: center;
   transition: background 0.2s ease;
   font-size: 1rem;
-  width: 100%;
+  width: auto; /* Change width to auto */
+  display: inline-block; /* Ensure the button doesn't stretch */
 }
 
 .button:hover {
