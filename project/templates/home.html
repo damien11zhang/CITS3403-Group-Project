@@ -9,72 +9,72 @@
     <h1 class="display-4">Discover Your Future Career</h1>
     <p class="lead">Take our personalized career quiz to explore job paths aligned with your interests and strengths.</p>
     <img src="{{ url_for('static', filename='images/quiz_intro.svg.jpg') }}" alt="Quiz Illustration" class="img-fluid my-3" style="max-height: 300px;">
-    <a href="{{ url_for('quiz') }}" class="btn btn-primary btn-lg mt-3">Take the Quiz</a>
+    <a href="{{ url_for('quiz') }}" class="button mt-3">Take the Quiz</a>
   </div>
 
-  <!-- 2 & 3. Side-by-side containers -->
+  <!-- 2 & 3. Side-by-side cards -->
   <div class="row mb-5">
-    <!-- Example Top 5 Results Card -->
+    <!-- Top 5 Results Card -->
     <div class="col-md-6 mb-4">
-      <div class="card shadow-sm h-100">
-        <div class="card-body">
+      <div class="card shadow-sm h-100 d-flex align-items-center text-center p-3">
+        <div class="card-body d-flex flex-column justify-content-center align-items-center">
           <h3 class="card-title">See Your Top 5 Jobs</h3>
           <p class="card-text">Share your personalized job results with friends and compare pathways.</p>
-          <ul class="list-group list-group-flush mb-3">
+          <ul class="list-group list-group-flush mb-3 text-start" style="width: 100%; max-width: 300px;">
             <li class="list-group-item">1. Software Engineer</li>
             <li class="list-group-item">2. Mechanical Engineer</li>
             <li class="list-group-item">3. Data Analyst</li>
             <li class="list-group-item">4. Civil Engineer</li>
             <li class="list-group-item">5. Project Manager</li>
           </ul>
-          <a href="{{ url_for('login') }}" class="btn btn-outline-primary">Log In / Sign Up</a>
+          <a href="{{ url_for('login') }}" class="button mt-2">Log In / Sign Up</a>
         </div>
       </div>
     </div>
 
-    <!-- Quiz History Feature -->
+    <!-- Quiz History Card -->
     <div class="col-md-6 mb-4">
-      <div class="card shadow-sm h-100">
-        <div class="card-body">
+      <div class="card shadow-sm h-100 d-flex align-items-center text-center p-3">
+        <div class="card-body d-flex flex-column justify-content-center align-items-center">
           <h3 class="card-title">Track Your Progress</h3>
           <p class="card-text">Retake the quiz as your interests evolve and view your quiz history anytime.</p>
           <img src="{{ url_for('static', filename='images/history.svg.jpg') }}" alt="History" class="img-fluid my-3" style="max-height: 180px;">
-          <a href="{{ url_for('profile') }}" class="btn btn-outline-secondary">View My Profile</a>
+          <a href="{{ url_for('profile') }}" class="button mt-2">View My Profile</a>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- 4 & 5. Side-by-side containers -->
+  <!-- 4 & 5. Side-by-side cards -->
   <div class="row mb-5">
-    <!-- Learn More About Us -->
+    <!-- About Us Card -->
     <div class="col-md-6 mb-4">
-      <div class="card shadow-sm h-100">
-        <div class="card-body">
+      <div class="card shadow-sm h-100 d-flex align-items-center text-center p-3">
+        <div class="card-body d-flex flex-column justify-content-center align-items-center">
           <h3 class="card-title">Learn More About Us</h3>
           <p class="card-text">Understand why we built this tool and how we’re helping students navigate careers.</p>
           <img src="{{ url_for('static', filename='images/about_us.svg.jpg') }}" alt="About Us" class="img-fluid my-3" style="max-height: 180px;">
-          <a href="{{ url_for('about') }}" class="btn btn-outline-info">About Us</a>
+          <a href="{{ url_for('about') }}" class="button mt-2">About Us</a>
         </div>
       </div>
     </div>
 
-    <!-- Suggestions -->
+    <!-- Suggestions Card -->
     <div class="col-md-6 mb-4">
-      <div class="card shadow-sm h-100">
-        <div class="card-body">
+      <div class="card shadow-sm h-100 d-flex align-items-center text-center p-3">
+        <div class="card-body d-flex flex-column justify-content-center align-items-center">
           <h3 class="card-title">Have Suggestions?</h3>
           <p class="card-text">We’d love your feedback! Help us improve by suggesting new features or jobs.</p>
           <img src="{{ url_for('static', filename='images/suggest.svg.jpg') }}" alt="Suggestions" class="img-fluid my-3" style="max-height: 180px;">
-          <a href="{{ url_for('suggest') }}" class="btn btn-outline-success">Make a Suggestion</a>
+          <a href="{{ url_for('suggest') }}" class="button mt-2">Make a Suggestion</a>
         </div>
       </div>
     </div>
   </div>
 
-  <footer style="text-align: center; margin-top: 2rem;">
+  <footer class="text-center mt-5">
     <p>&copy; CareerCompass</p>
-</footer>
+  </footer>
 
 </div>
 
