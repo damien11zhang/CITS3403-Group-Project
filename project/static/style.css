@@ -315,11 +315,21 @@ input[type="range"]::-moz-range-thumb {
 }
 
 .chart-container {
-    max-width: 60%;
     display: flex;
     justify-content: center;
     align-items: center;
     margin: 1rem auto;
+}
+
+/* Center and space the text and button below the chart */
+#topAttribute {
+  font-weight: bold;
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+}
+
+#downloadRadar {
+  margin-top: 0.5rem;
 }
 
 #subgroupChart,
