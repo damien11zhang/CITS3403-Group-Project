@@ -365,8 +365,16 @@ def results():
     if not quiz_session:
         flash("Invalid session ID.", "danger")
         return redirect(url_for('profile'))
+    
+    if quiz_session.user_id != current_user.id:
+        shared = SharedResult.query.filter_by(
+            quiz_session_id=quiz_session.id,
+            shared_with_id=current_user.id
+        ).first()
+        if not shared:
+            flash("You do not have permission to view this result.", "danger")
+            return redirect(url_for('profile'))
 
-    # Retrieve job scores and other data for the session
     user_responses = UserResponse.query.filter_by(session_id=session_id).all()
     job_scores = {response.target_id: response.score for response in user_responses if response.question_type == 'second'}
     sorted_jobs = sorted(job_scores.items(), key=lambda x: x[1], reverse=True)
