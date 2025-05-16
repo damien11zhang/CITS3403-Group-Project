@@ -7,7 +7,7 @@ from flask_wtf import CSRFProtect
 from collections import defaultdict
 from forms import LoginForm, SignupForm
 from extensions import db  # <--- new way
-from models import User, JobCluster, Subgroup, Job, UserResponse, QuizSession, Suggestion, FriendRequest
+from models import User, JobCluster, Subgroup, Job, UserResponse, QuizSession, Suggestion, FriendRequest, SharedResult
 import os
 from werkzeug.utils import secure_filename
 
@@ -516,6 +516,35 @@ def users():
     else:
         users = []
     return render_template('users.html', users=users, query=query)
+
+@app.route('/share_results', methods=['POST'])
+@login_required
+def share_results():
+    session_id = request.form.get('session_id')
+    friend_id = request.form.get('friend_id')
+
+    quiz_session = QuizSession.query.filter_by(session_id=session_id).first()
+    if not quiz_session or quiz_session.user_id != current_user.id:
+        flash("You are not authorized to share this result.", "danger")
+        return redirect(url_for('profile'))
+
+    existing_share = SharedResult.query.filter_by(
+        quiz_session_id=quiz_session.id,
+        shared_with_id=friend_id
+    ).first()
+
+    if existing_share:
+        flash("This result has already been shared with that friend.", "info")
+    else:
+        shared_result = SharedResult(
+            quiz_session_id=quiz_session.id,
+            shared_with_id=friend_id
+        )
+        db.session.add(shared_result)
+        db.session.commit()
+        flash("Results successfully shared!", "success")
+
+    return redirect(url_for('profile'))
 
 @app.route('/logout')
 @login_required
