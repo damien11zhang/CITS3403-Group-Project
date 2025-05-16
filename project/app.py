@@ -8,6 +8,8 @@ from collections import defaultdict
 from forms import LoginForm, SignupForm
 from extensions import db  # <--- new way
 from models import User, JobCluster, Subgroup, Job, UserResponse, QuizSession, Suggestion, FriendRequest
+import os
+from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 app.config['WTF_CSRF_ENABLED'] = False
@@ -111,12 +113,74 @@ def signup():
         return redirect(url_for('login'))
     return render_template("signup.html", form=form)
 
-@app.route('/profile')
+@app.route('/profile', methods=['GET', 'POST'])
 @login_required
 def profile():
-    user_id = current_user.id
-    quiz_sessions = QuizSession.query.filter_by(user_id=user_id).all()
-    return render_template('profile.html', user=current_user, quiz_sessions=quiz_sessions)
+    if request.method == 'POST':
+        # Handle profile updates (e.g., username, email)
+        current_user.username = request.form['username']
+        current_user.email = request.form['email']
+        db.session.commit()
+        flash('Profile updated successfully!', 'success')
+        return redirect(url_for('profile'))
+
+    # Fetch the most recent quiz session for the current user
+    recent_session = QuizSession.query.filter_by(user_id=current_user.id).order_by(QuizSession.created_at.desc()).first()
+
+    # Retrieve the top 5 jobs for the most recent session
+    top_jobs = []
+    if recent_session:
+        user_responses = UserResponse.query.filter_by(session_id=recent_session.session_id, question_type='second').all()
+        job_scores = {response.target_id: response.score for response in user_responses}
+        sorted_jobs = sorted(job_scores.items(), key=lambda x: x[1], reverse=True)[:5]
+        top_jobs = [(Job.query.get(job_id), score) for job_id, score in sorted_jobs]
+
+    # Fetch friend requests for the current user
+    friend_requests = FriendRequest.query.filter_by(to_user_id=current_user.id).all()
+
+    return render_template(
+        'profile.html',
+        user=current_user,
+        top_jobs=top_jobs,
+        friend_requests=friend_requests,
+        quiz_sessions=current_user.quiz_sessions
+    )
+
+UPLOAD_FOLDER = 'static/uploads'
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+# Ensure the upload folder exists
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+@app.route('/upload_profile_pic', methods=['POST'])
+@login_required
+def upload_profile_pic():
+    if 'profile_pic' not in request.files:
+        flash('No file part', 'danger')
+        return redirect(url_for('profile'))
+
+    file = request.files['profile_pic']
+    if file.filename == '':
+        flash('No selected file', 'danger')
+        return redirect(url_for('profile'))
+
+    if file and allowed_file(file.filename):
+        filename = secure_filename(file.filename)
+        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+
+        # Update the user's profile picture in the database
+        current_user.profile_pic = filename
+        db.session.commit()
+
+        flash('Profile picture updated successfully!', 'success')
+        return redirect(url_for('profile'))
+
+    flash('Invalid file type. Please upload an image file.', 'danger')
+    return redirect(url_for('profile'))
 
 import uuid
 
@@ -284,7 +348,7 @@ def quiz4():
         top_jobs = sorted(final_scores.items(), key=lambda x: x[1], reverse=True)[:5]
         session['top_jobs'] = [job_id for job_id, score in top_jobs]
 
-        return redirect(url_for('results'))
+        return redirect(url_for('results', session_id=session_id))
 
     # GET method
     jobs = Job.query.filter(Job.id.in_(passing_jobs)).all()
@@ -292,14 +356,19 @@ def quiz4():
 
 @app.route('/results', methods=['GET'])
 def results():
-    # Check if the session contains valid quiz data
-    top_jobs_session = session.get('top_jobs', None)
-    if not top_jobs_session:
+    session_id = request.args.get('session_id')
+    if not session_id:
         flash("No quiz results found. Please complete a quiz first.", "warning")
         return redirect(url_for('quiz'))
 
-    # Retrieve job scores from session
-    job_scores = session.get('job_scores', {})
+    quiz_session = QuizSession.query.filter_by(session_id=session_id).first()
+    if not quiz_session:
+        flash("Invalid session ID.", "danger")
+        return redirect(url_for('profile'))
+
+    # Retrieve job scores and other data for the session
+    user_responses = UserResponse.query.filter_by(session_id=session_id).all()
+    job_scores = {response.target_id: response.score for response in user_responses if response.question_type == 'second'}
     sorted_jobs = sorted(job_scores.items(), key=lambda x: x[1], reverse=True)
 
     # Get the top 5 jobs and accumulate weighted attributes
@@ -331,7 +400,6 @@ def results():
             subgroup_name = job.subgroup.name
             subgroup_scores[subgroup_name] += score
 
-
     return render_template(
         'results.html',
         top_jobs=top_jobs,
@@ -339,7 +407,6 @@ def results():
         normalized_scores=normalized_scores,
         subgroup_scores=dict(subgroup_scores)
     )
-
 
 @app.route('/add_friend/<int:friend_id>', methods=['POST'])
 @login_required
