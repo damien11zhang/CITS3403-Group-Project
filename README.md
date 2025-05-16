@@ -57,6 +57,7 @@ A personalized career discovery platform built with Flask. Users can take quizze
 2. `templates/` - all HTML templates
 3. `test/` - test files
 4. `models.py` - database models
+5. `static/` - CSS, images
 
 ---
 
