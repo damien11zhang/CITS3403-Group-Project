@@ -128,3 +128,13 @@ class Suggestion(db.Model):
     question_1 = db.Column(db.String(300), nullable=True)
     question_2 = db.Column(db.String(300), nullable=True)
     timestamp = db.Column(db.DateTime, server_default=db.func.now())
+
+class SharedResult(db.Model):
+    __tablename__ = 'shared_results'
+
+    id = db.Column(db.Integer, primary_key=True)
+    quiz_session_id = db.Column(db.Integer, db.ForeignKey('quiz_sessions.id'), nullable=False)
+    shared_with_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+
+    quiz_session = db.relationship('QuizSession', backref='shared_results')
+    shared_with = db.relationship('User', backref='received_shared_results')

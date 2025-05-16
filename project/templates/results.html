@@ -7,7 +7,6 @@
 
 {% if top_jobs %}
 <div class="container">
-  <!-- Top 5 Jobs Section -->
   <div class="section card">
     <h2 class="text-center">Top 5 Jobs</h2>
     <div class="card-row">
@@ -21,46 +20,53 @@
     </div>
   </div>
 
-  <!-- Top Subgroups Breakdown Section -->
-<div class="section card">
-  <h2 class="text-center">Top Subgroups Breakdown</h2>
-  <div class="chart-container">
-    <canvas id="subgroupChart" style="width: 400px; height: 400px;"></canvas> <!-- Adjusted size -->
+  <div class="section card">
+    <h2 class="text-center">Top Subgroups Breakdown</h2>
+    <div class="chart-container">
+      <canvas id="subgroupChart" style="width: 400px; height: 400px;"></canvas>
+    </div>
   </div>
-</div>
 
-<!-- Attribute Profile Comparison Section -->
-<div class="section card">
-  <h2 class="text-center">Attribute Profile Comparison</h2>
-  <div class="chart-container text-center">
-    <canvas id="pentagonChart" style="width: 500px; height: 500px;"></canvas> <!-- Increased size -->
+  <div class="section card">
+    <h2 class="text-center">Attribute Profile Comparison</h2>
+    <div class="chart-container text-center">
+      <canvas id="pentagonChart" style="width: 500px; height: 500px;"></canvas>
+    </div>
+    <div class="text-center mt-3">
+      <p id="topAttribute" style="font-weight: bold; font-size: 1.2rem; margin-bottom: 1rem;"></p>
+      <button id="downloadRadar" class="button">Download Radar Chart</button>
+    </div>
   </div>
-  <div class="text-center mt-3">
-    <p id="topAttribute" style="font-weight: bold; font-size: 1.2rem; margin-bottom: 1rem;"></p>
-    <button id="downloadRadar" class="button">Download Radar Chart</button>
+
+  <div class="section card text-center" style="margin-top: 2rem;">
+    <h2>Share Results with a Friend</h2>
+    <form method="POST" action="{{ url_for('share_result') }}">
+      <input type="hidden" name="session_id" value="{{ quiz_session.session_id }}">
+      <select name="friend_id" required>
+        {% for friend in current_user.friends %}
+          <option value="{{ friend.id }}">{{ friend.username }}</option>
+        {% endfor %}
+      </select>
+      <button type="submit" class="button">Share</button>
+    </form>
   </div>
-</div>
-</div>
 </div>
 {% else %}
-    <p>No results available. Please complete the quiz first.</p>
+  <p>No results available. Please complete the quiz first.</p>
 {% endif %}
 
 <div class="button-row">
   <a href="{{ url_for('quiz') }}" class="button">Take the Quiz Again</a>
-  <a href="{{ url_for('friend_requests') }}" class="button">Share with your friends</a>
 </div>
 
 <footer style="text-align: center; margin-top: 2rem;">
-    <p>&copy; CareerCompass</p>
+  <p>&copy; CareerCompass</p>
 </footer>
 
-<!-- Chart.js CDN -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
 document.addEventListener("DOMContentLoaded", function () {
-    // Pie (Donut) Chart
     const subgroupCtx = document.getElementById('subgroupChart').getContext('2d');
     new Chart(subgroupCtx, {
         type: 'doughnut',
@@ -96,7 +102,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-    // Radar Chart with top attribute highlight
     const radarCtx = document.getElementById('pentagonChart').getContext('2d');
 
     const labels = ['Social', 'Physical', 'Leadership', 'Creativity', 'Logic'];
@@ -164,7 +169,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-    // Download radar chart
     document.getElementById('downloadRadar').addEventListener('click', () => {
         const url = document.getElementById('pentagonChart').toDataURL("image/png");
         const link = document.createElement('a');

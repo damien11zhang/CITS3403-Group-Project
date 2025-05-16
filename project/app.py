@@ -7,7 +7,7 @@ from flask_wtf import CSRFProtect
 from collections import defaultdict
 from forms import LoginForm, SignupForm
 from extensions import db  # <--- new way
-from models import User, JobCluster, Subgroup, Job, UserResponse, QuizSession, Suggestion, FriendRequest
+from models import User, JobCluster, Subgroup, Job, UserResponse, QuizSession, Suggestion, FriendRequest, SharedResult
 import os
 from werkzeug.utils import secure_filename
 
@@ -117,17 +117,14 @@ def signup():
 @login_required
 def profile():
     if request.method == 'POST':
-        # Handle profile updates (e.g., username, email)
         current_user.username = request.form['username']
         current_user.email = request.form['email']
         db.session.commit()
         flash('Profile updated successfully!', 'success')
         return redirect(url_for('profile'))
 
-    # Fetch the most recent quiz session for the current user
     recent_session = QuizSession.query.filter_by(user_id=current_user.id).order_by(QuizSession.created_at.desc()).first()
 
-    # Retrieve the top 5 jobs for the most recent session
     top_jobs = []
     if recent_session:
         user_responses = UserResponse.query.filter_by(session_id=recent_session.session_id, question_type='second').all()
@@ -135,24 +132,26 @@ def profile():
         sorted_jobs = sorted(job_scores.items(), key=lambda x: x[1], reverse=True)[:5]
         top_jobs = [(Job.query.get(job_id), score) for job_id, score in sorted_jobs]
 
-    # Fetch friend requests for the current user
     friend_requests = FriendRequest.query.filter_by(to_user_id=current_user.id).all()
 
+    shared_results = SharedResult.query.filter_by(shared_with_id=current_user.id).all()
+    shared_sessions = [
+        QuizSession.query.get(shared.quiz_session_id) for shared in shared_results
+    ]
     return render_template(
         'profile.html',
         user=current_user,
         top_jobs=top_jobs,
         friend_requests=friend_requests,
-        quiz_sessions=current_user.quiz_sessions
+        quiz_sessions=current_user.quiz_sessions,
+        shared_sessions=shared_sessions
     )
 
 UPLOAD_FOLDER = 'static/uploads'
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-# Ensure the upload folder exists
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
-
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
@@ -365,8 +364,16 @@ def results():
     if not quiz_session:
         flash("Invalid session ID.", "danger")
         return redirect(url_for('profile'))
+    
+    if quiz_session.user_id != current_user.id:
+        shared = SharedResult.query.filter_by(
+            quiz_session_id=quiz_session.id,
+            shared_with_id=current_user.id
+        ).first()
+        if not shared:
+            flash("You do not have permission to view this result.", "danger")
+            return redirect(url_for('profile'))
 
-    # Retrieve job scores and other data for the session
     user_responses = UserResponse.query.filter_by(session_id=session_id).all()
     job_scores = {response.target_id: response.score for response in user_responses if response.question_type == 'second'}
     sorted_jobs = sorted(job_scores.items(), key=lambda x: x[1], reverse=True)
@@ -405,7 +412,8 @@ def results():
         top_jobs=top_jobs,
         attribute_totals=dict(attribute_totals),
         normalized_scores=normalized_scores,
-        subgroup_scores=dict(subgroup_scores)
+        subgroup_scores=dict(subgroup_scores),
+        quiz_session=quiz_session
     )
 
 @app.route('/add_friend/<int:friend_id>', methods=['POST'])
@@ -434,23 +442,30 @@ def view_friend(friend_id):
 @app.route('/send_friend_request/<int:to_user_id>', methods=['POST'])
 @login_required
 def send_friend_request(to_user_id):
-    to_user = User.query.get(to_user_id)
-    if not to_user or to_user == current_user:
-        flash("Invalid user.", "danger")
+    to_user = User.query.get_or_404(to_user_id)
+
+    if to_user in current_user.friends:
+        flash("You're already friends with this user.", "info")
         return redirect(url_for('profile'))
 
-    # Check if a request already exists
     existing_request = FriendRequest.query.filter_by(
         from_user_id=current_user.id, to_user_id=to_user_id
     ).first()
     if existing_request:
-        flash("Friend request already sent.", "warning")
+        flash("Friend request already sent.", "info")
+        return redirect(url_for('profile'))
+    
+    reverse_request = FriendRequest.query.filter_by(
+        from_user_id=to_user_id, to_user_id=current_user.id
+    ).first()
+    if reverse_request:
+        flash("This user already sent you a friend request.", "info")
         return redirect(url_for('profile'))
 
-    # Create a new friend request
     friend_request = FriendRequest(from_user_id=current_user.id, to_user_id=to_user_id)
     db.session.add(friend_request)
     db.session.commit()
+
     flash("Friend request sent!", "success")
     return redirect(url_for('profile'))
 
@@ -472,11 +487,11 @@ def accept_friend_request(request_id):
     current_user.friends.append(friend_request.from_user)
     friend_request.from_user.friends.append(current_user)
 
-    # Update the request status
-    friend_request.status = 'accepted'
+    db.session.delete(friend_request)
     db.session.commit()
+
     flash("Friend request accepted!", "success")
-    return redirect(url_for('friend_requests'))
+    return redirect(url_for('profile'))
 
 @app.route('/decline_friend_request/<int:request_id>', methods=['POST'])
 @login_required
@@ -492,10 +507,59 @@ def decline_friend_request(request_id):
     flash("Friend request declined.", "info")
     return redirect(url_for('friend_requests'))
 
+@app.route('/users')
+@login_required
+def users():
+    query = request.args.get('q', '')
+    if query:
+        users = User.query.filter(User.username.ilike(f"%{query}%")).all()
+    else:
+        users = []
+    return render_template('users.html', users=users, query=query)
+
+@app.route('/share_result', methods=['POST'])
+@login_required
+def share_result():
+    session_id = request.form.get('session_id')
+    friend_id = request.form.get('friend_id')
+
+    if not session_id or not friend_id:
+        flash('Missing data to share result.', 'danger')
+        return redirect(url_for('profile'))
+
+    quiz_session = QuizSession.query.filter_by(session_id=session_id).first()
+    if not quiz_session:
+        flash('Quiz session not found.', 'danger')
+        return redirect(url_for('profile'))
+
+    friend = User.query.get(friend_id)
+    if not friend or friend not in current_user.friends or friend.id == current_user.id:
+        flash('Invalid friend selection.', 'danger')
+        return redirect(url_for('profile'))
+
+    already_shared = SharedResult.query.filter_by(
+        quiz_session_id=quiz_session.id,
+        shared_with_id=friend.id
+    ).first()
+
+    if already_shared:
+        flash(f'You’ve already shared this result with {friend.username}.', 'info')
+        return redirect(url_for('profile'))
+
+    shared_result = SharedResult(
+        quiz_session_id=quiz_session.id, 
+        shared_with_id=friend.id
+    )
+    db.session.add(shared_result)
+    db.session.commit()
+
+    flash(f'Result shared with {friend.username}!', 'success')
+    return redirect(url_for('profile'))
+
 @app.route('/logout')
 @login_required
 def logout():
-    # Clear all quiz-related session data
+
     for key in ['session_id', 'selected_clusters', 'asked_subgroups', 'job_scores', 'passing_jobs', 'top_jobs']:
         session.pop(key, None)
     
