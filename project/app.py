@@ -407,7 +407,8 @@ def results():
         top_jobs=top_jobs,
         attribute_totals=dict(attribute_totals),
         normalized_scores=normalized_scores,
-        subgroup_scores=dict(subgroup_scores)
+        subgroup_scores=dict(subgroup_scores),
+        quiz_session=quiz_session
     )
 
 @app.route('/add_friend/<int:friend_id>', methods=['POST'])
