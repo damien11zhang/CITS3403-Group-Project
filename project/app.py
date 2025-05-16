@@ -434,23 +434,23 @@ def view_friend(friend_id):
 @app.route('/send_friend_request/<int:to_user_id>', methods=['POST'])
 @login_required
 def send_friend_request(to_user_id):
-    to_user = User.query.get(to_user_id)
-    if not to_user or to_user == current_user:
-        flash("Invalid user.", "danger")
+    to_user = User.query.get_or_404(to_user_id)
+
+    if to_user in current_user.friends:
+        flash("You're already friends with this user.", "info")
         return redirect(url_for('profile'))
 
-    # Check if a request already exists
     existing_request = FriendRequest.query.filter_by(
         from_user_id=current_user.id, to_user_id=to_user_id
     ).first()
     if existing_request:
-        flash("Friend request already sent.", "warning")
+        flash("Friend request already sent.", "info")
         return redirect(url_for('profile'))
 
-    # Create a new friend request
     friend_request = FriendRequest(from_user_id=current_user.id, to_user_id=to_user_id)
     db.session.add(friend_request)
     db.session.commit()
+
     flash("Friend request sent!", "success")
     return redirect(url_for('profile'))
 
