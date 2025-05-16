@@ -517,33 +517,33 @@ def users():
         users = []
     return render_template('users.html', users=users, query=query)
 
-@app.route('/share_results', methods=['POST'])
+@app.route('/share_result', methods=['POST'])
 @login_required
-def share_results():
+def share_result():
     session_id = request.form.get('session_id')
     friend_id = request.form.get('friend_id')
 
-    quiz_session = QuizSession.query.filter_by(session_id=session_id).first()
-    if not quiz_session or quiz_session.user_id != current_user.id:
-        flash("You are not authorized to share this result.", "danger")
+    if not session_id or not friend_id:
+        flash("Missing session or friend information.", "danger")
         return redirect(url_for('profile'))
 
-    existing_share = SharedResult.query.filter_by(
-        quiz_session_id=quiz_session.id,
-        shared_with_id=friend_id
-    ).first()
+    friend = User.query.get(friend_id)
+    session = QuizSession.query.filter_by(session_id=session_id).first()
 
-    if existing_share:
-        flash("This result has already been shared with that friend.", "info")
+    if not friend or not session:
+        flash("Invalid friend or session.", "danger")
+        return redirect(url_for('profile'))
+
+    existing = SharedResult.query.filter_by(session_id=session_id, user_id=current_user.id, friend_id=friend.id).first()
+    if existing:
+        flash(f"You've already shared this result with {friend.username}.", "info")
     else:
-        shared_result = SharedResult(
-            quiz_session_id=quiz_session.id,
-            shared_with_id=friend_id
-        )
+        shared_result = SharedResult(session_id=session_id, user_id=current_user.id, friend_id=friend.id)
         db.session.add(shared_result)
         db.session.commit()
-        flash("Results successfully shared!", "success")
+        flash(f"Successfully shared result with {friend.username}.", "success")
 
+    # ✅ Redirect to profile, not /friend_requests
     return redirect(url_for('profile'))
 
 @app.route('/logout')
