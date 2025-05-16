@@ -18,6 +18,7 @@ class User(UserMixin, db.Model):
     password = db.Column(db.String(100), nullable=False)
     bio = db.Column(db.Text, nullable=True)
     join_date = db.Column(db.DateTime, default=datetime.now)  # Add this line
+    profile_pic = db.Column(db.String(120), nullable=True)
 
     friends = db.relationship(
         'User',
