@@ -115,12 +115,10 @@
         {% endif %}
     </section>
 
-    {% if current_user.id == user.id %}
     <section class="card">
         <h2>Find More Friends</h2>
         <a href="{{ url_for('users') }}" class="button">Search Users</a>
     </section>
-    {% endif %}
 
     <section class="card">
         <h3>
@@ -134,11 +132,37 @@
                     <li>
                         <strong>Quiz Date:</strong> {{ session.created_at.strftime('%Y-%m-%d %H:%M:%S') }}
                         <a href="{{ url_for('results', session_id=session.session_id) }}" class="button">View Results</a>
+                        <form action="{{ url_for('share_result') }}" method="POST" style="display:inline;">
+                            <input type="hidden" name="session_id" value="{{ session.session_id }}">
+                            <label for="friend_id">Share with:</label>
+                            <select name="friend_id" required>
+                                {% for friend in current_user.friends %}
+                                    <option value="{{ friend.id }}">{{ friend.username }}</option>
+                                {% endfor %}
+                            </select>
+                            <button type="submit">Share</button>
+                        </form>
                     </li>
                 {% endfor %}
             </ul>
         {% else %}
             <p>No quiz history found.</p>
+        {% endif %}
+    </section>
+
+    <section class="card">
+        <h3>Results You've Shared with Friends</h3>
+        {% if shared_results %}
+            <ul>
+                {% for shared in shared_results %}
+                    <li>
+                        Shared with <strong>{{ shared.friend.username }}</strong> —
+                        <a href="{{ url_for('results', session_id=shared.session_id) }}">View Shared Result</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>You haven't shared any results yet.</p>
         {% endif %}
     </section>
 
