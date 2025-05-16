@@ -472,11 +472,11 @@ def accept_friend_request(request_id):
     current_user.friends.append(friend_request.from_user)
     friend_request.from_user.friends.append(current_user)
 
-    # Update the request status
-    friend_request.status = 'accepted'
+    db.session.delete(friend_request)
     db.session.commit()
+
     flash("Friend request accepted!", "success")
-    return redirect(url_for('friend_requests'))
+    return redirect(url_for('profile'))
 
 @app.route('/decline_friend_request/<int:request_id>', methods=['POST'])
 @login_required
