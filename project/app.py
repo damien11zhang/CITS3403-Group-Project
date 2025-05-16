@@ -134,12 +134,17 @@ def profile():
 
     friend_requests = FriendRequest.query.filter_by(to_user_id=current_user.id).all()
 
+    shared_results = SharedResult.query.filter_by(shared_with_id=current_user.id).all()
+    shared_sessions = [
+        QuizSession.query.get(shared.quiz_session_id) for shared in shared_results
+    ]
     return render_template(
         'profile.html',
         user=current_user,
         top_jobs=top_jobs,
         friend_requests=friend_requests,
-        quiz_sessions=current_user.quiz_sessions
+        quiz_sessions=current_user.quiz_sessions,
+        shared_sessions=shared_sessions
     )
 
 UPLOAD_FOLDER = 'static/uploads'
