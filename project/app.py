@@ -446,6 +446,13 @@ def send_friend_request(to_user_id):
     if existing_request:
         flash("Friend request already sent.", "info")
         return redirect(url_for('profile'))
+    
+    reverse_request = FriendRequest.query.filter_by(
+        from_user_id=to_user_id, to_user_id=current_user.id
+    ).first()
+    if reverse_request:
+        flash("This user already sent you a friend request.", "info")
+        return redirect(url_for('profile'))
 
     friend_request = FriendRequest(from_user_id=current_user.id, to_user_id=to_user_id)
     db.session.add(friend_request)
