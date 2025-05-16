@@ -113,12 +113,38 @@ def signup():
         return redirect(url_for('login'))
     return render_template("signup.html", form=form)
 
-@app.route('/profile')
+@app.route('/profile', methods=['GET', 'POST'])
 @login_required
 def profile():
-    user_id = current_user.id
-    quiz_sessions = QuizSession.query.filter_by(user_id=user_id).all()
-    return render_template('profile.html', user=current_user, quiz_sessions=quiz_sessions)
+    if request.method == 'POST':
+        # Handle profile updates (e.g., username, email)
+        current_user.username = request.form['username']
+        current_user.email = request.form['email']
+        db.session.commit()
+        flash('Profile updated successfully!', 'success')
+        return redirect(url_for('profile'))
+
+    # Fetch the most recent quiz session for the current user
+    recent_session = QuizSession.query.filter_by(user_id=current_user.id).order_by(QuizSession.created_at.desc()).first()
+
+    # Retrieve the top 5 jobs for the most recent session
+    top_jobs = []
+    if recent_session:
+        user_responses = UserResponse.query.filter_by(session_id=recent_session.session_id, question_type='second').all()
+        job_scores = {response.target_id: response.score for response in user_responses}
+        sorted_jobs = sorted(job_scores.items(), key=lambda x: x[1], reverse=True)[:5]
+        top_jobs = [(Job.query.get(job_id), score) for job_id, score in sorted_jobs]
+
+    # Fetch friend requests for the current user
+    friend_requests = FriendRequest.query.filter_by(to_user_id=current_user.id).all()
+
+    return render_template(
+        'profile.html',
+        user=current_user,
+        top_jobs=top_jobs,
+        friend_requests=friend_requests,
+        quiz_sessions=current_user.quiz_sessions
+    )
 
 UPLOAD_FOLDER = 'static/uploads'
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
