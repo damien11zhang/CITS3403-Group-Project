@@ -134,6 +134,20 @@
         {% else %}
             <p>No quiz history found.</p>
         {% endif %}
+
+    <h2>Shared Results With You</h2>
+        {% if shared_sessions %}
+            <ul>
+                {% for session in shared_sessions %}
+                    <li>
+                        Shared by: {{ session.user.username if session.user else 'Unknown' }} <br>
+                        <a href="{{ url_for('results', session_id=session.session_id) }}">View Results</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No results have been shared with you.</p>
+        {% endif %}
     </section>
 
     <footer style="text-align: center; margin-top: 2rem;">
