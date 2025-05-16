@@ -492,6 +492,16 @@ def decline_friend_request(request_id):
     flash("Friend request declined.", "info")
     return redirect(url_for('friend_requests'))
 
+@app.route('/users')
+@login_required
+def users():
+    query = request.args.get('q', '')
+    if query:
+        users = User.query.filter(User.username.ilike(f"%{query}%")).all()
+    else:
+        users = []
+    return render_template('users.html', users=users, query=query)
+
 @app.route('/logout')
 @login_required
 def logout():
