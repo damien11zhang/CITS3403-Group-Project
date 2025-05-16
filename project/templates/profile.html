@@ -9,117 +9,111 @@
         <h1>Welcome, {{ user.username }}</h1>
         <h2>Your personalized career dashboard</h2>
         <div class="nav-right">
-            <a href="{{ url_for('base') }}" class="button" style="width:auto;">Home</a>
-            <a href="{{ url_for('logout') }}" class="button" style="width:auto;">Logout</a>
+            <a href="{{ url_for('base') }}" class="button">Home</a>
+            <a href="{{ url_for('logout') }}" class="button">Logout</a>
         </div>
     </header>
 
     <section class="card">
-    <h2>Profile Information</h2>
-    <div class="centered" style="margin-bottom: 1rem;">
-        <img src="{{ url_for('static', filename='uploads/' + (user.profile_pic or 'user.profile_pic.jpg')) }}" 
-             alt="Profile Picture" width="100" height="100" style="border-radius: 50%;">
-    </div>
-    <p><strong>Username:</strong> {{ user.username }}</p>
-    <p><strong>Email:</strong> {{ user.email }}</p>
-    <p><strong>Location:</strong> {{ user.location }}</p>
-    {% if user.join_date %}
-        <p><strong>Joined on:</strong> {{ user.join_date.strftime('%Y-%m-%d') }}</p>
-    {% else %}
-        <p><strong>Joined on:</strong> Unknown</p>
-    {% endif %}
-    </section>
-
-    <section class="card">
-    <h2>Update Profile</h2>
-    <form action="{{ url_for('profile') }}" method="POST" enctype="multipart/form-data">
-        <!-- Profile Picture -->
-        <div class="centered" style="margin-bottom: 1rem;">
+        <h2>Profile Information</h2>
+        <div class="centered">
             <img src="{{ url_for('static', filename='uploads/' + (user.profile_pic or 'user.profile_pic.jpg')) }}" 
                  alt="Profile Picture" width="100" height="100" style="border-radius: 50%;">
         </div>
-        <label for="profile_pic">Upload a new profile picture:</label>
-        <input type="file" id="profile_pic" name="profile_pic" accept="image/*">
-
-        <!-- Username -->
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="username" value="{{ user.username }}" required>
-
-        <!-- Email -->
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" value="{{ user.email }}" required>
-
-        <!-- Submit Button -->
-        <button class="button" type="submit">Update Profile</button>
-    </form>
+        <p><strong>Username:</strong> {{ user.username }}</p>
+        <p><strong>Email:</strong> {{ user.email }}</p>
+        <p><strong>Location:</strong> {{ user.location }}</p>
+        <p><strong>Joined on:</strong> {{ user.join_date.strftime('%Y-%m-%d') if user.join_date else "Unknown" }}</p>
     </section>
 
     <section class="card">
-    <h2>
-    <img src="{{ url_for('static', filename='images/two.png') }}" 
-         alt="Career Icon" 
-         style="width: 100px; height: 100px; margin-right: 10px;">
-    Your Career Interests
-    </h2>   
-    {% if top_jobs %}
-        <table style="width:100%; border-collapse: collapse;">
-            <tr>
-                <th>Career Path</th>
-                <th>Score</th>
-            </tr>
-            {% for job, score in top_jobs %}
-                <tr>
-                    <td>{{ job.title }}</td>
-                    <td>{{ '%.1f' % ((score / 30) * 100) }}%</td>
-                </tr>
-            {% endfor %}
-        </table>
-    {% else %}
-        <p>No recent quiz results found. Take a quiz to see your top career matches!</p>
-    {% endif %}
+        <h2>Update Profile</h2>
+        <form action="{{ url_for('profile') }}" method="POST" enctype="multipart/form-data">
+            <label for="profile_pic">New profile picture:</label>
+            <input type="file" id="profile_pic" name="profile_pic" accept="image/*">
+
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" value="{{ user.username }}" required>
+
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" value="{{ user.email }}" required>
+
+            <button class="button" type="submit">Update Profile</button>
+        </form>
+    </section>
+
+    <section class="card">
+        <h2>
+            <img src="{{ url_for('static', filename='images/two.png') }}" 
+                 alt="Career Icon" style="width: 100px; height: 100px;">
+            Your Career Interests
+        </h2>
+        {% if top_jobs %}
+            <table>
+                <tr><th>Career Path</th><th>Score</th></tr>
+                {% for job, score in top_jobs %}
+                    <tr>
+                        <td>{{ job.title }}</td>
+                        <td>{{ '%.1f' % ((score / 30) * 100) }}%</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        {% else %}
+            <p>No recent quiz results. Take a quiz to see your matches!</p>
+        {% endif %}
     </section>
 
     <section class="card">
         <h2>Your Friends
             <img src="{{ url_for('static', filename='images/friend.png') }}" 
-         alt="Career Icon" 
-         style="width: 100px; height: 100px; margin-right: 10px;">
+                 alt="Friend Icon" style="width: 100px; height: 100px;">
         </h2>
-        <ul>
-        {% for friend in current_user.friends %}
-        <li>{{ friend.username }}</li>
-        {% endfor %}
-        </ul>
+        {% if current_user.friends %}
+            <ul>
+                {% for friend in current_user.friends %}
+                    <li>{{ friend.username }}</li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>You haven't added any friends yet.</p>
+        {% endif %}
+    </section>
 
-        <h2>Send Friend Request</h2>
+    {% if current_user.id != user.id %}
+    <section class="card">
+        <h2>Send Friend Request to {{ user.username }}</h2>
         <form action="{{ url_for('send_friend_request', to_user_id=user.id) }}" method="POST">
-        <button class="button" type="submit">Send Friend Request</button>
+            <button class="button" type="submit">Send Friend Request</button>
         </form>
-    <section class="card">
+    </section>
+    {% endif %}
 
-        <h2>Friend Requests</h2>
-        <ul>
-            {% for request in friend_requests %}
-                <li>
-                    {{ request.from_user.username }}
-                    <form action="{{ url_for('accept_friend_request', request_id=request.id) }}" method="POST" style="display:inline;">
-                        <button type="submit">Accept</button>
-                    </form>
-                    <form action="{{ url_for('decline_friend_request', request_id=request.id) }}" method="POST" style="display:inline;">
-                        <button type="submit">Decline</button>
-                    </form>
-                </li>
-            {% endfor %}
-        </ul>
     <section class="card">
+        <h2>Friend Requests</h2>
+        {% if friend_requests %}
+            <ul>
+                {% for request in friend_requests %}
+                    <li>
+                        {{ request.from_user.username }}
+                        <form action="{{ url_for('accept_friend_request', request_id=request.id) }}" method="POST" style="display:inline;">
+                            <button type="submit">Accept</button>
+                        </form>
+                        <form action="{{ url_for('decline_friend_request', request_id=request.id) }}" method="POST" style="display:inline;">
+                            <button type="submit">Decline</button>
+                        </form>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No new friend requests.</p>
+        {% endif %}
+    </section>
 
     <section class="card">
         <h3>Your Quiz History
             <img src="{{ url_for('static', filename='images/one.png') }}" 
-         alt="Career Icon" 
-         style="width: 100px; height: 100px; margin-right: 10px;">
+                 alt="Quiz Icon" style="width: 100px; height: 100px;">
         </h3>
-
         {% if quiz_sessions %}
             <ul>
                 {% for session in quiz_sessions %}
@@ -132,7 +126,7 @@
         {% else %}
             <p>No quiz history found.</p>
         {% endif %}
-    </section> 
+    </section>
 
     <footer style="text-align: center; margin-top: 2rem;">
         <p>&copy; CareerCompass</p>
