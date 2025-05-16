@@ -4,6 +4,12 @@ A personalized career discovery platform built with Flask. Users can take quizze
 
 ---
 
+## Group Members:
+1. 23669907 - Damien Zhang
+2. 23136223 - Jules Van Melle-Park
+3. 23951196 - Sam Hunt
+4. 24195369 - Agnes Renatha Sihombing
+
 ## Features
 
 - **User Registration & Login**
