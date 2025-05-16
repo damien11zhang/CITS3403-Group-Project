@@ -524,32 +524,42 @@ def share_result():
     friend_id = request.form.get('friend_id')
 
     if not session_id or not friend_id:
-        flash("Missing session or friend information.", "danger")
+        flash('Missing data to share result.', 'danger')
+        return redirect(url_for('profile'))
+
+    quiz_session = QuizSession.query.filter_by(session_id=session_id).first()
+    if not quiz_session:
+        flash('Quiz session not found.', 'danger')
         return redirect(url_for('profile'))
 
     friend = User.query.get(friend_id)
-    session = QuizSession.query.filter_by(session_id=session_id).first()
-
-    if not friend or not session:
-        flash("Invalid friend or session.", "danger")
+    if not friend or friend not in current_user.friends or friend.id == current_user.id:
+        flash('Invalid friend selection.', 'danger')
         return redirect(url_for('profile'))
 
-    existing = SharedResult.query.filter_by(session_id=session_id, user_id=current_user.id, friend_id=friend.id).first()
-    if existing:
-        flash(f"You've already shared this result with {friend.username}.", "info")
-    else:
-        shared_result = SharedResult(session_id=session_id, user_id=current_user.id, friend_id=friend.id)
-        db.session.add(shared_result)
-        db.session.commit()
-        flash(f"Successfully shared result with {friend.username}.", "success")
+    already_shared = SharedResult.query.filter_by(
+        quiz_session_id=quiz_session.id,
+        shared_with_id=friend.id
+    ).first()
 
-    # ✅ Redirect to profile, not /friend_requests
+    if already_shared:
+        flash(f'You’ve already shared this result with {friend.username}.', 'info')
+        return redirect(url_for('profile'))
+
+    shared_result = SharedResult(
+        quiz_session_id=quiz_session.id, 
+        shared_with_id=friend.id
+    )
+    db.session.add(shared_result)
+    db.session.commit()
+
+    flash(f'Result shared with {friend.username}!', 'success')
     return redirect(url_for('profile'))
 
 @app.route('/logout')
 @login_required
 def logout():
-    # Clear all quiz-related session data
+
     for key in ['session_id', 'selected_clusters', 'asked_subgroups', 'job_scores', 'passing_jobs', 'top_jobs']:
         session.pop(key, None)
     
